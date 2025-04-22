@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { Link, Outlet } from "react-router";
-import { useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router";
+import { useState, useCallback } from "react";
+import axios from "axios";
 
 const StyledHeader = styled.header`
   background: red;
@@ -41,10 +42,33 @@ const StyledCanvas = styled(Offcanvas)`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // const interval = setInterval(() => getStats(), 10000);
+  // const stopInterval = () => clearInterval(interval);
+
+  const getStats = useCallback(() => {
+    // console.log("getStats");
+    axios
+      .get("http://localhost:3000/stats", { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("invalid token", err);
+        clearInterval();
+        navigate("/sign-in", { replace: true });
+      });
+  }, [navigate]);
+
+  // useEffect(() => {
+  //   setInterval(() => getStats(), 10000);
+  // }, [getStats]);
 
   return (
     <>
@@ -81,7 +105,14 @@ const Header = () => {
                 <Link to="/">Home</Link>
               </li>
               {/* open modal displaying the player stats without leaving the current page/quest*/}
-              <li onClick={handleClose}>Stats</li>
+              <li
+                onClick={(e) => {
+                  e.preventDefault();
+                  getStats();
+                }}
+              >
+                Stats
+              </li>
               {/* Sign out, ask the user to confirm before closing the app and perform a POST request to the server in order to save user progression for later use before logout*/}
               <li onClick={handleClose}>Sign out</li>
               {/* test page for the 404 error page */}

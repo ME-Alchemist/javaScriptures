@@ -30,6 +30,8 @@ services:
   database:
     image: mysql:latest
     container_name: DB-dungeon
+    env_file:
+      - .env
     environment:
       - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
@@ -39,8 +41,8 @@ services:
       - "3306:3306"
     healthcheck:
       test: "mysqladmin ping -h localhost -u root -p${ROOT_PASSWORD}"
-      interval: 2s
-      retries: 5
+      interval: 10s
+      retries: 10
     volumes:
       - ./data:/var/lib/mysql
       - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
