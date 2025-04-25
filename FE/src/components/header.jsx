@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { Link, Outlet, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState, useCallback } from "react";
 import axios from "axios";
 
@@ -16,29 +16,14 @@ const StyledHeader = styled.header`
 `;
 
 const StyledCanvas = styled(Offcanvas)`
-  height: 7.6em !important;
+  height: 6.6em !important;
 
-  background-image: url(images/bannerBG.webp) !important;
+  background-image: url(/images/bannerBG.webp) !important;
   background-position: center !important;
 
-  /*
-  transition: transform 0.3s ease-in-out !important;
-
-  &.show {
-    transform: translateY(0%) !important;
-    visibility: visible !important;
+  .offcanvas-body {
+    padding: unset !important;
   }
-
-  &:not(.show) {
-    transform: translateY(-100%) !important;
-    visibility: visible;
-    transition: transform 0.3s ease-in-out !important;
-  }
-
-  &.hiding {
-    visibility: hidden !important;
-  }
-    */
 `;
 
 const Header = () => {
@@ -62,7 +47,7 @@ const Header = () => {
       .catch((err) => {
         console.log("invalid token", err);
         clearInterval();
-        navigate("/sign-in", { replace: true });
+        navigate("/login", { replace: true });
       });
   }, [navigate]);
 
@@ -85,12 +70,12 @@ const Header = () => {
       >
         <Offcanvas.Header
           style={{
-            padding: "10px 35px 0px 35px",
+            padding: "0px 35px 0px 35px",
           }}
           closeButton
         >
           <Offcanvas.Title style={{ color: "white" }}>
-            Menu (Quest in progress)
+            <p>Menu</p>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="h-25">
@@ -102,7 +87,7 @@ const Header = () => {
             >
               {/* Quit current quest and return to main menu, a state is needed to check wether or not the player is currently in a quest and if it's not finished yet warn the player progress will be lost, upon confiming, the progression of the current quest is reset and the player is returned to the main menu, a boolean state may be needed false/true to check wether or not the player currently is in a quest */}
               <li onClick={handleClose}>
-                <Link to="/">Home</Link>
+                <Link to="/main/quests">Home</Link>
               </li>
               {/* open modal displaying the player stats without leaving the current page/quest*/}
               <li
@@ -117,13 +102,12 @@ const Header = () => {
               <li onClick={handleClose}>Sign out</li>
               {/* test page for the 404 error page */}
               <li onClick={handleClose}>
-                <Link to="/404">404 test page</Link>
+                <Link to="/main/BegunQuest">404 test page</Link>
               </li>
             </ul>
           </div>
         </Offcanvas.Body>
       </StyledCanvas>
-      <Outlet />
     </>
   );
 };

@@ -44,8 +44,8 @@ export default function Login() {
           console.log(res);
           alert("Login successful");
           setTimeout(() => {
-            navigate("/");
-          }, 1500);
+            navigate("/main");
+          }, 500);
         }
       })
       .catch((err) => console.log(err));
@@ -104,7 +104,7 @@ export default function Login() {
                   className="mx-auto"
                   placeholder="enter email"
                   {...register("email", { required: true })}
-                  autoComplete="off"
+                  autoComplete="email"
                 />
               </Col>
               {errors.email && <span>Email is required</span>}
@@ -134,7 +134,10 @@ export default function Login() {
       </StyleWrapper>
 
       <p>
-        No account? sign up <Link to={"/sign-up"}>here!</Link>
+        No account? sign up{" "}
+        <Link to={"/register"} viewTransition>
+          here!
+        </Link>
       </p>
     </div>
   );

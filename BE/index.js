@@ -7,6 +7,8 @@ const sequelize = require("./sequelize");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const UserModel = require("./models/user.model");
+const BestiaryModel = require("./models/bestiary.model");
+const QuestsModel = require("./models/quests.model");
 dotenv.config();
 
 const connection = mysql.createConnection({
@@ -51,6 +53,8 @@ const verifyToken = (req, res, next) => {
 };
 
 const User = UserModel(sequelize, require("sequelize").DataTypes);
+const Bestiary = BestiaryModel(sequelize, require("sequelize").DataTypes);
+const Quests = QuestsModel(sequelize, require("sequelize").DataTypes);
 
 sequelize
   .sync()
@@ -69,8 +73,32 @@ sequelize
 
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
+// Get all quests
+app.get("/quests", async (req, res) => {
+  try {
+    const quests = await Quests.findAll();
+    res.json(quests);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get all monsters
+app.get("/monsters", async (req, res) => {
+  try {
+    const monsters = await Bestiary.findAll();
+    res.json(monsters);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
 // Get all users
-app.get("/", async (req, res) => {
+app.get("/users", async (req, res) => {
   try {
     const user = await User.findAll();
     res.json(user);
@@ -121,7 +149,7 @@ app.get("/stats", verifyToken, async (req, res) => {
 });
 
 // Get single user by id
-app.get("/:id", async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await User.findOne({ where: { user_id: userId } });
@@ -174,7 +202,7 @@ app.post("/login", async (req, res) => {
       });
     }
     const token = jwt.sign({ user_id: user.user_id }, JWT_SECRET, {
-      expiresIn: "2m",
+      expiresIn: "20s",
     });
     res.cookie("token", token, {
       httpOnly: true,

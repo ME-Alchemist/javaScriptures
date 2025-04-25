@@ -4,7 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState } from "react";
 import Toast from "react-bootstrap/Toast";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 
 const StyleWrapper = styled.div`
   display: flex;
@@ -192,6 +192,12 @@ export default function SignIn() {
           <Button type="submit" className="btn btn-dark">
             Submit
           </Button>
+          <p>
+            Already have an account? login{" "}
+            <Link to={"/login"} viewTransition>
+              here!
+            </Link>
+          </p>
         </Form>
       </StyleWrapper>
       <ToastContainer position={"bottom-end"}>

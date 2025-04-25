@@ -27,11 +27,11 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      lvl: {
+      level_id: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
       },
-      vocation: {
+      vocation_id: {
         type: DataTypes.STRING(150),
         defaultValue: "Squire",
       },
