@@ -32,8 +32,8 @@ module.exports = (sequelize) => {
         defaultValue: 1,
       },
       vocation_id: {
-        type: DataTypes.STRING(150),
-        defaultValue: "Squire",
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
       },
     },
     {

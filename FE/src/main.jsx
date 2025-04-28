@@ -11,6 +11,7 @@ import FourOhFour from "./routes/404.jsx";
 import Quests from "./routes/chooseQuest.jsx";
 import MainPage from "./routes/mainPage.jsx";
 import LoadQuest from "./routes/loadQuest.jsx";
+import Status from "./routes/status.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="quests" element={<Quests />} />
           <Route path="BegunQuest" element={<LoadQuest />} />
           <Route path="404" element={<FourOhFour />} />
+          <Route path="stats" element={<Status />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -6,9 +6,8 @@ const mysql = require("mysql2");
 const sequelize = require("./sequelize");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const UserModel = require("./models/user.model");
-const BestiaryModel = require("./models/bestiary.model");
-const QuestsModel = require("./models/quests.model");
+const initializeModels = require("./models/index");
+
 dotenv.config();
 
 const connection = mysql.createConnection({
@@ -52,10 +51,6 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const User = UserModel(sequelize, require("sequelize").DataTypes);
-const Bestiary = BestiaryModel(sequelize, require("sequelize").DataTypes);
-const Quests = QuestsModel(sequelize, require("sequelize").DataTypes);
-
 sequelize
   .sync()
   .then(() => {
@@ -65,11 +60,9 @@ sequelize
     console.error("Unable to connect to the database:", error);
   });
 
-// const arrOfItems = [
-//   { id: 1, name: "Item 1" },
-//   { id: 2, name: "Item 2" },
-//   { id: 3, name: "Item 3" },
-// ];
+const models = initializeModels(sequelize);
+
+const { User, Bestiary, Quests, Vocations, Levels } = models;
 
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
@@ -109,6 +102,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// Get stats of currently logged in user
 app.get("/stats", verifyToken, async (req, res) => {
   // const token = req.cookies.token;
   console.log("Cookies get", req.cookies);
@@ -118,7 +112,14 @@ app.get("/stats", verifyToken, async (req, res) => {
   try {
     // const decode = jwt.verify(token, JWT_SECRET);
     // console.log(decode);
-    const user = await User.findOne({ where: { user_id: req.user.user_id } });
+    const user = await User.findOne({
+      where: { user_id: req.user.user_id },
+      include: [
+        { model: Levels, as: "level" },
+        { model: Vocations, as: "vocation" },
+      ],
+    });
+
     if (!user) {
       return res.status(404).json({
         error: "User not found",
@@ -137,10 +138,12 @@ app.get("/stats", verifyToken, async (req, res) => {
     // });
 
     res.status(200).json({
+      user_id: user.user_id,
       username: user.username,
-      experience: user.exp,
-      level: user.lvl,
-      vocation: user.vocation,
+      email: user.email,
+      exp: user.exp,
+      level: user.level.level,
+      vocation: user.vocation.vocation_name,
     });
   } catch (error) {
     console.error(error);
@@ -202,7 +205,7 @@ app.post("/login", async (req, res) => {
       });
     }
     const token = jwt.sign({ user_id: user.user_id }, JWT_SECRET, {
-      expiresIn: "20s",
+      expiresIn: "60m",
     });
     res.cookie("token", token, {
       httpOnly: true,
