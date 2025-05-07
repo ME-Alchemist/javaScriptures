@@ -15,7 +15,11 @@ module.exports = (sequelize) => {
         unique: true,
       },
       vocation_img: {
-        type: DataTypes.STRING(250),
+        type: DataTypes.STRING(150),
+        allowNull: true,
+      },
+      vocation_portrait: {
+        type: DataTypes.STRING(150),
         allowNull: true,
       },
     },

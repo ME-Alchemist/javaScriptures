@@ -7,6 +7,8 @@ const UserDetails = create((set) => ({
   vocation: "",
   username: "",
   email: "",
+  vocation_img: "",
+  vocation_portrait: "",
   setDetails: (user_id, level, exp, vocation, username, email) =>
     set({
       user_id: user_id,
@@ -15,6 +17,19 @@ const UserDetails = create((set) => ({
       level: level,
       exp: exp,
       vocation: vocation,
+      vocation_img: vocation + ".png",
+      vocation_portrait: vocation + "_portrait.png",
+    }),
+  reset: () =>
+    set({
+      user_id: 0,
+      username: "",
+      email: "",
+      level: 0,
+      exp: 0,
+      vocation: "",
+      vocation_img: "",
+      vocation_portrait: "",
     }),
 }));
 

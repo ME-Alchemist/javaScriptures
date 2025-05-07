@@ -17,10 +17,6 @@ module.exports = (sequelize, models) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      vocation_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
     },
     {
       tableName: "levels",

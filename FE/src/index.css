@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* .embla * {
+  all: unset;
+} */
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -26,14 +30,19 @@ html,
 body {
   margin: 0;
   /* display: flex; */
-  place-items: center;
+  /* place-items: center; */
   min-width: 320px;
   height: 100%;
+  overflow-y: auto;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.monster-img {
+  max-width: 60% !important;
 }
 
 button {

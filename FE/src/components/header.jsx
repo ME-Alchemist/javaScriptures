@@ -4,7 +4,10 @@ import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState } from "react";
-// import axios from "axios";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import UserDetails from "../zustore/userStore";
+import titleStore from "../zustore/titleStore";
 
 const StyledHeader = styled.header`
   background: red;
@@ -27,7 +30,8 @@ const StyledCanvas = styled(Offcanvas)`
 `;
 
 const Header = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { title } = titleStore();
 
   const [show, setShow] = useState(false);
 
@@ -36,6 +40,27 @@ const Header = () => {
 
   // const interval = setInterval(() => getStats(), 10000);
   // const stopInterval = () => clearInterval(interval);
+
+  const logout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        UserDetails.getState().reset();
+        navigate("/login", { replace: true });
+      } else {
+        console.log("error logging out", response.status);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // const getStats = useCallback(() => {
   //   // console.log("getStats");
@@ -58,7 +83,7 @@ const Header = () => {
   return (
     <>
       <StyledHeader className="shadow-sm d-flex flex-row justify-content-center gap-5">
-        <h1>Welcome traveler!</h1>
+        <h1>{title}</h1>
         <Button onClick={handleShow}>Primary</Button>
       </StyledHeader>
 
@@ -94,7 +119,7 @@ const Header = () => {
                 <Link to={"/main/stats"}>Stats</Link>
               </li>
               {/* Sign out, ask the user to confirm before closing the app and perform a POST request to the server in order to save user progression for later use before logout*/}
-              <li onClick={handleClose}>Sign out</li>
+              <li onClick={logout}>logout</li>
               {/* test page for the 404 error page */}
               <li onClick={handleClose}>
                 <Link to="/main/BegunQuest">404 test page</Link>

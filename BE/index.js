@@ -7,6 +7,7 @@ const sequelize = require("./sequelize");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const initializeModels = require("./models/index");
+const { Op } = require("sequelize");
 
 dotenv.config();
 
@@ -33,6 +34,9 @@ const PORT = 3000;
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Set and save a list of blacklisted tokens
+const tokenBlacklist = new Set();
+
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
 
@@ -40,6 +44,12 @@ const verifyToken = (req, res, next) => {
     return res
       .status(401)
       .json({ error: "No token provided, authorization denied." });
+  }
+
+  if (tokenBlacklist.has(token)) {
+    return res
+      .status(401)
+      .json({ error: "Token blacklisted, authorization denied." });
   }
 
   try {
@@ -61,15 +71,83 @@ sequelize
   });
 
 const models = initializeModels(sequelize);
-
 const { User, Bestiary, Quests, Vocations, Levels } = models;
 
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
+// Check for token, not needed for now
+// app.use("/main/:route*", verifyToken);
+
 // Get all quests
 app.get("/quests", async (req, res) => {
   try {
-    const quests = await Quests.findAll();
+    const quests = await Quests.findAll({
+      include: ["category"],
+      attributes: { exclude: ["category_id"] },
+    });
+    res.json(quests);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get HTML quests
+app.get("/quests/html/:difficulty", async (req, res) => {
+  try {
+    const difficulty = req.params.difficulty;
+    const quests = await Quests.findAll({
+      where: {
+        category_id: {
+          [Op.eq]: parseInt(difficulty) + 0,
+        },
+      },
+      include: ["category"],
+      attributes: { exclude: ["category_id"] },
+    });
+    res.json(quests);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get CSS quests
+app.get("/quests/css/:difficulty", async (req, res) => {
+  try {
+    const difficulty = req.params.difficulty;
+    const quests = await Quests.findAll({
+      where: {
+        category_id: {
+          [Op.eq]: parseInt(difficulty) + 3,
+        },
+      },
+      include: ["category"],
+      attributes: { exclude: ["category_id"] },
+    });
+    res.json(quests);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get JS quests
+app.get("/quests/js/:difficulty", async (req, res) => {
+  try {
+    const difficulty = req.params.difficulty;
+    const quests = await Quests.findAll({
+      where: {
+        category_id: {
+          [Op.eq]: parseInt(difficulty) + 6,
+        },
+      },
+      include: ["category"],
+      attributes: { exclude: ["category_id"] },
+    });
     res.json(quests);
   } catch (error) {
     return res.status(500).json({
@@ -82,6 +160,38 @@ app.get("/quests", async (req, res) => {
 app.get("/monsters", async (req, res) => {
   try {
     const monsters = await Bestiary.findAll();
+    res.json(monsters);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get specific monster
+app.get("/monster/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const monster = await Bestiary.findOne({ where: { enemy_id: id } });
+    res.json(monster);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get monsters specific to difficulty
+app.get("/monsters/:difficulty", async (req, res) => {
+  try {
+    const difficulty = req.params.difficulty;
+    const monsters = await Bestiary.findAll({
+      where: {
+        category_id: {
+          [Op.eq]: difficulty,
+        },
+      },
+    });
     res.json(monsters);
   } catch (error) {
     return res.status(500).json({
@@ -104,14 +214,9 @@ app.get("/users", async (req, res) => {
 
 // Get stats of currently logged in user
 app.get("/stats", verifyToken, async (req, res) => {
-  // const token = req.cookies.token;
   console.log("Cookies get", req.cookies);
-  // if (!token) {
-  //   return res.status(401).json({ error: "Unauthorized" });
-  // }
+
   try {
-    // const decode = jwt.verify(token, JWT_SECRET);
-    // console.log(decode);
     const user = await User.findOne({
       where: { user_id: req.user.user_id },
       include: [
@@ -144,6 +249,8 @@ app.get("/stats", verifyToken, async (req, res) => {
       exp: user.exp,
       level: user.level.level,
       vocation: user.vocation.vocation_name,
+      vocation_img: user.vocation.vocation_img,
+      vocation_portrait: user.vocation.vocation_portrait,
     });
   } catch (error) {
     console.error(error);
@@ -162,6 +269,18 @@ app.get("/user/:id", async (req, res) => {
       });
     }
     res.json(user);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Get vocations
+app.get("/vocations", async (req, res) => {
+  try {
+    const vocations = await Vocations.findAll();
+    res.json(vocations);
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -220,8 +339,18 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// blacklist current token and log out user
+app.post("/logout", async (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    tokenBlacklist.add(token);
+  }
+  res.clearCookie("token");
+  res.json({ message: "logging out" });
+});
+
 // Update user details
-app.patch("/update/:id", async (req, res) => {
+app.patch("/user/update/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const { username, email } = req.body;
@@ -232,7 +361,7 @@ app.patch("/update/:id", async (req, res) => {
       });
     }
 
-    user.set({ username: username, email: email });
+    user.set({ username: username, email: email, exp: exp });
     await user.save();
 
     // user.username = username;
@@ -245,6 +374,46 @@ app.patch("/update/:id", async (req, res) => {
     //   { where: { user_id: userId } }
     // );
     res.json({ message: "User updated successfully" });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Update user exp points, check for level up
+app.patch("/user/questComplete/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { exp } = req.body;
+    const user = await User.findOne({ where: { user_id: userId } });
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
+
+    user.exp += exp;
+
+    const newLevel = await Levels.findOne({
+      where: {
+        exp_required: { [Op.lte]: user.exp },
+        // vocation_id: { [Op.lte]: user.vocation_id },
+      },
+      order: [["exp_required", "DESC"]],
+    });
+
+    if (newLevel && newLevel.level_id !== user.level_id) {
+      user.level_id = newLevel.level_id;
+    }
+
+    await user.save();
+
+    return res.json({
+      message: `User gained ${exp} EXP`,
+      updatedUser: user,
+      // newLevel: newLevel,
+    });
   } catch (error) {
     return res.status(500).json({
       error: error.message,

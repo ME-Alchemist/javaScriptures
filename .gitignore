@@ -19,6 +19,7 @@ dist-ssr
 data/
 health.sh
 .env
+text.txt
 **/.env
 .env.*
 **/.env.*

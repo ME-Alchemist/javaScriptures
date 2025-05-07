@@ -9,6 +9,18 @@
   flex-direction: column;
 }
 
+/* .embla * {
+  all: unset;
+}
+
+.embla-carousel * {
+  all: unset;
+} */
+
+.outletContainer {
+  background-image: url("/images/background.png");
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -26,7 +26,11 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       correct_answer: {
-        type: DataTypes.STRING(250),
+        type: DataTypes.STRING(10),
+        allowNull: false,
+      },
+      category_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
