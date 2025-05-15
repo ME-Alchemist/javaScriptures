@@ -2,22 +2,33 @@ import { useForm } from "react-hook-form";
 import { Col, Row, Form, Button, ToastContainer } from "react-bootstrap";
 import styled from "styled-components";
 import axios from "axios";
-import { useState } from "react";
+import AOS from "aos";
+
+import { useState, useEffect } from "react";
 import Toast from "react-bootstrap/Toast";
 import { useNavigate, Link } from "react-router";
 
 const StyleWrapper = styled.div`
-  display: flex;
-  justify-content: center;
+  border: 3px solid black;
+  background-color: #bdb76b66;
+  font-size: x-large;
   margin: auto;
+  padding: 15px;
+  min-width: 154px;
+  max-width: 408px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  text-align: center;
 
   .form-control {
     max-width: 250px;
   }
 
   & span {
-    color: red;
-    text-shadow: 1px 1px 5px blue;
+    color: #ffffff;
+    text-shadow: 0px 0px 5px #ff1800;
   }
 `;
 
@@ -30,10 +41,10 @@ export default function SignIn() {
   });
 
   const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const changeHandler = (e) => {
     setUser((user) => ({ ...user, [e.target.name]: e.target.value }));
-    console.log(e.target.value);
   };
 
   const {
@@ -41,83 +52,69 @@ export default function SignIn() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onSubmit" });
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+
+    window.scrollTo(0, 0);
+  }, []);
+
+  // const username = watch("username");
+  // const email = watch("email");
   const pass = watch("passHash");
   const repeat = watch("repass");
 
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
-    console.log(data);
-    if (pass !== repeat) {
-      alert("Password and repeated password are not matching!");
-      return;
-    }
     axios
       .post("http://localhost:3000/sign-up", data)
       .then((res) => {
-        if (res.status >= 200 && res.status < 300) {
+        if (res.status === 201) {
+          setToastMessage("A new adventurer successfully registered!");
           setToast(true);
           console.log(res);
           setTimeout(() => {
-            navigate("/sign-in");
+            navigate("/login");
           }, 1500);
         }
       })
-      .catch((err) => console.log(err));
-
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setToastMessage("This adventurer already exists!");
+          setToast(true);
+          console.log(err, "hell no");
+        } else {
+          setToastMessage("Something went wrong!");
+          setToast(true);
+          console.log(err);
+        }
+      });
+    document.activeElement.blur();
     form.reset();
   };
 
-  // useEffect(() => {
-  //   fetch("http://localhost:3000", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data));
-  // }, [errors]);
-
   return (
-    <div>
-      <h1>Sign up page</h1>
+    <>
+      <div className="d-flex justify-content-center" data-aos="fade-zoom-in">
+        <img
+          className="img-fluid"
+          src="/images/decorations/dragonTopDeco.webp"
+          alt="dragon"
+          title="dragon"
+          width={"420px"}
+        />
+      </div>
       <StyleWrapper>
+        <h1 style={{ textDecoration: "underline" }}>Sign up</h1>
         <Form
           autoComplete="off"
           id="userForm"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {/* <Col>
-            <Form.Group className="mb-3" controlId="fname">
-              <Form.Label>First name:</Form.Label>
-              <Col>
-                <Form.Control
-                  type="text"
-                  className="mx-auto"
-                  placeholder="enter first name"
-                  {...register("fname", { required: true })}
-                  onChange={(e) => setFname(e.target.value)}
-                />
-              </Col>
-              {errors.fname && <span>First name is required</span>}
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group className="mb-3" controlId="lname">
-              <Form.Label>Last name:</Form.Label>
-              <Col>
-                <Form.Control
-                  type="text"
-                  className="mx-auto"
-                  placeholder="enter last name"
-                  {...register("lname", { required: true })}
-                />
-              </Col>
-              {errors.lname && <span>Last name is required</span>}
-            </Form.Group>
-          </Col> */}
           <Col>
             <Form.Group className="mb-3" controlId="uname">
               <Form.Label>Username:</Form.Label>
@@ -125,14 +122,25 @@ export default function SignIn() {
                 <Form.Control
                   name="username"
                   onChange={changeHandler}
-                  type="text"
+                  type="input"
                   className="mx-auto"
                   placeholder="enter username"
-                  {...register("username", { required: true })}
+                  {...register("username", {
+                    required: true,
+                    maxLength: 20,
+                    minLength: 4,
+                  })}
                   autoComplete="off"
                 />
               </Col>
-              {errors.username && <span>Username is required</span>}
+              {errors.username && (
+                <span>
+                  {errors.username.type === "required" &&
+                    "Username is required"}
+                  {errors.username.type === "minLength" &&
+                    "Username must be between 4 to 20 characters long"}
+                </span>
+              )}
             </Form.Group>
           </Col>
           <Col>
@@ -162,18 +170,28 @@ export default function SignIn() {
                   onChange={changeHandler}
                   type="password"
                   className="mx-auto mainPass"
-                  onInput={(e) => console.log(e.target.value)}
                   placeholder="enter password"
-                  {...register("passHash", { required: true })}
+                  {...register("passHash", {
+                    required: true,
+                    pattern:
+                      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/,
+                  })}
                   autoComplete="new-password"
                 />
               </Col>
-              {errors.repass && <span>A password is required</span>}
+              {errors.passHash && (
+                <span>
+                  {errors.passHash.type === "required" &&
+                    "Password is required"}
+                  {errors.passHash.type === "pattern" &&
+                    "Required: one uppercase letter, one number, one special character and 8 or more characters"}
+                </span>
+              )}
             </Form.Group>
           </Col>
           <Col>
             <Form.Group className="mb-3" controlId="repass">
-              <Form.Label>Repeat password:</Form.Label>
+              <Form.Label>Confirm password:</Form.Label>
               <Col>
                 <Form.Control
                   ref={repeat}
@@ -182,38 +200,56 @@ export default function SignIn() {
                   type="password"
                   className="mx-auto repeatPass"
                   placeholder="repeat password"
-                  {...register("repass", { required: true })}
+                  {...register("repass", {
+                    required: true,
+                    validate: (value) => value == watch("passHash"),
+                  })}
                   autoComplete="new-password"
                 />
               </Col>
-              {errors.repass && <span>Please repeat the password</span>}
+              {errors.repass && (
+                <span>
+                  {errors.repass.type === "required" &&
+                    "Repeat password is required"}
+                  {errors.repass.type === "validate" &&
+                    "Passwords are not matching!"}
+                </span>
+              )}
             </Form.Group>
           </Col>
-          <Button type="submit" className="btn btn-dark">
-            Submit
+          <Button type="submit" className="btn btn-dark btn-lg">
+            Register
           </Button>
-          <p>
-            Already have an account? login{" "}
-            <Link to={"/login"} viewTransition>
-              here!
-            </Link>
-          </p>
         </Form>
+        <p className="mt-5">
+          Already registered? login{" "}
+          <Link to={"/login"} viewTransition>
+            here!
+          </Link>
+        </p>
+        <p>
+          Back to the{" "}
+          <Link to={"/"} viewTransition>
+            main page
+          </Link>
+        </p>
       </StyleWrapper>
-      <ToastContainer position={"bottom-end"}>
-        <Toast
-          onClose={() => setToast(false)}
-          show={toast}
-          delay={2500}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">Jsdungeons</strong>
-            <small>{new Date().toLocaleString()}</small>
-          </Toast.Header>
-          <Toast.Body>Woohoo, user successfully registered!</Toast.Body>
-        </Toast>
-      </ToastContainer>
-    </div>
+      {toast && (
+        <ToastContainer position={"bottom-end"}>
+          <Toast
+            onClose={() => setToast(false)}
+            show={toast}
+            delay={2500}
+            autohide
+          >
+            <Toast.Header>
+              <strong className="me-auto">The Guild</strong>
+              <small>{new Date().toLocaleString()}</small>
+            </Toast.Header>
+            <Toast.Body>{toastMessage}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
+    </>
   );
 }

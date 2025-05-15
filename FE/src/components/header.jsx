@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState } from "react";
@@ -10,7 +10,7 @@ import UserDetails from "../zustore/userStore";
 import titleStore from "../zustore/titleStore";
 
 const StyledHeader = styled.header`
-  background: red;
+  background: #ff8f0075;
   margin: 0px;
   text-align: center;
   h1 {
@@ -19,13 +19,42 @@ const StyledHeader = styled.header`
 `;
 
 const StyledCanvas = styled(Offcanvas)`
-  height: 6.6em !important;
+  height: 5em !important;
+  /* font-weight: bold; */
+  font-size: larger;
+  font-weight: bolder;
+
+  & p {
+    margin-bottom: 0px;
+  }
+
+  & a {
+    text-decoration: none;
+    font-weight: bolder;
+    font-size: larger;
+    color: inherit;
+    transition: all 0.2s ease-in-out;
+  }
+
+  & a:hover {
+    color: #188acc;
+  }
 
   background-image: url(/images/bannerBG.webp) !important;
   background-position: center !important;
 
   .offcanvas-body {
     padding: unset !important;
+  }
+
+  .logout {
+    font-size: larger;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .logout:hover {
+    color: #188acc;
+    cursor: pointer;
   }
 `;
 
@@ -82,9 +111,14 @@ const Header = () => {
 
   return (
     <>
-      <StyledHeader className="shadow-sm d-flex flex-row justify-content-center gap-5">
-        <h1>{title}</h1>
-        <Button onClick={handleShow}>Primary</Button>
+      <StyledHeader className="shadow-sm d-flex flex-row justify-content-center">
+        <h1 className="flex-grow-1">{title}</h1>
+        <button
+          className="btn bi bi-caret-down-fill fs-5 fw-bold "
+          onClick={handleShow}
+        >
+          Menu
+        </button>
       </StyledHeader>
 
       <StyledCanvas
@@ -100,7 +134,7 @@ const Header = () => {
           closeButton
         >
           <Offcanvas.Title style={{ color: "white" }}>
-            <p>Menu</p>
+            <p>JavaScriptures</p>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="h-25">
@@ -112,17 +146,15 @@ const Header = () => {
             >
               {/* Quit current quest and return to main menu, a state is needed to check wether or not the player is currently in a quest and if it's not finished yet warn the player progress will be lost, upon confiming, the progression of the current quest is reset and the player is returned to the main menu, a boolean state may be needed false/true to check wether or not the player currently is in a quest */}
               <li onClick={handleClose}>
-                <Link to="/main/quests">Home</Link>
+                <Link to="/main/quests">Quests</Link>
               </li>
               {/* open modal displaying the player stats without leaving the current page/quest*/}
               <li onClick={handleClose}>
                 <Link to={"/main/stats"}>Stats</Link>
               </li>
               {/* Sign out, ask the user to confirm before closing the app and perform a POST request to the server in order to save user progression for later use before logout*/}
-              <li onClick={logout}>logout</li>
-              {/* test page for the 404 error page */}
-              <li onClick={handleClose}>
-                <Link to="/main/BegunQuest">404 test page</Link>
+              <li className="logout" onClick={logout}>
+                logout
               </li>
             </ul>
           </div>

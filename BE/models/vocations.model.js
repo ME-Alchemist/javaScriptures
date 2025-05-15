@@ -22,6 +22,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(150),
         allowNull: true,
       },
+      vocation_description: {
+        type: DataTypes.STRING(350),
+        allowNull: true,
+      },
     },
     {
       tableName: "vocations",

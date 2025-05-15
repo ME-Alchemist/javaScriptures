@@ -1,0 +1,207 @@
+import styled from "styled-components";
+import questStore from "../zustore/questStore";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & h1 {
+    font-weight: bolder;
+    text-shadow: 2px 3px 12px white;
+  }
+
+  .eventBox {
+    background-image: url("/images/backdrops/resultBG.webp");
+    background-size: cover;
+    width: 400px;
+    height: 480px;
+    border: 2px solid grey;
+    border-radius: 15px;
+
+    @media screen and (max-width: 768px) {
+      /* all: unset; */
+      height: 80px;
+      width: 350px;
+      display: none;
+
+      /* height: 480px; */
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 300px;
+      height: 80px;
+
+      & img {
+        height: 80%;
+      }
+    }
+  }
+
+  .resultBox {
+    background-image: url("/images/backdrops/resultBG.webp");
+    background-size: cover;
+    width: 400px;
+    height: 480px;
+    border: 2px solid grey;
+    border-radius: 15px;
+    font-weight: bold;
+
+    & p {
+      margin-bottom: 0px;
+      font-size: larger;
+    }
+
+    & ul {
+      list-style: inside;
+
+      & li {
+        font-size: large;
+      }
+    }
+
+    @media screen and (max-width: 995px) {
+      width: 350px;
+      height: 480px;
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 300px;
+      height: 480px;
+    }
+  }
+`;
+
+const QuestSuccess = () => {
+  const { exp_gathered, hitPoints, monstersEncountered } = questStore();
+
+  const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   const imgResize = () => {
+  //     if (window.innerWidth < 768) {
+  //       setImgSrc("/images/Event/successMobile.webp");
+  //     } else {
+  //       setImgSrc("/images/Event/Success.webp");
+  //     }
+  //   };
+
+  //   window.addEventListener("resize", imgResize);
+  //   return () => {
+  //     window.removeEventListener("resize", imgResize);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const combinedExp = exp_gathered + hitPoints * 10;
+    // console.log(questStore.getState().hitPoints);
+    // console.log(questStore.getState().exp_gathered);
+
+    axios
+      .patch(
+        "http://localhost:3000/user/questComplete",
+        {
+          exp: combinedExp,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setUser(res.data);
+      });
+  }, []);
+
+  // useLayoutEffect(() => {
+  //   addExp(questStore.getState());
+  //   return () => {
+  //     resetQuest();
+  //   };
+  // }, []);
+
+  return (
+    // Grab the score from the questStore, display Results then perform a PATCH request on the users exp field
+    <StyledDiv>
+      <h1>Quest Successful!</h1>
+
+      <section className="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-center">
+        <section className="eventBox">
+          <img
+            src="/images/Event/Success.webp"
+            alt="Success"
+            title="Success!"
+            style={{ height: "100%" }}
+          />
+        </section>
+        <section className="resultBox">
+          <h3>Results</h3>
+          <div className="d-flex flex-row align-items-center justify-content-center">
+            <div
+              className="portrait"
+              style={{
+                width: "150px",
+                height: "150px",
+                border: "1px solid black",
+                borderRadius: "15px",
+                margin: "10px",
+              }}
+            >
+              <img
+                src={user?.portrait}
+                alt="portrait"
+                title="portrait"
+                width={"100%"}
+                height={"100%"}
+                style={{ borderRadius: "15px" }}
+              />
+            </div>
+            <div>
+              <p>Hero: {user?.username}</p>
+              <p>Vocation: {user?.vocation}</p>
+              <p>Level: {user?.level}</p>
+              <p>Exp: {user?.exp}</p>
+            </div>
+          </div>
+          <hr
+            style={{
+              border: "2px solid rgba(0, 0, 0, 0.36)",
+              opacity: "unset",
+              margin: "0 0 10px 0",
+            }}
+          />
+          <div className="questResults">
+            <ul>
+              <li>Hit Points remaining: {hitPoints}</li>
+              <li>
+                Remaining HP bonus exp:{" "}
+                <span style={{ color: "green", fontWeight: "bold" }}>{`+${
+                  hitPoints * 10
+                }`}</span>
+              </li>
+              <li>Total Exp Gained: {exp_gathered + hitPoints * 10}</li>
+            </ul>
+            <hr
+              style={{
+                border: "2px solid #0000005c",
+                opacity: "unset",
+                margin: "0 0 10px 0",
+              }}
+            />
+            <p style={{ textDecoration: "underline" }}>Monsters encountered:</p>
+            <div style={{ maxHeight: "80px", overflowY: "auto" }}>
+              {monstersEncountered.map((m, index) => {
+                return <p key={index}>{m}</p>;
+              })}
+            </div>
+          </div>
+        </section>
+      </section>
+    </StyledDiv>
+  );
+};
+
+export default QuestSuccess;

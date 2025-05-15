@@ -5,8 +5,9 @@ import Footer from "../components/footer";
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
-  background-image: url(/images/background2.png);
-  background-size: repeat;
+  background-image: url(/images/backdrops/poseBG2.webp);
+  background-color: grey;
+  background-size: cover;
   height: 100vh;
   margin-top: auto;
   display: flex;

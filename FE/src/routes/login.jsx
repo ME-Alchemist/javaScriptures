@@ -2,14 +2,25 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { Col, Row, Form, Button, ToastContainer } from "react-bootstrap";
 import styled from "styled-components";
+import Toast from "react-bootstrap/Toast";
 import axios from "axios";
+import AOS from "aos";
 import { useNavigate } from "react-router";
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const StyleWrapper = styled.div`
+  font-size: x-large;
+  border: 3px solid black;
+  background-color: #bdb76b66;
+  margin: 0 auto auto auto;
+  padding: 15px;
+  min-width: 154px;
+  max-width: 408px;
   display: flex;
-  justify-content: center;
-  margin: auto;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  text-align: center;
 
   .form-control {
     max-width: 250px;
@@ -23,11 +34,25 @@ const StyleWrapper = styled.div`
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastColor, setToastColor] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+
+    window.scrollTo(0, 0);
+  }, []);
 
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
@@ -40,61 +65,62 @@ export default function Login() {
       .post("http://localhost:3000/login", data, { withCredentials: true })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
-          // setToast(true);
+          if (res.data.user.chosenVocation === 0) {
+            {
+              alert("You must select a vocation first");
+              navigate("/vocation");
+              return;
+            }
+          }
           console.log(res);
-          alert("Login successful");
+          setToastColor("bg-success fs-5");
+          setToastMessage("Welcome back " + res.data.user.username + "!");
+          setToast(true);
           setTimeout(() => {
             navigate("/main");
-          }, 500);
+          }, 2500);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response.status === 401) {
+          setToastColor("bg-danger fs-5");
+          setToastMessage("Wrong email or password!");
+          setToast(true);
+          console.log(err);
+        } else if (err.response.status === 404) {
+          setToastColor("bg-danger fs-5");
+          setToastMessage("Adventurer not found!");
+          setToast(true);
+          console.log(err);
+        }
+      });
 
     form.reset();
   };
 
   return (
-    <div>
-      <h1>login page</h1>
-
+    <>
+      <div
+        className="d-flex justify-content-center mt-2"
+        data-aos="fade-zoom-in"
+      >
+        <img
+          className="img-fluid"
+          src="/images/decorations/lichTopDeco.webp"
+          alt="lich"
+          title="Lich"
+          width={"470px"}
+        />
+      </div>
       <StyleWrapper>
+        <h1 style={{ textDecoration: "underline" }}>login</h1>
         <Form
           autoComplete="off"
           id="userForm"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {/* <Col>
-                  <Form.Group className="mb-3" controlId="fname">
-                    <Form.Label>First name:</Form.Label>
-                    <Col>
-                      <Form.Control
-                        type="text"
-                        className="mx-auto"
-                        placeholder="enter first name"
-                        {...register("fname", { required: true })}
-                        onChange={(e) => setFname(e.target.value)}
-                      />
-                    </Col>
-                    {errors.fname && <span>First name is required</span>}
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group className="mb-3" controlId="lname">
-                    <Form.Label>Last name:</Form.Label>
-                    <Col>
-                      <Form.Control
-                        type="text"
-                        className="mx-auto"
-                        placeholder="enter last name"
-                        {...register("lname", { required: true })}
-                      />
-                    </Col>
-                    {errors.lname && <span>Last name is required</span>}
-                  </Form.Group>
-                </Col> */}
-
           <Col>
-            <Form.Group className="mb-3" controlId="email">
+            <Form.Group controlId="email">
               <Form.Label>Email:</Form.Label>
               <Col>
                 <Form.Control
@@ -127,18 +153,39 @@ export default function Login() {
               {errors.repass && <span>A password is required</span>}
             </Form.Group>
           </Col>
-          <Button type="submit" className="btn btn-dark">
-            Submit
+          <Button type="submit" className="btn btn-dark btn-lg">
+            Login
           </Button>
         </Form>
+        <p className="mt-5">
+          No account? sign up{" "}
+          <Link to={"/register"} viewTransition>
+            here!
+          </Link>
+        </p>
+        <p>
+          Back to the{" "}
+          <Link to={"/"} viewTransition>
+            main page
+          </Link>
+        </p>
       </StyleWrapper>
-
-      <p>
-        No account? sign up{" "}
-        <Link to={"/register"} viewTransition>
-          here!
-        </Link>
-      </p>
-    </div>
+      {toast && (
+        <ToastContainer position={"top-center"}>
+          <Toast
+            onClose={() => setToast(false)}
+            show={toast}
+            delay={2000}
+            autohide
+          >
+            <Toast.Header className={toastColor}>
+              <strong className="me-auto">The Guild</strong>
+              <small>{new Date().toLocaleString()}</small>
+            </Toast.Header>
+            <Toast.Body className="fs-5">{toastMessage}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
+    </>
   );
 }

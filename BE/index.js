@@ -258,11 +258,11 @@ app.get("/stats", verifyToken, async (req, res) => {
   }
 });
 
-// Get single user by id
-app.get("/user/:id", async (req, res) => {
+// Get single user by token
+app.get("/user/", verifyToken, async (req, res) => {
   try {
-    const userId = req.params.id;
-    const user = await User.findOne({ where: { user_id: userId } });
+    const userID = req.user.user_id;
+    const user = await User.findOne({ where: { user_id: userID } });
     if (user === null) {
       return res.status(404).json({
         error: "User not found",
@@ -294,6 +294,12 @@ app.post("/sign-up", async (req, res) => {
     const { username, email, passHash } = req.body;
     const salt = await bcryptjs.genSaltSync(10);
     const hashed = await bcryptjs.hashSync(passHash, salt);
+
+    if (await User.findOne({ where: { email: email } })) {
+      return res.status(400).json({
+        error: "User already exists",
+      });
+    }
 
     const user = await User.create({
       username: username,
@@ -350,11 +356,11 @@ app.post("/logout", async (req, res) => {
 });
 
 // Update user details
-app.patch("/user/update/:id", async (req, res) => {
+app.patch("/user/update/", verifyToken, async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userID = req.user.user_id;
     const { username, email } = req.body;
-    const user = await User.findOne({ where: { user_id: userId } });
+    const user = await User.findOne({ where: { user_id: userID } });
     if (user === null) {
       return res.status(404).json({
         error: "User not found",
@@ -373,6 +379,37 @@ app.patch("/user/update/:id", async (req, res) => {
     //   { username: username, email: email, passHash: passHash },
     //   { where: { user_id: userId } }
     // );
+
+    res.json({ message: "User updated successfully" });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+// Update user vocation for first time login
+app.patch("/user/update/vocation", verifyToken, async (req, res) => {
+  try {
+    const userID = req.user.user_id;
+    const { chosenVocation, vocation_id } = req.body;
+    const user = await User.findOne({ where: { user_id: userID } });
+
+    if (user === null) {
+      return res.status(404).json({
+        error: "User not found",
+      });
+    }
+
+    if (chosenVocation !== 0 && chosenVocation !== 1) {
+      return res.status(400).json({
+        error: "Invalid value for chosenVocation",
+      });
+    }
+
+    user.set({ chosenVocation: chosenVocation, vocation_id: vocation_id });
+    await user.save();
+
     res.json({ message: "User updated successfully" });
   } catch (error) {
     return res.status(500).json({
@@ -382,11 +419,14 @@ app.patch("/user/update/:id", async (req, res) => {
 });
 
 // Update user exp points, check for level up
-app.patch("/user/questComplete/:id", async (req, res) => {
+app.patch("/user/questComplete/", verifyToken, async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userID = req.user.user_id;
     const { exp } = req.body;
-    const user = await User.findOne({ where: { user_id: userId } });
+    const user = await User.findOne({
+      where: { user_id: userID },
+      include: ["level", "vocation"],
+    });
     if (!user) {
       return res.status(404).json({
         error: "User not found",
@@ -411,8 +451,12 @@ app.patch("/user/questComplete/:id", async (req, res) => {
 
     return res.json({
       message: `User gained ${exp} EXP`,
-      updatedUser: user,
-      // newLevel: newLevel,
+      // updatedUser: user,
+      username: user.username,
+      exp: user.exp,
+      level: user.level.level,
+      vocation: user.vocation.vocation_name,
+      portrait: user.vocation.vocation_portrait,
     });
   } catch (error) {
     return res.status(500).json({

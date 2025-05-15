@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      chosenVocation: {
+        type: DataTypes.TINYINT,
+        defaultValue: 0,
+      },
       level_id: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
