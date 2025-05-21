@@ -51,6 +51,15 @@ const Background = styled.div`
     min-width: 280px;
     background-color: #fffff0c2;
     margin-left: 10px;
+
+    @media screen and (max-width: 400px) {
+      max-width: 300px;
+      margin: unset;
+
+      & section:nth-child(2n) {
+        align-self: flex-start !important;
+      }
+    }
   }
 
   & section:nth-child(2n) {
@@ -165,16 +174,16 @@ function App() {
         <section className="align-self-end" data-aos="fade-left">
           <div>
             <p>
-              <img
-                src="/images/decorations/beholderDeco.webp"
-                alt=""
-                width={"150px"}
-                style={{ float: "left" }}
-                loading="lazy"
-              />
               Whether you're a seasoned adventurer or a new squire, there's a
               place for you at the table.
             </p>
+            <img
+              src="/images/decorations/beholderDeco.webp"
+              alt=""
+              width={"150px"}
+              style={{ float: "right" }}
+              loading="lazy"
+            />
             <p>The realm awaits. Are you ready to begin your legend?</p>
           </div>
         </section>

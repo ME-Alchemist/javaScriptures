@@ -8,11 +8,14 @@ import styled from "styled-components";
 // import "../../node_modules/slick-carousel/slick/slick-theme.css";
 
 const StyledDiv = styled.div`
-  /* background-image: url(/images/backdrops/mainPageBackground2.webp); */
   background-size: cover;
   background-position: center;
   height: auto;
-  margin-top: 30px;
+
+  & h1 {
+    font-weight: bolder;
+    text-shadow: 2px 3px 12px white;
+  }
 
   .vocationDescription {
     text-align: center;
@@ -136,7 +139,7 @@ const ChooseVocation = () => {
       .then((res) => {
         console.log(res);
         alert("Vocation updated successfully");
-        navigate("/main", { replace: true });
+        navigate("/main/home", { replace: true });
       })
       .catch((err) => {
         console.log("invalid token", err);

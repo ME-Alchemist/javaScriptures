@@ -2,6 +2,8 @@ import styled from "styled-components";
 import questStore from "../zustore/questStore";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation, useParams } from "react-router";
+import completedStore from "../zustore/questCompletedStore";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -26,7 +28,7 @@ const StyledDiv = styled.div`
       /* all: unset; */
       height: 80px;
       width: 350px;
-      display: none;
+      display: none !important;
 
       /* height: 480px; */
     }
@@ -71,40 +73,46 @@ const StyledDiv = styled.div`
     @media screen and (max-width: 400px) {
       width: 300px;
       height: 480px;
+
+      .portrait {
+        width: 120px !important;
+        height: 120px !important;
+      }
     }
   }
 `;
 
 const QuestSuccess = () => {
   const { exp_gathered, hitPoints, monstersEncountered } = questStore();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const imgResize = () => {
-  //     if (window.innerWidth < 768) {
-  //       setImgSrc("/images/Event/successMobile.webp");
-  //     } else {
-  //       setImgSrc("/images/Event/Success.webp");
-  //     }
-  //   };
-
-  //   window.addEventListener("resize", imgResize);
-  //   return () => {
-  //     window.removeEventListener("resize", imgResize);
-  //   };
-  // }, []);
+  const { category_name } = useParams();
+  const { setQuestCompleted, questCompleted } = completedStore();
 
   useEffect(() => {
-    const combinedExp = exp_gathered + hitPoints * 10;
-    // console.log(questStore.getState().hitPoints);
-    // console.log(questStore.getState().exp_gathered);
+    console.log(completedStore.getState().questCompleted);
 
+    setTimeout(() => {
+      console.log(completedStore.getState().questCompleted);
+    }, 2000);
+    // trying to navigate here manually or
+    //attempting to the reload the page will navigate away
+    if (!location.state?.fromQuest || questCompleted === true) {
+      navigate("/main/404");
+      return;
+    }
+    const combinedExp = exp_gathered + hitPoints * 10;
+    setQuestCompleted(true);
+
+    // Grab the score from the questStore,
+    // display Results then perform a PATCH request on the users exp field
     axios
       .patch(
         "http://localhost:3000/user/questComplete",
         {
           exp: combinedExp,
+          category_name: category_name,
         },
         {
           withCredentials: true,
@@ -113,18 +121,14 @@ const QuestSuccess = () => {
       .then((res) => {
         console.log(res);
         setUser(res.data);
+      })
+      .catch((err) => {
+        console.error("PATCH error:", err.response?.data || err.message);
+        navigate("/main/404");
       });
   }, []);
 
-  // useLayoutEffect(() => {
-  //   addExp(questStore.getState());
-  //   return () => {
-  //     resetQuest();
-  //   };
-  // }, []);
-
   return (
-    // Grab the score from the questStore, display Results then perform a PATCH request on the users exp field
     <StyledDiv>
       <h1>Quest Successful!</h1>
 
@@ -138,7 +142,9 @@ const QuestSuccess = () => {
           />
         </section>
         <section className="resultBox">
-          <h3>Results</h3>
+          <h3 style={{ textDecoration: "underline", fontWeight: "bold" }}>
+            Results
+          </h3>
           <div className="d-flex flex-row align-items-center justify-content-center">
             <div
               className="portrait"
@@ -175,6 +181,7 @@ const QuestSuccess = () => {
           />
           <div className="questResults">
             <ul>
+              <li># of times repeated: {user?.timesCompleted ?? 0}</li>
               <li>Hit Points remaining: {hitPoints}</li>
               <li>
                 Remaining HP bonus exp:{" "}
@@ -182,7 +189,7 @@ const QuestSuccess = () => {
                   hitPoints * 10
                 }`}</span>
               </li>
-              <li>Total Exp Gained: {exp_gathered + hitPoints * 10}</li>
+              <li>Total Exp Gained: {user?.gainedExp}</li>
             </ul>
             <hr
               style={{

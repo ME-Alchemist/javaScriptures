@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Spinner } from "react-bootstrap";
+// import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
+import AOS from "aos";
 import titleStore from "../zustore/titleStore";
 import UserDetails from "../zustore/userStore";
+import Spinner from "../components/spinner";
 
 const StyledSection = styled.section`
   .userInfo {
@@ -44,6 +46,15 @@ const StyledSection = styled.section`
       display: block;
     }
   }
+
+  .fade-in-img {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+  }
+
+  .fade-in-img.loaded {
+    opacity: 1;
+  }
 `;
 
 const Status = () => {
@@ -51,8 +62,30 @@ const Status = () => {
   const navigate = useNavigate();
   const { setTitle } = titleStore();
 
+  const {
+    level,
+    exp,
+    vocation,
+    username,
+    email,
+    vocation_img,
+    vocation_portrait,
+  } = UserDetails();
+
   useEffect(() => {
     setTitle("Status");
+
+    const img = new Image();
+    img.src = { vocation_img };
+    img.onload = () => {
+      setIsLoading(false);
+    };
+
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+
     axios
       .get("http://localhost:3000/stats", { withCredentials: true })
       .then((res) => {
@@ -70,16 +103,6 @@ const Status = () => {
       setTitle("Welcome traveler!");
     };
   }, [navigate]);
-
-  const {
-    level,
-    exp,
-    vocation,
-    username,
-    email,
-    vocation_img,
-    vocation_portrait,
-  } = UserDetails();
 
   return (
     <>
@@ -109,8 +132,8 @@ const Status = () => {
           //   backgroundSize: "contain",
           // }}
           >
-            {isLoading || !vocation_img ? (
-              <Spinner size="lg" animation="border" className="mx-auto" />
+            {isLoading ? (
+              <Spinner />
             ) : (
               <img
                 className="img-fluid userAvatar"

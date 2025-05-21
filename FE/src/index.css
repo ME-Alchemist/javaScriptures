@@ -37,8 +37,8 @@ body {
   margin: 0;
   /* display: flex; */
   /* place-items: center; */
-  min-width: 320px;
-  height: 100%;
+  min-width: 310px;
+  min-height: 100vh;
   text-align: center;
   /* overflow-y: auto; */
 }

@@ -6,12 +6,13 @@ import { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
 import { DndContext } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
+import HP from "../components/HP";
 
 import titleStore from "../zustore/titleStore";
 import questStore from "../zustore/questStore";
+import completedStore from "../zustore/questCompletedStore";
 import Draggable from "../components/DnD kit/Draggable";
 import Droppable from "../components/DnD kit/Droppable";
-import Header from "../components/header";
 
 const StyledWrapper = styled.section`
   /* width: auto;
@@ -22,6 +23,11 @@ const StyledWrapper = styled.section`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+  .icons {
+    height: 20px;
+    width: 20px;
+  }
 
   #droppable {
     width: 300px;
@@ -41,6 +47,10 @@ const StyledWrapper = styled.section`
     min-height: 450px;
     max-height: 450px;
     overflow-y: scroll;
+    & p {
+      font-size: large;
+      font-weight: 600;
+    }
   }
 
   .question {
@@ -83,11 +93,40 @@ const StyledWrapper = styled.section`
   }
 `;
 
+const ModalBox = styled.div`
+  .lightbox {
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background: #00000087;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & p {
+      font-size: larger;
+      font-weight: bold;
+      color: white;
+    }
+    & button {
+      border-radius: 15px;
+      /* background-color: #143636 !important; */
+    }
+  }
+
+  .lightbox .boxContainer {
+    background: #16081c;
+    padding: 2em 4em;
+    border-radius: 1rem;
+    max-width: 550px;
+  }
+`;
+
 const ChosenQuests = () => {
   const navigate = useNavigate();
   const { setTitle } = titleStore();
   const { updateQuest, resetQuest } = questStore();
-  const { difficulty } = useParams();
+  const { setQuestCompleted } = completedStore();
+  const { category_name } = useParams();
   // maybe these states could be placed in a object
 
   const [next, setNext] = useState(0);
@@ -104,7 +143,7 @@ const ChosenQuests = () => {
   // const [autoNavigate, setAutoNavigate] = useState(false);
 
   // Type writer effect
-  const appendToQuestLog = async (text, fSize, fStyle) => {
+  const appendToQuestLog = async (text, fSize, fStyle, fColor) => {
     try {
       let i = 0;
       let txt = text;
@@ -112,6 +151,7 @@ const ChosenQuests = () => {
       const para = document.createElement("p");
       para.style.fontSize = fSize;
       para.style.fontStyle = fStyle;
+      para.style.color = fColor;
       const questLog = document.querySelector(".questProgress");
       questLog.appendChild(para);
 
@@ -149,10 +189,16 @@ const ChosenQuests = () => {
     try {
       resetQuest();
       const questResponse = await axios.get(
-        `http://localhost:3000/quests/html/${difficulty}`
+        `http://localhost:3000/quests/${category_name}`,
+        {
+          withCredentials: true,
+        }
       );
       const monsterResponse = await axios.get(
-        `http://localhost:3000/monsters/${difficulty}`
+        `http://localhost:3000/monsters/${category_name}`,
+        {
+          withCredentials: true,
+        }
       );
       const data = questResponse.data;
       const monsterData = monsterResponse.data;
@@ -190,6 +236,8 @@ const ChosenQuests = () => {
 
   // Run fetch on mount
   useEffect(() => {
+    setQuestCompleted(false);
+    console.log(completedStore.getState().questCompleted);
     setTitle("The Quest begins!");
     questFetch();
 
@@ -220,19 +268,13 @@ const ChosenQuests = () => {
         "italic"
       );
       setTimeout(() => {
-        navigate("/main/results/success", { replace: true });
+        navigate(`/main/results/success/${category_name}`, {
+          replace: true,
+          state: { fromQuest: true },
+        });
       }, 2000);
     }
   }, [next]);
-
-  // run appendToQuestLog after mount
-  // useLayoutEffect(() => {
-  //   if (monsters) {
-  //     appendToQuestLog(
-  //       `The ${monsters[next].enemy_name} asks: ${quest[next].question}`
-  //     );
-  //   }
-  // });
 
   // Header.title = `"Loading"`;
 
@@ -252,11 +294,32 @@ const ChosenQuests = () => {
       >
         {({ isActive, onCancel, onConfirm }) =>
           isActive && (
-            <div>
-              <p>lol</p>
-              <button onClick={onConfirm}>Confirm</button>
-              <button onClick={onCancel}>Cancel</button>
-            </div>
+            <ModalBox>
+              <div className="lightbox">
+                <div className="boxContainer">
+                  <p>
+                    Are you sure you want to cancel the current quest? You'll
+                    lose your experience gathered so far
+                  </p>
+                  <div className="d-flex justify-content-center flex-column flex-sm-row gap-2">
+                    <button
+                      className="bg-success bg-gradient"
+                      type="button"
+                      onClick={onCancel}
+                    >
+                      No, I will push on!
+                    </button>
+                    <button
+                      className="bg-warning bg-gradient"
+                      type="submit"
+                      onClick={onConfirm}
+                    >
+                      Fallback! Retreat!
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ModalBox>
           )
         }
       </Prompt>
@@ -270,17 +333,26 @@ const ChosenQuests = () => {
             >
               {/* <button onClick={nextQuestion}>Next</button> */}
               <StyledWrapper className="">
-                <article className="questLog">
-                  <h3 className="text-decoration-underline fw-bold">
-                    {quest[next]?.category.category_name}
-                  </h3>
-                  <p>Quest log:</p>
-                  <hr
-                    style={{ border: "2px solid darkgray", opacity: "unset" }}
-                  />
+                <section className="d-flex flex-column gap-2">
+                  <div
+                    className="border border-black rounded-4"
+                    style={{ marginLeft: "10px" }}
+                  >
+                    <HP />
+                  </div>
 
-                  <aside className="questProgress"></aside>
-                </article>
+                  <article className="questLog">
+                    <h3 className="text-decoration-underline fw-bold">
+                      {quest[next]?.category.category_name}
+                    </h3>
+                    <p>Quest log:</p>
+                    <hr
+                      style={{ border: "2px solid darkgray", opacity: "unset" }}
+                    />
+                    <aside className="questProgress"></aside>
+                  </article>
+                </section>
+
                 {next < quest.length ? (
                   <article>
                     <div className="d-flex justify-content-center">
@@ -301,9 +373,30 @@ const ChosenQuests = () => {
                       }
                     />
                     <div className="answers">
-                      <Draggable id="a">{quest[next].answer_a}</Draggable>
-                      <Draggable id="b">{quest[next].answer_b}</Draggable>
-                      <Draggable id="c">{quest[next].answer_c}</Draggable>
+                      <Draggable id="a">
+                        {quest[next].answer_a}{" "}
+                        <img
+                          className="icons"
+                          src="/images/decorations/swordDeco.webp"
+                          alt=""
+                        />
+                      </Draggable>
+                      <Draggable id="b">
+                        {quest[next].answer_b}{" "}
+                        <img
+                          className="icons"
+                          src="/images/decorations/shieldDeco.webp"
+                          alt=""
+                        />
+                      </Draggable>
+                      <Draggable id="c">
+                        {quest[next].answer_c}{" "}
+                        <img
+                          className="icons"
+                          src="/images/decorations/potionDeco.webp"
+                          alt=""
+                        />
+                      </Draggable>
                     </div>
                   </article>
                 ) : (
@@ -339,7 +432,10 @@ const ChosenQuests = () => {
         );
         console.log(questStore.getState().exp_gathered);
         appendToQuestLog(
-          `Correct! You received ${monsters[next].exp_drop} exp`
+          `Correct! You received ${monsters[next].exp_drop} exp`,
+          undefined,
+          undefined,
+          "green"
         );
         if (nextMonster < quest.length) {
           appendToQuestLog(
@@ -350,17 +446,27 @@ const ChosenQuests = () => {
       }
 
       if (active.id !== String(quest[next].correct_answer)) {
+        let getHP = document.querySelectorAll(".hp");
+        getHP[getHP.length - 1].remove();
         const newHitPoints = hitPoints - 1;
         setHitPoints(newHitPoints);
         setDropped(active.id);
-        appendToQuestLog(`wrong answer! Hit Points left: ${newHitPoints}HP`);
+        appendToQuestLog(
+          `wrong answer! Hit Points left: ${newHitPoints}HP`,
+          undefined,
+          undefined,
+          "red"
+        );
         updateQuest(0, newHitPoints, "");
 
         if (newHitPoints <= 0) {
           setBlocking(false);
           appendToQuestLog("No more tries!").then(() => {
             setTimeout(() => {
-              navigate("/main/results/failed", { replace: true });
+              navigate("/main/results/failed", {
+                replace: true,
+                state: { fromQuest: true },
+              });
             }, 1500);
           });
         }

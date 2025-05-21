@@ -77,8 +77,9 @@ export default function Login() {
           setToastMessage("Welcome back " + res.data.user.username + "!");
           setToast(true);
           setTimeout(() => {
-            navigate("/main");
+            navigate("/main/home", { replace: true });
           }, 2500);
+          form.reset();
         }
       })
       .catch((err) => {
@@ -94,8 +95,6 @@ export default function Login() {
           console.log(err);
         }
       });
-
-    form.reset();
   };
 
   return (
@@ -105,11 +104,13 @@ export default function Login() {
         data-aos="fade-zoom-in"
       >
         <img
+          data-aos-once="true"
           className="img-fluid"
           src="/images/decorations/lichTopDeco.webp"
           alt="lich"
           title="Lich"
           width={"470px"}
+          height={"205px"}
         />
       </div>
       <StyleWrapper>

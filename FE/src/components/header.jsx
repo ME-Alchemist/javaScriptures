@@ -16,13 +16,18 @@ const StyledHeader = styled.header`
   h1 {
     margin: 0px;
   }
+
+  & button {
+    width: 150px;
+  }
 `;
 
 const StyledCanvas = styled(Offcanvas)`
-  height: 5em !important;
+  height: 100% !important;
   /* font-weight: bold; */
   font-size: larger;
   font-weight: bolder;
+  width: 250px !important;
 
   & p {
     margin-bottom: 0px;
@@ -37,14 +42,19 @@ const StyledCanvas = styled(Offcanvas)`
   }
 
   & a:hover {
-    color: #188acc;
+    color: #144095;
+    text-shadow: 2px 2px 2px #eee;
   }
 
-  background-image: url(/images/bannerBG.webp) !important;
+  background-color: #997043 !important;
+  background-image: url("/images/backdrops/bannerBG2.webp") !important;
   background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 
   .offcanvas-body {
     padding: unset !important;
+    list-style-type: none;
   }
 
   .logout {
@@ -53,7 +63,8 @@ const StyledCanvas = styled(Offcanvas)`
   }
 
   .logout:hover {
-    color: #188acc;
+    color: #144095;
+    text-shadow: 2px 2px 2px #eee;
     cursor: pointer;
   }
 `;
@@ -111,10 +122,10 @@ const Header = () => {
 
   return (
     <>
-      <StyledHeader className="shadow-sm d-flex flex-row justify-content-center">
+      <StyledHeader className="shadow-sm d-flex flex-column justify-content-center">
         <h1 className="flex-grow-1">{title}</h1>
         <button
-          className="btn bi bi-caret-down-fill fs-5 fw-bold "
+          className="btn bi bi-caret-right-fill fs-5 fw-bold mx-auto"
           onClick={handleShow}
         >
           Menu
@@ -122,14 +133,16 @@ const Header = () => {
       </StyledHeader>
 
       <StyledCanvas
-        className="h-25 offcanvas-top"
+        className="h-75 offcanvas-start"
         show={show}
         onHide={handleClose}
-        placement="top"
+        placement="start"
+        data-bs-theme="dark"
       >
         <Offcanvas.Header
           style={{
             padding: "0px 35px 0px 35px",
+            color: "white",
           }}
           closeButton
         >
@@ -137,22 +150,35 @@ const Header = () => {
             <p>JavaScriptures</p>
           </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body className="h-25">
+        <Offcanvas.Body className="d-flex flex-row justify-content-center">
           <div>
             {/* the header is only meant to be shown when the user is logged in, first page is the login page or welcome page if the user is not logged in*/}
             <ul
-              style={{ color: "white" }}
-              className="d-flex flex-row gap-5 justify-content-center"
+              style={{ color: "white", listStyleType: "none" }}
+              className="mt-3 d-flex flex-column gap-3 justify-content-center"
             >
-              {/* Quit current quest and return to main menu, a state is needed to check wether or not the player is currently in a quest and if it's not finished yet warn the player progress will be lost, upon confiming, the progression of the current quest is reset and the player is returned to the main menu, a boolean state may be needed false/true to check wether or not the player currently is in a quest */}
+              {" "}
+              {/* Quit current quest and return to main menu,*/}
+              <li onClick={handleClose}>
+                <Link to="/main/home">Home</Link>
+              </li>
+              {/* Quit current quest and return to main menu,*/}
+              <li onClick={handleClose}>
+                <Link to="/main/preparations">Preparations</Link>
+              </li>
+              {/* Quit current quest and return to main menu,*/}
               <li onClick={handleClose}>
                 <Link to="/main/quests">Quests</Link>
               </li>
-              {/* open modal displaying the player stats without leaving the current page/quest*/}
+              {/*has a page to display the stats of the player*/}
               <li onClick={handleClose}>
                 <Link to={"/main/stats"}>Stats</Link>
               </li>
-              {/* Sign out, ask the user to confirm before closing the app and perform a POST request to the server in order to save user progression for later use before logout*/}
+              {/* list monsters encounter by the player, perfomring a post request to the server in order to retrieve the list of monsters encountered by the player, join table in the database* open up when ready to continue work past end of project*/}
+              {/* <li onClick={handleClose}>
+                <Link to={"/main/bestiary"}>Bestiary</Link>
+              </li> */}
+              {/* Sign out, ask the user to confirm before closing the app, POST requests  for user progressinon are now made during result screens so no need to perform additonal requests before logout*/}
               <li className="logout" onClick={logout}>
                 logout
               </li>

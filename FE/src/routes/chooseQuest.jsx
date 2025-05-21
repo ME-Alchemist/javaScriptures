@@ -48,7 +48,7 @@ const StyledSection = styled.section`
 
   @media screen and (max-width: 400px) {
     .questDescription {
-      width: 300px;
+      width: 270px;
       height: 330px;
     }
 
@@ -58,6 +58,12 @@ const StyledSection = styled.section`
       }
     }
   }
+`;
+
+const StyledHeader = styled.header`
+  font-weight: bolder;
+  text-shadow: 2px 3px 12px white;
+  margin-bottom: 30px;
 `;
 
 const List = styled.ul`
@@ -109,15 +115,14 @@ const ChooseQuest = () => {
 
   useEffect(() => {
     textRef.current.innerHTML =
-      "5 riddles await — paths lie before you. Drag and drop your answer into the circle of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
+      "5 riddles await — 3 paths lie before you. Drag and drop your answer into the box of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
   }, []);
 
   return (
     <>
-      <header>
+      <StyledHeader>
         <h1>Choose your quest</h1>
-      </header>
-
+      </StyledHeader>
       <StyledSection className="flex-md-row">
         <div
           className="questDropdown flex-column d-flex dropdown gap-3"
@@ -139,19 +144,19 @@ const ChooseQuest = () => {
               <li>
                 <Link
                   className="dropdown-item"
-                  to="/main/questStart/html/1"
+                  to="/main/quests/html basics 1"
                   role="button"
                 >
                   HTML Basics 1
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/html/2">
+                <Link className="dropdown-item" to="/main/quests/html basics 2">
                   HTML Basics 2
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/html/3">
+                <Link className="dropdown-item" to="/main/quests/html basics 3">
                   HTML Basics 3
                 </Link>
               </li>
@@ -172,19 +177,19 @@ const ChooseQuest = () => {
               <li>
                 <Link
                   className="dropdown-item"
-                  to="/main/questStart/css/1"
+                  to="/main/quests/css basics 1"
                   role="button"
                 >
                   CSS Basics 1
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/css/2">
+                <Link className="dropdown-item" to="/main/quests/css basics 2">
                   CSS Basics 2
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/css/3">
+                <Link className="dropdown-item" to="/main/quests/css basics 3">
                   CSS Basics 3
                 </Link>
               </li>
@@ -205,19 +210,19 @@ const ChooseQuest = () => {
               <li>
                 <Link
                   className="dropdown-item"
-                  to="/main/questStart/js/1"
+                  to="/main/quests/js basics 1"
                   role="button"
                 >
                   JS Basics 1
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/js/2">
+                <Link className="dropdown-item" to="/main/quests/js basics 2">
                   JS Basics 2
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/questStart/js/3">
+                <Link className="dropdown-item" to="/main/quests/js basics 3">
                   JS Basics 3
                 </Link>
               </li>

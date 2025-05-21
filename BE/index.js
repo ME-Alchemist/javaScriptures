@@ -71,7 +71,8 @@ sequelize
   });
 
 const models = initializeModels(sequelize);
-const { User, Bestiary, Quests, Vocations, Levels } = models;
+const { User, Bestiary, Quests, Vocations, Levels, Categories, Completed } =
+  models;
 
 app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 
@@ -79,7 +80,7 @@ app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 // app.use("/main/:route*", verifyToken);
 
 // Get all quests
-app.get("/quests", async (req, res) => {
+app.get("/quests", verifyToken, async (req, res) => {
   try {
     const quests = await Quests.findAll({
       include: ["category"],
@@ -93,57 +94,25 @@ app.get("/quests", async (req, res) => {
   }
 });
 
-// Get HTML quests
-app.get("/quests/html/:difficulty", async (req, res) => {
+// Get HTML/CSS/JS quests
+app.get("/quests/:category_name", verifyToken, async (req, res) => {
   try {
-    const difficulty = req.params.difficulty;
-    const quests = await Quests.findAll({
+    const { category_name } = req.params;
+    // const difficulty = req.params.difficulty;
+
+    const category = await Categories.findOne({
       where: {
-        category_id: {
-          [Op.eq]: parseInt(difficulty) + 0,
-        },
+        category_name: category_name.toLowerCase(),
       },
-      include: ["category"],
-      attributes: { exclude: ["category_id"] },
     });
-    res.json(quests);
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-});
 
-// Get CSS quests
-app.get("/quests/css/:difficulty", async (req, res) => {
-  try {
-    const difficulty = req.params.difficulty;
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
     const quests = await Quests.findAll({
       where: {
-        category_id: {
-          [Op.eq]: parseInt(difficulty) + 3,
-        },
-      },
-      include: ["category"],
-      attributes: { exclude: ["category_id"] },
-    });
-    res.json(quests);
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-});
-
-// Get JS quests
-app.get("/quests/js/:difficulty", async (req, res) => {
-  try {
-    const difficulty = req.params.difficulty;
-    const quests = await Quests.findAll({
-      where: {
-        category_id: {
-          [Op.eq]: parseInt(difficulty) + 6,
-        },
+        category_id: category.category_id,
       },
       include: ["category"],
       attributes: { exclude: ["category_id"] },
@@ -182,15 +151,23 @@ app.get("/monster/:id", async (req, res) => {
 });
 
 // Get monsters specific to difficulty
-app.get("/monsters/:difficulty", async (req, res) => {
+app.get("/monsters/:category_name", verifyToken, async (req, res) => {
   try {
-    const difficulty = req.params.difficulty;
+    // const difficulty = req.params.difficulty;
+
+    const { category_name } = req.params;
+
+    const category = await Categories.findOne({
+      where: {
+        category_name: category_name.toLowerCase(),
+      },
+    });
+
     const monsters = await Bestiary.findAll({
       where: {
-        category_id: {
-          [Op.eq]: difficulty,
-        },
+        category_id: category.category_id,
       },
+      order: [["exp_drop", "ASC"]],
     });
     res.json(monsters);
   } catch (error) {
@@ -421,19 +398,59 @@ app.patch("/user/update/vocation", verifyToken, async (req, res) => {
 // Update user exp points, check for level up
 app.patch("/user/questComplete/", verifyToken, async (req, res) => {
   try {
+    //the token
     const userID = req.user.user_id;
-    const { exp } = req.body;
+    const { category_name, exp } = req.body;
+
+    // get category id
+    const category = await Categories.findOne({
+      where: { category_name: category_name.trim().toLowerCase() },
+    });
+
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    const category_id = category.category_id;
+
+    // get user
     const user = await User.findOne({
       where: { user_id: userID },
       include: ["level", "vocation"],
     });
+    // if not found return 404 status
     if (!user) {
       return res.status(404).json({
         error: "User not found",
       });
     }
 
-    user.exp += exp;
+    // check if user has completed the quest
+    const completedQuest = await Completed.findOne({
+      where: {
+        user_id: userID,
+        category_id: category_id,
+      },
+    });
+
+    let finalExp = exp;
+
+    if (completedQuest) {
+      completedQuest.times_completed += 1;
+      completedQuest.completed_at = new Date();
+      await completedQuest.save();
+
+      finalExp = Math.floor(exp / 3); // dela med 3
+    } else {
+      await Completed.create({
+        user_id: userID,
+        category_id: category_id,
+        completed: 1,
+        times_completed: 1,
+        completed_at: new Date(),
+      });
+    }
+
+    user.exp += finalExp;
 
     const newLevel = await Levels.findOne({
       where: {
@@ -452,13 +469,16 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
     return res.json({
       message: `User gained ${exp} EXP`,
       // updatedUser: user,
+      timesCompleted: completedQuest ? completedQuest.times_completed : 1,
       username: user.username,
-      exp: user.exp,
+      totaltExp: user.exp,
+      gainedExp: finalExp,
       level: user.level.level,
       vocation: user.vocation.vocation_name,
       portrait: user.vocation.vocation_portrait,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       error: error.message,
     });
@@ -466,7 +486,7 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
 });
 
 // Delete user
-app.delete("/delete/:id", async (req, res) => {
+app.delete("/delete/:id", verifyToken, async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await User.findOne({ where: { user_id: userId } });

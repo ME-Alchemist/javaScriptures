@@ -101,14 +101,16 @@ export default function SignIn() {
     <>
       <div className="d-flex justify-content-center" data-aos="fade-zoom-in">
         <img
+          data-aos-once="true"
           className="img-fluid"
           src="/images/decorations/dragonTopDeco.webp"
           alt="dragon"
           title="dragon"
           width={"420px"}
+          height={"220px"}
         />
       </div>
-      <StyleWrapper>
+      <StyleWrapper className="mb-5">
         <h1 style={{ textDecoration: "underline" }}>Sign up</h1>
         <Form
           autoComplete="off"

@@ -26,7 +26,7 @@ const StyledDiv = styled.div`
       /* all: unset; */
       height: 80px;
       width: 350px;
-      display: none;
+      display: none !important;
 
       /* height: 480px; */
     }
@@ -76,25 +76,18 @@ const StyledDiv = styled.div`
 `;
 
 const QuestFailed = () => {
-  const { exp_gathered, hitPoints, monstersEncountered } = questStore();
-
+  const { hitPoints, monstersEncountered } = questStore();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const combinedExp = exp_gathered + hitPoints * 10;
-    // console.log(questStore.getState().hitPoints);
-    // console.log(questStore.getState().exp_gathered);
+    // const combinedExp = exp_gathered + hitPoints * 10;
+    // Grab the score from the questStore,
+    // display Results then perform a PATCH request on the users exp field
 
     axios
-      .patch(
-        "http://localhost:3000/user/questComplete",
-        {
-          exp: combinedExp,
-        },
-        {
-          withCredentials: true,
-        }
-      )
+      .get("http://localhost:3000/stats", {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res);
         setUser(res.data);
@@ -102,7 +95,6 @@ const QuestFailed = () => {
   }, []);
 
   return (
-    // Grab the score from the questStore, display Results then perform a PATCH request on the users exp field
     <StyledDiv>
       <h1>Quest Failed..</h1>
 
@@ -116,7 +108,9 @@ const QuestFailed = () => {
           />
         </section>
         <section className="resultBox">
-          <h3>Results</h3>
+          <h3 style={{ textDecoration: "underline", fontWeight: "bold" }}>
+            Results
+          </h3>
           <div className="d-flex flex-row align-items-center justify-content-center">
             <div
               className="portrait"
@@ -129,7 +123,7 @@ const QuestFailed = () => {
               }}
             >
               <img
-                src={user?.portrait}
+                src={user?.vocation_portrait}
                 alt="portrait"
                 title="portrait"
                 width={"100%"}
@@ -153,11 +147,11 @@ const QuestFailed = () => {
           />
           <div className="questResults">
             <ul>
-              <li>Hit Points remaining: {hitPoints}</li>
+              <li>Hit Points remaining: {hitPoints * 0}</li>
               <li>
                 Remaining HP bonus exp:{" "}
                 <span style={{ color: "red", fontWeight: "bold" }}>{`+${
-                  hitPoints * 10
+                  hitPoints * 0
                 }`}</span>
               </li>
               <li>Total Exp Gained: 0</li>

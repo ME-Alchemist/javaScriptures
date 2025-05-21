@@ -21,14 +21,6 @@ function Droppable({ id, droppedAnswer }) {
     opacity: isOver ? 1 : 0.5,
   };
 
-  // const [droppedAnswer, setDroppedAnswer] = React.useState(null);
-
-  // React.useEffect(() => {
-  //   if (droppableProps && droppableProps.activeId) {
-  //     setDroppedAnswer(props.answer);
-  //   }
-  // }, [droppableProps]);
-
   return (
     <StyledDiv className="mx-auto m-3" ref={setNodeRef} style={style}>
       {droppedAnswer ? droppedAnswer : <div>Drop here</div>}

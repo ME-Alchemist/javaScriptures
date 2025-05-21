@@ -7,7 +7,7 @@ import { Link, Outlet } from "react-router";
 // import axios from "axios";
 
 const StyledFooter = styled.footer`
-  background: #0400ff;
+  background: #ff8f0075;
   margin: 0px;
   text-align: center;
   display: flex;
@@ -61,10 +61,12 @@ const Header = () => {
 
   return (
     <>
-      <StyledFooter>
-        <p>app name</p>
-        <p>all rights reserved</p>
-        <p>year</p>
+      <StyledFooter className="flex-column flex-sm-row">
+        <p>&copy; 2025 JavaScriptures</p>
+        <p>
+          &copy; 2025, D&D monsters, names, and class designs used under fair
+          use provisions.
+        </p>
       </StyledFooter>
     </>
   );

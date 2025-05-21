@@ -18,7 +18,6 @@ const App = lazy(() => import("./routes/App.jsx"));
 
 import Login from "./routes/login.jsx";
 import Register from "./routes/signUp.jsx";
-
 // const Login = lazy(() => import("./routes/login.jsx"));
 // const Register = lazy(() => import("./routes/signUp.jsx"));
 
@@ -32,11 +31,17 @@ import MainPage from "./routes/mainPage.jsx";
 import LoadQuest from "./routes/loadQuest.jsx";
 import Status from "./routes/status.jsx";
 import ChooseVocation from "./routes/chooseVocation.jsx";
+import Welcome from "./routes/welcome.jsx";
+import QuestPrep from "./routes/questPrep.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
   {
     path: "register",
@@ -60,19 +65,27 @@ const router = createBrowserRouter([
         children: [],
       },
       {
-        path: "questStart/html/:difficulty",
-        element: <LoadQuest />,
+        path: "home",
+        element: <Welcome />,
       },
       {
-        path: "questStart/css/:difficulty",
-        element: <LoadQuest />,
+        path: "preparations",
+        element: <QuestPrep />,
       },
       {
-        path: "questStart/js/:difficulty",
+        path: "quests/:category_name",
         element: <LoadQuest />,
       },
+      // {
+      //   path: "questStart/css/:difficulty",
+      //   element: <LoadQuest />,
+      // },
+      // {
+      //   path: "questStart/js/:difficulty",
+      //   element: <LoadQuest />,
+      // },
       {
-        path: "results/success",
+        path: "results/success/:category_name",
         element: <QuestSuccess />,
       },
       {
@@ -84,7 +97,7 @@ const router = createBrowserRouter([
         element: <Status />,
       },
       {
-        path: "*",
+        path: "404",
         element: <NotFound />,
       },
     ],
