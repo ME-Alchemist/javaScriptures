@@ -56,7 +56,6 @@ export default function Login() {
 
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
-    console.log(data);
     // if (pass.value !== repeat.value) {
     //   alert("Password and repeated password are not matching!");
     //   return;
@@ -64,35 +63,43 @@ export default function Login() {
     axios
       .post("http://localhost:3000/login", data, { withCredentials: true })
       .then((res) => {
-        if (res.status >= 200 && res.status < 300) {
-          if (res.data.user.chosenVocation === 0) {
-            {
-              alert("You must select a vocation first");
-              navigate("/vocation");
-              return;
+        try {
+          console.log("RES.DATA = ", res.data);
+          if (res.status >= 200 && res.status < 300) {
+            if (res.data.user.chosenVocation === 0) {
+              {
+                alert("You must select a vocation first");
+                navigate("/vocation");
+                return;
+              }
             }
+            setToastColor("bg-success fs-5");
+            setToastMessage("Welcome back " + res.data.user.username + "!");
+            setToast(true);
+            setTimeout(() => {
+              navigate("/main/home", { replace: true });
+            }, 2500);
+            form.reset();
           }
-          console.log(res);
-          setToastColor("bg-success fs-5");
-          setToastMessage("Welcome back " + res.data.user.username + "!");
-          setToast(true);
-          setTimeout(() => {
-            navigate("/main/home", { replace: true });
-          }, 2500);
-          form.reset();
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          setToastColor("bg-danger fs-5");
-          setToastMessage("Wrong email or password!");
-          setToast(true);
-          console.log(err);
-        } else if (err.response.status === 404) {
-          setToastColor("bg-danger fs-5");
-          setToastMessage("Adventurer not found!");
-          setToast(true);
-          console.log(err);
+        } catch (err) {
+          if (err.response) {
+            if (err.response.status === 401) {
+              setToastColor("bg-danger fs-5");
+              setToastMessage("Wrong email or password!");
+              setToast(true);
+              console.log(err);
+            } else if (err.response.status === 404) {
+              setToastColor("bg-danger fs-5");
+              setToastMessage("Adventurer not found!");
+              setToast(true);
+              console.log(err);
+            }
+          } else {
+            setToastColor("bg-danger fs-5");
+            setToastMessage("Something went wrong!");
+            setToast(true);
+            console.log(err);
+          }
         }
       });
   };

@@ -127,7 +127,7 @@ const ChosenQuests = () => {
   const { updateQuest, resetQuest } = questStore();
   const { setQuestCompleted } = completedStore();
   const { category_name } = useParams();
-  // maybe these states could be placed in a object
+  // maybe these states could be placed in a object on in a useReducer
 
   const [next, setNext] = useState(0);
   const [quest, setQuest] = useState(null);

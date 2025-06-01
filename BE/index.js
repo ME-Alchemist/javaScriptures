@@ -23,7 +23,7 @@ connection.connect();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost"],
     credentials: true,
   })
 );
@@ -424,7 +424,7 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
       });
     }
 
-    // check if user has completed the quest
+    // check if user has completed the same quest before
     const completedQuest = await Completed.findOne({
       where: {
         user_id: userID,
@@ -439,7 +439,7 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
       completedQuest.completed_at = new Date();
       await completedQuest.save();
 
-      finalExp = Math.floor(exp / 3); // dela med 3
+      finalExp = Math.floor(exp / 3); // divide by 3
     } else {
       await Completed.create({
         user_id: userID,
