@@ -7,6 +7,7 @@ import { Spinner } from "react-bootstrap";
 import { DndContext } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import HP from "../components/HP";
+// import { useAnimation, motion } from "motion/react"
 
 import titleStore from "../zustore/titleStore";
 import questStore from "../zustore/questStore";
@@ -184,6 +185,22 @@ const ChosenQuests = () => {
     );
   };
 
+//   const controls = useAnimation();
+
+//   const animation = {
+//   hidden: { opacity: 0, x: -100 },
+//   visible: {
+//     opacity: 1,
+//     x: 0,
+//     transition: { duration: 1 },
+//   },
+
+// };
+
+// const startAnimation = () => {
+//   controls.start("visible");
+// };
+
   // fetch data/quests/monsters
   const questFetch = async () => {
     try {
@@ -223,16 +240,10 @@ const ChosenQuests = () => {
       setNext(next + 1);
       setDropped(null);
 
-      console.log(quest[next]);
-      console.log(next);
+      // console.log(quest[next]);
+      // console.log(next);
     }
   };
-
-  // Reload button to restart game and reset hitpoints,
-  // const reload = () => {
-  //   setNext(0);
-  //   setHitPoints(3);
-  // };
 
   // Run fetch on mount
   useEffect(() => {
@@ -359,7 +370,9 @@ const ChosenQuests = () => {
                       <h3 className="question">{quest[next].question}</h3>
                     </div>
                     {/* {!parent ? draggable : null} */}
+                                        
                     <img
+
                       src={monsters[next].img_path}
                       alt={monsters[next].enemy_name}
                       title={monsters[next].enemy_name}
@@ -430,7 +443,7 @@ const ChosenQuests = () => {
           questStore.getState().hitPoints,
           monsters[next].enemy_name
         );
-        console.log(questStore.getState().exp_gathered);
+        // console.log(questStore.getState().exp_gathered);
         appendToQuestLog(
           `Correct! You received ${monsters[next].exp_drop} exp`,
           undefined,

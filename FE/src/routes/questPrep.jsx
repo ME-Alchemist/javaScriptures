@@ -106,9 +106,9 @@ const QuestPrep = () => {
             </p>
           </div>
           <p>
-            Wish to learn more?
+            Brush up on your knowledge by
             <br />
-            press
+            pressing
             <Link target="_blank" to={prep.reference}>
               {" "}
               here

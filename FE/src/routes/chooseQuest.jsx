@@ -210,19 +210,19 @@ const ChooseQuest = () => {
               <li>
                 <Link
                   className="dropdown-item"
-                  to="/main/quests/js basics 1"
+                  to="/main/quests/javascript basics 1"
                   role="button"
                 >
                   JS Basics 1
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/quests/js basics 2">
+                <Link className="dropdown-item" to="/main/quests/javascript basics 2">
                   JS Basics 2
                 </Link>
               </li>
               <li>
-                <Link className="dropdown-item" to="/main/quests/js basics 3">
+                <Link className="dropdown-item" to="/main/quests/javascript basics 3">
                   JS Basics 3
                 </Link>
               </li>

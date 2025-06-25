@@ -18,6 +18,17 @@
   all: unset;
 } */
 
+.slash-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -61,11 +72,13 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s ease-in-out,;
 }
+
 button:hover {
-  border-color: #646cff;
+  border-color: #ffffff !important;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

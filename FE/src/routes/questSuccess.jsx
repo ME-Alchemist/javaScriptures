@@ -169,7 +169,7 @@ const QuestSuccess = () => {
               <p>Hero: {user?.username}</p>
               <p>Vocation: {user?.vocation}</p>
               <p>Level: {user?.level}</p>
-              <p>Exp: {user?.exp}</p>
+              <p>Exp: {user?.totaltExp}</p>
             </div>
           </div>
           <hr

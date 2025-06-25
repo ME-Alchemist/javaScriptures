@@ -63,7 +63,6 @@ export default function Login() {
     axios
       .post("http://localhost:3000/login", data, { withCredentials: true })
       .then((res) => {
-        try {
           console.log("RES.DATA = ", res.data);
           if (res.status >= 200 && res.status < 300) {
             if (res.data.user.chosenVocation === 0) {
@@ -81,7 +80,8 @@ export default function Login() {
             }, 2500);
             form.reset();
           }
-        } catch (err) {
+        })
+      .catch((err) => {
           if (err.response) {
             if (err.response.status === 401) {
               setToastColor("bg-danger fs-5");
@@ -100,8 +100,7 @@ export default function Login() {
             setToast(true);
             console.log(err);
           }
-        }
-      });
+        });
   };
 
   return (

@@ -4,8 +4,6 @@ import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import Slider from "react-slick";
 import styled from "styled-components";
-// import "../../node_modules/slick-carousel/slick/slick.css";
-// import "../../node_modules/slick-carousel/slick/slick-theme.css";
 
 const StyledDiv = styled.div`
   background-size: cover;
@@ -138,7 +136,7 @@ const ChooseVocation = () => {
       )
       .then((res) => {
         console.log(res);
-        alert("Vocation updated successfully");
+        alert(`Vocation chosen: ${currentVocation.vocation_name}`);
         navigate("/main/home", { replace: true });
       })
       .catch((err) => {
