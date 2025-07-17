@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import questStore from "../zustore/questStore";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { useNavigate, useLocation, useParams } from "react-router";
 import completedStore from "../zustore/questCompletedStore";
 
@@ -89,6 +89,27 @@ const QuestSuccess = () => {
   const [user, setUser] = useState(null);
   const { category_name } = useParams();
   const { setQuestCompleted, questCompleted } = completedStore();
+  
+//   const handleQuestComplete = () => {
+//     console.log("calling playWin");
+//     playWin();
+// };  
+
+  // const toggleBGM = () => {
+  //   if (playing) {
+  //     // pauseFailBGM();
+  //     // pauseBGM();
+  //     pauseWinBGM();
+  //     setPlaying(false);
+  //   } else {
+  //     playWinBGM();
+  //     // playFailBGM();
+  //     // playBGM();
+  //     setPlaying(true);
+  //     // console.log(currentPath);
+  //   }
+  // };
+
 
   useEffect(() => {
     console.log(completedStore.getState().questCompleted);
@@ -127,6 +148,7 @@ const QuestSuccess = () => {
         navigate("/main/404");
       });
   }, []);
+
 
   return (
     <StyledDiv>

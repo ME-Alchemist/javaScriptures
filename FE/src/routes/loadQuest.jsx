@@ -1,4 +1,6 @@
 import styled from "styled-components";
+// import useSound from "use-sound";
+import { useSoundContext } from "../components/soundContext";
 import axios from "axios";
 import Prompt from "react-router-prompt";
 import { useParams, useNavigate } from "react-router";
@@ -81,6 +83,26 @@ const StyledWrapper = styled.section`
     object-fit: contain;
   }
 
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes move {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(40px); }
+  100% { transform: translateX(0); }
+}
+
   @media screen and (max-width: 760px) {
     .questLog {
       display: none;
@@ -123,12 +145,15 @@ const ModalBox = styled.div`
 `;
 
 const ChosenQuests = () => {
+
+  const { playSlash, playMissed, playBlocked } = useSoundContext();
+  
   const navigate = useNavigate();
   const { setTitle } = titleStore();
   const { updateQuest, resetQuest } = questStore();
   const { setQuestCompleted } = completedStore();
   const { category_name } = useParams();
-  // maybe these states could be placed in a object on in a useReducer
+  // maybe these states could be placed in a object or used with a useReducer
 
   const [next, setNext] = useState(0);
   const [quest, setQuest] = useState(null);
@@ -139,9 +164,7 @@ const ChosenQuests = () => {
   // const [loading, setLoading] = useState(true);
   // You get three tries
   const [hitPoints, setHitPoints] = useState(3);
-  // const draggable = <Draggable id="draggable">Go ahead, drag me.</Draggable>;
   const [blocking, setBlocking] = useState(true);
-  // const [autoNavigate, setAutoNavigate] = useState(false);
 
   // Type writer effect
   const appendToQuestLog = async (text, fSize, fStyle, fColor) => {
@@ -170,6 +193,42 @@ const ChosenQuests = () => {
     }
   };
 
+  const playSFX = (type) => {
+    switch (type) {
+      case "slash":
+        playSlash();
+        break;
+        case "missed":
+          playMissed();
+          break;
+          case "blocked":
+            playBlocked();
+            break;
+          }
+          console.log("playing sound effect");
+  }
+  //monster img shake effect
+  const attackHit = () => {
+      const monsterImg = document.querySelector(".monster-img");
+      monsterImg.style.animation = "shake 0.3s";
+      monsterImg.style.animationIterationCount = "1";
+
+        monsterImg.addEventListener("animationend", () => {
+    monsterImg.style.animation = "";
+  }, { once: true });
+  }
+
+  //monster img  move effect
+  const attackMissed = () => {
+      const monsterImg = document.querySelector(".monster-img");
+      monsterImg.style.animation = "move 0.6s";
+      monsterImg.style.animationIterationCount = "1";
+
+        monsterImg.addEventListener("animationend", () => {
+    monsterImg.style.animation = "";
+  }, { once: true });
+  }
+
   // image preloader
   const preloadImages = async (imageUrls) => {
     return Promise.all(
@@ -184,22 +243,6 @@ const ChosenQuests = () => {
       )
     );
   };
-
-//   const controls = useAnimation();
-
-//   const animation = {
-//   hidden: { opacity: 0, x: -100 },
-//   visible: {
-//     opacity: 1,
-//     x: 0,
-//     transition: { duration: 1 },
-//   },
-
-// };
-
-// const startAnimation = () => {
-//   controls.start("visible");
-// };
 
   // fetch data/quests/monsters
   const questFetch = async () => {
@@ -239,9 +282,6 @@ const ChosenQuests = () => {
     if (next < quest.length) {
       setNext(next + 1);
       setDropped(null);
-
-      // console.log(quest[next]);
-      // console.log(next);
     }
   };
 
@@ -265,6 +305,7 @@ const ChosenQuests = () => {
       appendToQuestLog(
         `The ${monsters[0].enemy_name} asks: ${quest[0].question}`
       );
+
     }
   }, [quest]);
 
@@ -296,7 +337,7 @@ const ChosenQuests = () => {
         beforeConfirm={() => {
           resetQuest();
           console.log(
-            `You chose to leave.Your progress is now lost, the quest resets itself`
+            `You chose to leave.Your progress is now lost.`
           );
         }}
         beforeCancel={() => {
@@ -364,13 +405,16 @@ const ChosenQuests = () => {
                   </article>
                 </section>
 
-                {next < quest.length ? (
+                { questStore.getState().hitPoints <= 0 ? (
+                  <div className="d-flex justify-content-center gap-4 ms-4">
+                    <h3 className="question">Quest Failed...</h3>
+                  </div>
+                ) : next < quest.length ? (
                   <article>
                     <div className="d-flex justify-content-center">
                       <h3 className="question">{quest[next].question}</h3>
                     </div>
-                    {/* {!parent ? draggable : null} */}
-                                        
+
                     <img
 
                       src={monsters[next].img_path}
@@ -432,57 +476,70 @@ const ChosenQuests = () => {
 
   function handleDragEnd({ active, over }) {
     if (over) {
-      console.log(
-        `the answer "${active.id}" was dropped over the ${over.id} element`
-      );
+      // console.log(
+      //   `the answer "${active.id}" was dropped over the ${over.id} element`
+      // );
+
+      // if the answer is correct
       if (active.id === String(quest[next].correct_answer)) {
-        const nextMonster = next + 1;
-        setDropped(active.id);
-        updateQuest(
-          monsters[next].exp_drop,
-          questStore.getState().hitPoints,
-          monsters[next].enemy_name
-        );
-        // console.log(questStore.getState().exp_gathered);
-        appendToQuestLog(
-          `Correct! You received ${monsters[next].exp_drop} exp`,
-          undefined,
-          undefined,
-          "green"
-        );
-        if (nextMonster < quest.length) {
-          appendToQuestLog(
-            `The ${monsters[nextMonster].enemy_name} asks: ${quest[nextMonster].question}`
+        attackHit();
+        playSFX("slash");
+        setTimeout(() => {
+          const nextMonster = next + 1;
+          setDropped(active.id);
+          updateQuest(
+            monsters[next].exp_drop,
+            questStore.getState().hitPoints,
+            monsters[next].enemy_name
           );
-        }
-        nextQuestion();
+          appendToQuestLog(
+            `Correct! A fine hit! You received ${monsters[next].exp_drop} exp`,
+            undefined,
+            undefined,
+            "green"
+          );
+          if (nextMonster < quest.length) {
+            appendToQuestLog(
+              `The ${monsters[nextMonster].enemy_name} asks: ${quest[nextMonster].question}`
+            );
+          }
+          nextQuestion();
+          
+        }, 500);
       }
 
+      // if the answer is wrong
       if (active.id !== String(quest[next].correct_answer)) {
-        let getHP = document.querySelectorAll(".hp");
-        getHP[getHP.length - 1].remove();
-        const newHitPoints = hitPoints - 1;
-        setHitPoints(newHitPoints);
-        setDropped(active.id);
-        appendToQuestLog(
-          `wrong answer! Hit Points left: ${newHitPoints}HP`,
-          undefined,
-          undefined,
-          "red"
-        );
-        updateQuest(0, newHitPoints, "");
-
-        if (newHitPoints <= 0) {
-          setBlocking(false);
-          appendToQuestLog("No more tries!").then(() => {
-            setTimeout(() => {
-              navigate("/main/results/failed", {
-                replace: true,
-                state: { fromQuest: true },
-              });
-            }, 1500);
-          });
-        }
+        attackMissed();
+        playSFX("missed");
+        setTimeout(() => {
+          console.log(hitPoints);
+          let getHP = document.querySelectorAll(".hp");
+          getHP[getHP.length - 1].remove();
+          const newHitPoints = hitPoints - 1;
+          setHitPoints(newHitPoints);
+          setDropped(active.id);
+          appendToQuestLog(
+            `wrong answer! The attack missed! Hit Points left: ${newHitPoints}HP`,
+            undefined,
+            undefined,
+            "red"
+          );
+          updateQuest(0, newHitPoints, "");
+  
+          if (newHitPoints <= 0) {
+            setBlocking(false);
+            appendToQuestLog("No more tries!").then(() => {
+              setTimeout(() => {
+                navigate("/main/results/failed", {
+                  replace: true,
+                  state: { fromQuest: true },
+                });
+              }, 2000);
+            });
+          }
+          
+        }, 500);
       }
     }
   }

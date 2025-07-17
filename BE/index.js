@@ -189,6 +189,19 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// Create check to see if the user is still logged in or the token is still valid
+app.get("/check", verifyToken, async (req, res) => {
+  try {
+    res.json({
+      message: "You are still logged in.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+})
+
 // Get stats of currently logged in user
 app.get("/stats", verifyToken, async (req, res) => {
   console.log("Cookies get", req.cookies);

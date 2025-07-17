@@ -43,6 +43,13 @@ const Background = styled.div`
     margin-top: 30px;
   }
 
+    & h1:nth-child(3) {
+    text-shadow: #000 4px 5px 4px;
+    color: white;
+    font-weight: bold;
+    margin-top: 30px;
+  }
+
   & section {
     /* overflow: auto; */
     border: 3px solid #000000;
@@ -97,7 +104,8 @@ function App() {
 
   return (
     <Background>
-      <h1>Welcome to the JavaScriptures</h1>
+      <h1>Welcome to</h1>
+      <img src="/images/decorations/logo.webp" alt="logo" style={{ width: "55vw", maxWidth: "550px", minWidth: "300px" }} data-aos="fade-up"/>
       <h1>Where Code is Power and Every Line Matters</h1>
       <main
         className="d-flex flex-column gap-5 mx-auto justify-content-center align-items-center mt-5"

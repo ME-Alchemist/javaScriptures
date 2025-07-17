@@ -37,6 +37,10 @@ const StyledSection = styled.section`
     }
   }
 
+  .paragraphBreak {
+    word-break: break-all;
+  }
+
   @media screen and (max-width: 768px) {
     .userAvatar {
       display: none;
@@ -118,12 +122,12 @@ const Status = () => {
             />
           </article>
           <article className="userInfo">
-            <h1 style={{ textDecoration: "underline" }}>Stats</h1>
-            <p>Username: {username}</p>
-            <p>Email: {email}</p>
+            {/* <h1 style={{ textDecoration: "underline" }}>Stats</h1> */}
+            <p className="paragraphBreak">Username: {username}</p>
+            <p className="paragraphBreak">Email: {email}</p>
             <p>Level: {level}</p>
-            <p>Experience: {exp}</p>
-            <p>Vocation: {vocation}</p>
+            <p className="paragraphBreak">Experience: {exp}</p>
+            <p className="paragraphBreak">Vocation: {vocation}</p>
           </article>
           <article
           // style={{

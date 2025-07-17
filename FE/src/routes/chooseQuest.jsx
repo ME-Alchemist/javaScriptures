@@ -1,6 +1,9 @@
 import { useRef, useEffect } from "react";
-import { Link } from "react-router";
+import axios from "axios";
+import { Link, useNavigate } from "react-router";
 import styled from "styled-components";
+import titleStore from "../zustore/titleStore";
+
 
 const StyledSection = styled.section`
   gap: 3rem;
@@ -79,6 +82,8 @@ const List = styled.ul`
 `;
 
 const ChooseQuest = () => {
+  const { setTitle } = titleStore();
+  const navigate = useNavigate();
   // Keeping this as an example for future use
 
   // const [show, setShow] = useState(null);
@@ -94,6 +99,7 @@ const ChooseQuest = () => {
   const textRef = useRef(null);
 
   const handleHover = (text) => {
+
     const threeStrings = {
       html: "A challenge awaits — three code tags lie before you. Drag and drop the correct tag into the sacred markup. You have three attempts to structure it right. Fail, and a hit point shall be lost. Succeed, and earn experience in the language of the web. The browser gods are watching — good luck.",
 
@@ -114,8 +120,20 @@ const ChooseQuest = () => {
   };
 
   useEffect(() => {
-    textRef.current.innerHTML =
-      "5 riddles await — 3 paths lie before you. Drag and drop your answer into the box of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
+
+    setTitle("Choose your Quest");
+    axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
+      console.log(res);
+textRef.current.innerHTML =
+        "5 riddles await — 3 paths lie before you. Drag and drop your answer into the box of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
+      }) .catch((err) => {
+        console.log(err);
+        navigate("/login", { replace: true });
+      });
+          return () => {
+        setTitle("Welcome traveler");
+      };
+    
   }, []);
 
   return (

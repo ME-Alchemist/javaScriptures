@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-// import { Button } from "react-bootstrap";
+// import useSound from "use-sound";
+import { useSoundContext } from "../components/soundContext";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState } from "react";
@@ -18,7 +19,7 @@ const StyledHeader = styled.header`
   }
 
   & button {
-    width: 150px;
+    width: 150px !important;
   }
 `;
 
@@ -71,15 +72,15 @@ const StyledCanvas = styled(Offcanvas)`
 
 const Header = () => {
   const navigate = useNavigate();
+
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
-
+  const { mute, playing, toggleMute, toggleBGM, pauseBGM } = useSoundContext();
+ 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const interval = setInterval(() => getStats(), 10000);
-  // const stopInterval = () => clearInterval(interval);
 
   const logout = async () => {
     try {
@@ -92,6 +93,7 @@ const Header = () => {
       );
 
       if (response.status === 200) {
+        pauseBGM();
         UserDetails.getState().reset();
         navigate("/login", { replace: true });
       } else {
@@ -102,34 +104,25 @@ const Header = () => {
     }
   };
 
-  // const getStats = useCallback(() => {
-  //   // console.log("getStats");
-  //   axios
-  //     .get("http://localhost:3000/stats", { withCredentials: true })
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log("invalid token", err);
-  //       clearInterval();
-  //       navigate("/login", { replace: true });
-  //     });
-  // }, [navigate]);
-
-  // useEffect(() => {
-  //   setInterval(() => getStats(), 10000);
-  // }, [getStats]);
-
   return (
     <>
       <StyledHeader className="shadow-sm d-flex flex-column justify-content-center">
         <h1 className="flex-grow-1">{title}</h1>
+        <div className="d-flex flex-row justify-content-center align-items-center gap-5">
         <button
-          className="btn bi bi-caret-right-fill fs-5 fw-bold mx-auto"
+          className="btn bi bi-caret-right-fill fs-5 fw-bold"
           onClick={handleShow}
         >
           Menu
         </button>
+        <button onClick={toggleBGM} className="btn bi bi-music-note-beamed fw-bold" style={{ fontSize: "1.5rem" }}>
+          {playing ? "BGM: On" : "BGM: Off"}
+        </button>
+        <button onClick={toggleMute} className="btn bi bi-volume-off-fill fw-bold" style={{ fontSize: "1.5rem" }}>
+          {mute ? "SFX: Off" : "SFX: On"}
+        </button>
+
+        </div>
       </StyledHeader>
 
       <StyledCanvas
@@ -147,7 +140,7 @@ const Header = () => {
           closeButton
         >
           <Offcanvas.Title style={{ color: "white" }}>
-            <p>JavaScriptures</p>
+            <p>Menu</p>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-row justify-content-center">
@@ -174,10 +167,10 @@ const Header = () => {
               <li onClick={handleClose}>
                 <Link to={"/main/stats"}>Stats</Link>
               </li>
-              {/* list monsters encounter by the player, perfomring a post request to the server in order to retrieve the list of monsters encountered by the player, join table in the database* open up when ready to continue work past end of project*/}
-              {/* <li onClick={handleClose}>
-                <Link to={"/main/bestiary"}>Bestiary</Link>
-              </li> */}
+              {/* has a page to display the credits for links, bgm and sound effects*/}
+              <li onClick={handleClose}>
+                <Link to={"/main/credits"}>Credits</Link>
+              </li>
               {/* Sign out, ask the user to confirm before closing the app, POST requests  for user progressinon are now made during result screens so no need to perform additonal requests before logout*/}
               <li className="logout" onClick={logout}>
                 logout

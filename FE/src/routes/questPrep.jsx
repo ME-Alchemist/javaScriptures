@@ -1,8 +1,9 @@
 import JSON from "../static.json";
+import axios from "axios";
 import styled from "styled-components";
 import titleStore from "../zustore/titleStore";
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Spinner from "../components/spinner";
 
 const StyledSection = styled.section`
@@ -32,6 +33,8 @@ const StyledSection = styled.section`
 `;
 
 const QuestPrep = () => {
+  const navigate = useNavigate();
+  const { setTitle } = titleStore();
   const { categories } = JSON;
 
   const [prep, setPrep] = useState({
@@ -53,20 +56,30 @@ const QuestPrep = () => {
     });
   };
 
-  const { setTitle } = titleStore();
 
   useEffect(() => {
-    setTitle("Prepare for the quest ahead");
 
-    const img = new Image();
-    img.src = "/images/decorations/dmDeco.webp";
-    img.onload = () => {
-      setIsLoading(false);
-    };
+    axios.get("http://localhost:3000/check", { withCredentials: true }).then((response) => {
 
-    return () => {
-      setTitle("Welcome traveler");
-    };
+      console.log("the response:", response);
+  
+      setTitle("Prepare for the quest ahead");
+  
+      const img = new Image();
+      img.src = "/images/decorations/dmDeco.webp";
+      img.onload = () => {
+        setIsLoading(false);
+      };
+  
+      return () => {
+        setTitle("Welcome traveler");
+      };
+
+    }).catch((err) => {
+      console.log(err);
+      navigate("/login", { replace: true });
+    });
+
   }, []);
 
   return (

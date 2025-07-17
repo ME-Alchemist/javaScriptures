@@ -33,6 +33,7 @@ import Status from "./routes/status.jsx";
 import ChooseVocation from "./routes/chooseVocation.jsx";
 import Welcome from "./routes/welcome.jsx";
 import QuestPrep from "./routes/questPrep.jsx";
+import Credits from "./routes/credits.jsx";
 
 const router = createBrowserRouter([
   {
@@ -76,14 +77,6 @@ const router = createBrowserRouter([
         path: "quests/:category_name",
         element: <LoadQuest />,
       },
-      // {
-      //   path: "questStart/css/:difficulty",
-      //   element: <LoadQuest />,
-      // },
-      // {
-      //   path: "questStart/js/:difficulty",
-      //   element: <LoadQuest />,
-      // },
       {
         path: "results/success/:category_name",
         element: <QuestSuccess />,
@@ -95,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "stats",
         element: <Status />,
+      },
+      {
+        path: "credits",
+        element: <Credits />,
       },
       {
         path: "404",

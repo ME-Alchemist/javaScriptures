@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import titleStore from "../zustore/titleStore";
 import styled from "styled-components";
 import Spinner from "../components/spinner";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 const StyledSection = styled.section`
   display: flex !important;
@@ -34,21 +36,31 @@ const StyledSection = styled.section`
 `;
 
 const Welcome = () => {
+  const navigate = useNavigate();
   const { setTitle } = titleStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTitle("Home");
 
-    const img = new Image();
-    img.src = "/images/decorations/guildDeco.webp";
-    img.onload = () => {
-      setIsLoading(false);
-    };
+    axios.get("http://localhost:3000/check", { withCredentials: true }).then((response) => {
+      console.log("the response:", response);
+      
+          setTitle("Home");
+      
+          const img = new Image();
+          img.src = "/images/decorations/guildDeco.webp";
+          img.onload = () => {
+            setIsLoading(false);
+          };
+      
+          return () => {
+            setTitle("Welcome traveler");
+          };
 
-    return () => {
-      setTitle("Welcome traveler");
-    };
+    }) .catch((err) => {
+      console.log(err);
+      navigate("/login", { replace: true });    
+    });
   }, []);
 
   return (
