@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import useSound from "use-sound";
 import { useSoundContext } from "../components/soundContext";
 import axios from "axios";
 import Prompt from "react-router-prompt";
@@ -9,7 +8,6 @@ import { Spinner } from "react-bootstrap";
 import { DndContext } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import HP from "../components/HP";
-// import { useAnimation, motion } from "motion/react"
 
 import titleStore from "../zustore/titleStore";
 import questStore from "../zustore/questStore";
@@ -146,7 +144,7 @@ const ModalBox = styled.div`
 
 const ChosenQuests = () => {
 
-  const { playSlash, playMissed, playBlocked } = useSoundContext();
+  const { playSlash, playMissed, playBlocked,stopBattle } = useSoundContext();
   
   const navigate = useNavigate();
   const { setTitle } = titleStore();
@@ -207,6 +205,7 @@ const ChosenQuests = () => {
           }
           console.log("playing sound effect");
   }
+
   //monster img shake effect
   const attackHit = () => {
       const monsterImg = document.querySelector(".monster-img");
@@ -218,7 +217,7 @@ const ChosenQuests = () => {
   }, { once: true });
   }
 
-  //monster img  move effect
+  //monster img move effect
   const attackMissed = () => {
       const monsterImg = document.querySelector(".monster-img");
       monsterImg.style.animation = "move 0.6s";
@@ -287,6 +286,11 @@ const ChosenQuests = () => {
 
   // Run fetch on mount
   useEffect(() => {
+
+        axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
+      console.log(res);
+      });
+
     setQuestCompleted(false);
     console.log(completedStore.getState().questCompleted);
     setTitle("The Quest begins!");
@@ -336,6 +340,7 @@ const ChosenQuests = () => {
         when={blocking}
         beforeConfirm={() => {
           resetQuest();
+          stopBattle();
           console.log(
             `You chose to leave.Your progress is now lost.`
           );

@@ -74,7 +74,7 @@ const router = createBrowserRouter([
         element: <QuestPrep />,
       },
       {
-        path: "quests/:category_name",
+        path: "quests/start/:category_name",
         element: <LoadQuest />,
       },
       {

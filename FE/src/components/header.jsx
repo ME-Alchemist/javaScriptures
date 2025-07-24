@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 // import useSound from "use-sound";
+import { useLocation } from "react-router";
 import { useSoundContext } from "../components/soundContext";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
@@ -71,12 +72,13 @@ const StyledCanvas = styled(Offcanvas)`
 `;
 
 const Header = () => {
+  const currentPath = useLocation().pathname;
   const navigate = useNavigate();
 
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
-  const { mute, playing, toggleMute, toggleBGM, pauseBGM } = useSoundContext();
+  const { mute, playing, playingBattle, toggleMute, toggleBGM, pauseBGM, pauseBattle } = useSoundContext();
  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -94,10 +96,13 @@ const Header = () => {
 
       if (response.status === 200) {
         pauseBGM();
+        pauseBattle();
         UserDetails.getState().reset();
         navigate("/login", { replace: true });
       } else {
         console.log("error logging out", response.status);
+        pauseBGM();
+        pauseBattle();
       }
     } catch (err) {
       console.log(err);
@@ -115,8 +120,8 @@ const Header = () => {
         >
           Menu
         </button>
-        <button onClick={toggleBGM} className="btn bi bi-music-note-beamed fw-bold" style={{ fontSize: "1.5rem" }}>
-          {playing ? "BGM: On" : "BGM: Off"}
+        <button onClick={() => toggleBGM(currentPath)} className="btn bi bi-music-note-beamed fw-bold" style={{ fontSize: "1.5rem" }}>
+          {playing || playingBattle ? "BGM: On" : "BGM: Off"}
         </button>
         <button onClick={toggleMute} className="btn bi bi-volume-off-fill fw-bold" style={{ fontSize: "1.5rem" }}>
           {mute ? "SFX: Off" : "SFX: On"}

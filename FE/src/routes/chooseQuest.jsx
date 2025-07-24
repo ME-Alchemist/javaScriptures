@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router";
 import styled from "styled-components";
 import titleStore from "../zustore/titleStore";
+import { useSoundContext } from "../components/soundContext";
+
 
 
 const StyledSection = styled.section`
@@ -82,24 +84,40 @@ const List = styled.ul`
 `;
 
 const ChooseQuest = () => {
+  const { 
+    playBGM, 
+    currentBGM, 
+    pauseBGM, 
+    playBattle, 
+    pauseBattle, 
+    playingBattle, 
+    setPlayingBattle, 
+    playing, 
+    setPlaying } = useSoundContext();
+
+    const dropdownBtns = [
+      {text: "HTML", funcArg: "html", options: [
+        {text: "HTML Basics 1", link: "/main/quests/start/html basics 1"},
+        {text: "HTML Basics 2", link: "/main/quests/start/html basics 2"},
+        {text: "HTML Basics 3", link: "/main/quests/start/html basics 3"},]},
+      {text: "CSS", funcArg: "css", options: [
+        {text: "CSS Basics 1", link: "/main/quests/start/css basics 1"},
+        {text: "CSS Basics 2", link: "/main/quests/start/css basics 2"},
+        {text: "CSS Basics 3", link: "/main/quests/start/css basics 3"},
+      ]},
+      {text: "JavaScript", funcArg: "js", options: [
+        {text: "JS Basics 1", link: "/main/quests/start/javascript basics 1"},
+        {text: "JS Basics 2", link: "/main/quests/start/javascript basics 2"},
+        {text: "JS Basics 3", link: "/main/quests/start/javascript basics 3"},
+      ]},
+    ]
+
   const { setTitle } = titleStore();
   const navigate = useNavigate();
-  // Keeping this as an example for future use
-
-  // const [show, setShow] = useState(null);
-
-  // const handleList = (list) => {
-  //   console.log(list);
-  //   setShow(list);
-  //   if (show === list) {
-  //     setShow(null);
-  //   }
-  // };
 
   const textRef = useRef(null);
 
   const handleHover = (text) => {
-
     const threeStrings = {
       html: "A challenge awaits — three code tags lie before you. Drag and drop the correct tag into the sacred markup. You have three attempts to structure it right. Fail, and a hit point shall be lost. Succeed, and earn experience in the language of the web. The browser gods are watching — good luck.",
 
@@ -119,8 +137,13 @@ const ChooseQuest = () => {
     textRef.current.innerHTML = text;
   };
 
-  useEffect(() => {
+  const battleBGMbutton = () => {
+    pauseBGM();
+    playBattle();
+  }
 
+  useEffect(() => {
+    console.log(currentBGM.current);
     setTitle("Choose your Quest");
     axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
       console.log(res);
@@ -146,107 +169,40 @@ textRef.current.innerHTML =
           className="questDropdown flex-column d-flex dropdown gap-3"
           style={{ textAlign: "end" }}
         >
-          <div className="dropdown">
-            <button
-              onClick={() => handleHover("html")}
-              className="dropdown-toggle rounded"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              // Keeping this as an example for future use
-              // onClick={() => handleList("html")}
-            >
-              HTML
-            </button>
-            <List className="dropdown-menu">
-              <li>
-                <Link
-                  className="dropdown-item"
-                  to="/main/quests/html basics 1"
-                  role="button"
-                >
-                  HTML Basics 1
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/html basics 2">
-                  HTML Basics 2
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/html basics 3">
-                  HTML Basics 3
-                </Link>
-              </li>
-            </List>
-          </div>
 
-          <div className="dropdown">
-            <button
-              onClick={() => handleHover("css")}
-              className="dropdown-toggle rounded"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              CSS
-            </button>
-            <List className="dropdown-menu">
-              <li>
-                <Link
-                  className="dropdown-item"
-                  to="/main/quests/css basics 1"
-                  role="button"
+          {dropdownBtns.map((btn, index) => {
+            return (
+              <div key={index} className="dropdown">
+                <button
+                  onClick={() => handleHover(btn.funcArg)}
+                  className="dropdown-toggle rounded"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  key={index}
                 >
-                  CSS Basics 1
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/css basics 2">
-                  CSS Basics 2
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/css basics 3">
-                  CSS Basics 3
-                </Link>
-              </li>
-            </List>
-          </div>
-          <div className="dropdown">
-            <button
-              onClick={() => handleHover("js")}
-              className="dropdown-toggle rounded"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              // onClick={() => handleList("js")}
-            >
-              JavaScript
-            </button>
-            <List className="dropdown-menu">
-              <li>
-                <Link
-                  className="dropdown-item"
-                  to="/main/quests/javascript basics 1"
-                  role="button"
-                >
-                  JS Basics 1
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/javascript basics 2">
-                  JS Basics 2
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/main/quests/javascript basics 3">
-                  JS Basics 3
-                </Link>
-              </li>
-            </List>
-          </div>
+                  {btn.text}
+                </button>
+                <List className="dropdown-menu">
+                  {btn.options.map((option, index) => {
+                    return (
+                      <li key={index}>
+                        <Link
+                          className="dropdown-item battleBtn"
+                          to={option.link}
+                          // onClick={() => battleBGMbutton()}
+                        >
+                          {option.text}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </List>
+              </div>
+            );
+          })}
         </div>
+
         <div>
           <section className="questDescription">
             <p ref={textRef} className="placeText"></p>
@@ -258,3 +214,17 @@ textRef.current.innerHTML =
 };
 
 export default ChooseQuest;
+
+
+
+
+  // Keeping this as an example for future use
+  // const [show, setShow] = useState(null);
+
+  // const handleList = (list) => {
+  //   console.log(list);
+  //   setShow(list);
+  //   if (show === list) {
+  //     setShow(null);
+  //   }
+  // };
