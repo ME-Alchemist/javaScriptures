@@ -3,7 +3,6 @@ import questStore from "../zustore/questStore";
 import axios from "axios";
 import { useEffect, useState} from "react";
 import { useNavigate, useLocation, useParams } from "react-router";
-import { useSoundContext } from "../components/soundContext";
 import completedStore from "../zustore/questCompletedStore";
 
 const StyledDiv = styled.div`
@@ -84,7 +83,6 @@ const StyledDiv = styled.div`
 `;
 
 const QuestSuccess = () => {
-  const { playWin, stopWin, pauseBGM, playBGM, playBattle, pauseBattle, stopBattle, toggleBGM } = useSoundContext();
   const { exp_gathered, hitPoints, monstersEncountered } = questStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -92,35 +90,10 @@ const QuestSuccess = () => {
   const { category_name } = useParams();
   const { setQuestCompleted, questCompleted } = completedStore();
   
-//   const handleQuestComplete = () => {
-//     console.log("calling playWin");
-//     playWin();
-// };  
-
-  // const toggleBGM = () => {
-  //   if (playing) {
-  //     // pauseFailBGM();
-  //     // pauseBGM();
-  //     pauseWinBGM();
-  //     setPlaying(false);
-  //   } else {
-  //     playWinBGM();
-  //     // playFailBGM();
-  //     // playBGM();
-  //     setPlaying(true);
-  //     // console.log(currentPath);
-  //   }
-  // };
-
 
   useEffect(() => {
-    stopBattle();
-    playWin();
     console.log(completedStore.getState().questCompleted);
-    setTimeout(() => {
-      stopWin();
-      playBGM();
-    }, 4000);
+    
     // trying to navigate here manually or
     //attempting to the reload the page will navigate away
     if (!location.state?.fromQuest || questCompleted === true) {

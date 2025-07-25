@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
-import { Col, Row, Form, Button, ToastContainer } from "react-bootstrap";
+import { Col, Form, Button, ToastContainer } from "react-bootstrap";
+import { useSoundContext } from "../components/soundContext";
 import styled from "styled-components";
 import Toast from "react-bootstrap/Toast";
 import axios from "axios";
@@ -32,7 +33,8 @@ const StyleWrapper = styled.div`
   }
 `;
 
-export default function Login() {
+const Login = () => {  
+  const {stopBGM, stopBattle, setPlaying, setPlayingBattle, setMute} = useSoundContext();
   const navigate = useNavigate();
 
   const [toast, setToast] = useState(false);
@@ -45,7 +47,14 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
+  
+
   useEffect(() => {
+    stopBGM();
+    stopBattle();
+    setPlaying(false);
+    setPlayingBattle(false);
+    setMute(false);
     AOS.init({
       duration: 1000,
       once: true,
@@ -54,12 +63,10 @@ export default function Login() {
     window.scrollTo(0, 0);
   }, []);
 
+
+
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
-    // if (pass.value !== repeat.value) {
-    //   alert("Password and repeated password are not matching!");
-    //   return;
-    // }
     axios
       .post("http://localhost:3000/login", data, { withCredentials: true })
       .then((res) => {
@@ -132,7 +139,6 @@ export default function Login() {
               <Col>
                 <Form.Control
                   name="email"
-                  // onChange={changeHandler}
                   type="email"
                   className="mx-auto"
                   placeholder="enter email"
@@ -149,7 +155,6 @@ export default function Login() {
               <Col>
                 <Form.Control
                   name="passHash"
-                  // onChange={changeHandler}
                   type="password"
                   className="mx-auto mainPass"
                   placeholder="enter password"
@@ -196,3 +201,5 @@ export default function Login() {
     </>
   );
 }
+
+export default Login;

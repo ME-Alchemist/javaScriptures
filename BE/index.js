@@ -221,17 +221,6 @@ app.get("/stats", verifyToken, async (req, res) => {
       });
     }
 
-    // For testing refresh of token
-    // const newToken = jwt.sign({ user_id: user.user_id }, JWT_SECRET, {
-    //   expiresIn: "2m",
-    // });
-
-    // res.cookie("token", newToken, {
-    //   httpOnly: true,
-    //   sameSite: "lax",
-    //   secure: false,
-    // });
-
     res.status(200).json({
       user_id: user.user_id,
       username: user.username,

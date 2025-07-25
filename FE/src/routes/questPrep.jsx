@@ -104,7 +104,7 @@ const QuestPrep = () => {
         className="d-flex flex-row align-items-center justify-content-center mx-auto"
         style={{ maxWidth: "650px", width: "100%" }}
       >
-        <div className="border border-black rounded-4 m-2">
+        <div className="border border-black rounded-4 m-2 bg-dark bg-opacity-50">
           <div>
             <p>
               <img

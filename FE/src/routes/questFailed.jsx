@@ -2,7 +2,6 @@ import styled from "styled-components";
 import questStore from "../zustore/questStore";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSoundContext } from "../components/soundContext";
 
 
 const StyledDiv = styled.div`
@@ -78,18 +77,10 @@ const StyledDiv = styled.div`
 `;
 
 const QuestFailed = () => {
-  const { playFail, stopFail, pauseBGM, playBGM, playBattle, pauseBattle, stopBattle } = useSoundContext();
   const { hitPoints, monstersEncountered } = questStore();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    stopBattle();
-    playFail();
-
-    setTimeout(() => {
-      stopFail();
-      playBGM();
-    }, 3000);
     // const combinedExp = exp_gathered + hitPoints * 10;
     // Grab the score from the questStore,
     // display Results then perform a PATCH request on the users exp field

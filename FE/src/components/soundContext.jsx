@@ -1,24 +1,21 @@
 import { createContext, useContext, useState, useRef, useEffect } from "react";
-// import { useLocation } from "react-router";
-// import { set } from "react-hook-form";
 import useSound from "use-sound";
 
 const SoundContext = createContext();
 
 export const SoundProvider = ({ children }) => {
     
-    // const currentLocation = useLocation();
     const [playing, setPlaying] = useState(false);
     const [playingBattle, setPlayingBattle] = useState(false);
     const currentBGM = useRef(null);
     const [mute, setMute] = useState(false);
-    const [vol, setVol] = useState(0.3);
+    const [vol, setVol] = useState(0);
     const [playBGM, {pause: pauseBGM, stop: stopBGM}] = useSound("/sounds/tunnels.mp3", {volume: 0.2, loop: true,});
     const [playBattle, {pause: pauseBattle, stop: stopBattle}] = useSound("/sounds/battle.mp3", {volume: 0.2, loop: true,});
     const [playSlash, {pause: pauseSlash}] = useSound("/sounds/slash.mp3", { volume: vol });
     const [playMissed, {pause: pauseMissed}] = useSound("/sounds/missed.mp3", { volume: vol });
-    const [playFail, {stop: stopFail}] = useSound("/sounds/fail.mp3", { volume: 0.3 });
-    const [playWin, {stop: stopWin}] = useSound("/sounds/success.mp3", { volume: 0.3 });
+    const [playFail, {stop: stopFail}] = useSound("/sounds/fail.mp3", { volume: vol });
+    const [playWin, {stop: stopWin}] = useSound("/sounds/success.mp3", { volume: vol });
 
   useEffect(() => {
       currentBGM.current = playing;
@@ -28,7 +25,7 @@ export const SoundProvider = ({ children }) => {
   const toggleMute = () => {
     const newMute = !mute;
     setMute(newMute)
-    setVol(newMute ? 0 : 0.3);
+    setVol(newMute ? 0.3 : 0);
   };
 
   const toggleBGM = (path) => {
@@ -77,6 +74,7 @@ export const SoundProvider = ({ children }) => {
         stopBGM,
         playingBattle,
         setPlayingBattle,
+        setPlaying,
         playing,
         mute,
         playBGM,
@@ -92,6 +90,7 @@ export const SoundProvider = ({ children }) => {
         stopWin,
         toggleMute,
         toggleBGM,
+        setMute
       }}
     >
       {children}

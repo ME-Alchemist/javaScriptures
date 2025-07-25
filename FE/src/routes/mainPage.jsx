@@ -1,6 +1,5 @@
 import React from "react";
 import { Outlet } from "react-router";
-import { SoundProvider } from "../components/soundContext";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import styled from "styled-components";
@@ -19,13 +18,11 @@ const StyledDiv = styled.div`
 function MainPage() {
   return (
     <>
-      <SoundProvider>
       <Header />
       <StyledDiv loading="lazy">
         <Outlet />
       </StyledDiv>
       <Footer />
-      </SoundProvider>
     </>
   );
 }

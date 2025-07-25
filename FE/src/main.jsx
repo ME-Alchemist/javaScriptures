@@ -2,6 +2,7 @@ import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 // import { BrowserRouter, Routes, Route } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { SoundProvider } from "./components/soundContext";
 
 import "./index.css";
 import "../node_modules/slick-carousel/slick/slick.css";
@@ -104,7 +105,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Suspense fallback={<div>Loading...</div>}>
-      <RouterProvider router={router} />
+          <SoundProvider>
+              <RouterProvider router={router} />
+          </SoundProvider>
     </Suspense>
   </StrictMode>
 );

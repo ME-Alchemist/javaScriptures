@@ -72,7 +72,7 @@ const Welcome = () => {
         className="d-flex align-items-center justify-content-center mx-auto"
         style={{ maxWidth: "650px", width: "100%" }}
       >
-        <div className="Container">
+        <div className="Container bg-dark bg-opacity-50">
           <p
             style={{
               fontSize: "larger",

@@ -8,7 +8,7 @@ export default function SlashEffect({ trigger }) {
   useEffect(() => {
     if (trigger) {
       setShow(true);
-      setTimeout(() => setShow(false), 700); // göm efter animationen
+      setTimeout(() => setShow(false), 700);
     }
   }, [trigger]);
 

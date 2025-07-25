@@ -44,8 +44,8 @@ const StyledCanvas = styled(Offcanvas)`
   }
 
   & a:hover {
-    color: #144095;
-    text-shadow: 2px 2px 2px #eee;
+    color: #000000;
+    text-shadow: 1px 1px 2px #eee;
   }
 
   background-color: #997043 !important;
@@ -65,8 +65,8 @@ const StyledCanvas = styled(Offcanvas)`
   }
 
   .logout:hover {
-    color: #144095;
-    text-shadow: 2px 2px 2px #eee;
+    color: #000000;
+    text-shadow: 1px 1px 2px #eee;
     cursor: pointer;
   }
 `;
@@ -94,7 +94,7 @@ const Header = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.status < 300) {
         pauseBGM();
         pauseBattle();
         UserDetails.getState().reset();
@@ -124,7 +124,7 @@ const Header = () => {
           {playing || playingBattle ? "BGM: On" : "BGM: Off"}
         </button>
         <button onClick={toggleMute} className="btn bi bi-volume-off-fill fw-bold" style={{ fontSize: "1.5rem" }}>
-          {mute ? "SFX: Off" : "SFX: On"}
+          {mute ? "SFX: On" : "SFX: Off"}
         </button>
 
         </div>

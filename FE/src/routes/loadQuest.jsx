@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useSoundContext } from "../components/soundContext";
 import axios from "axios";
 import Prompt from "react-router-prompt";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, } from "react-router";
 import { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
 import { DndContext } from "@dnd-kit/core";
@@ -144,7 +144,18 @@ const ModalBox = styled.div`
 
 const ChosenQuests = () => {
 
-  const { playSlash, playMissed, playBlocked,stopBattle } = useSoundContext();
+  const { playSlash, 
+    playMissed, 
+    playBlocked, 
+    stopBattle, 
+    playBGM,
+    playWin,
+    stopWin,
+    playFail,
+    stopFail,
+    setPlaying, 
+    playingBattle, 
+    setPlayingBattle } = useSoundContext();
   
   const navigate = useNavigate();
   const { setTitle } = titleStore();
@@ -191,6 +202,7 @@ const ChosenQuests = () => {
     }
   };
 
+  // sound effects
   const playSFX = (type) => {
     switch (type) {
       case "slash":
@@ -286,7 +298,6 @@ const ChosenQuests = () => {
 
   // Run fetch on mount
   useEffect(() => {
-
         axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
       console.log(res);
       });
@@ -299,7 +310,6 @@ const ChosenQuests = () => {
     // cleanup function
     return () => {
       setTitle("Welcome traveler!"); // reset to initial title
-      // resetQuest();
       setBlocking(true);
     };
   }, []);
@@ -328,6 +338,16 @@ const ChosenQuests = () => {
           replace: true,
           state: { fromQuest: true },
         });
+          stopBattle();
+          playWin();
+          setTimeout(() => {
+            stopWin();
+            if(playingBattle) {
+              setPlayingBattle(false);
+              setPlaying(true);
+              playBGM();
+            }
+          }, 4000);
       }, 2000);
     }
   }, [next]);
@@ -340,7 +360,12 @@ const ChosenQuests = () => {
         when={blocking}
         beforeConfirm={() => {
           resetQuest();
-          stopBattle();
+            if(playingBattle) {
+              stopBattle();
+              setPlayingBattle(false);
+              playBGM();
+              setPlaying(true);
+            }
           console.log(
             `You chose to leave.Your progress is now lost.`
           );
@@ -540,6 +565,16 @@ const ChosenQuests = () => {
                   replace: true,
                   state: { fromQuest: true },
                 });
+                  stopBattle();
+                  playFail();
+                  setTimeout(() => {
+                    stopFail();
+                    if(playingBattle) {
+                      setPlayingBattle(false);
+                      setPlaying(true);
+                      playBGM();
+                    }
+                  }, 4000);
               }, 2000);
             });
           }

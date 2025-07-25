@@ -85,12 +85,9 @@ const List = styled.ul`
 
 const ChooseQuest = () => {
   const { 
-    playBGM, 
+    stopBGM,
     currentBGM, 
-    pauseBGM, 
     playBattle, 
-    pauseBattle, 
-    playingBattle, 
     setPlayingBattle, 
     playing, 
     setPlaying } = useSoundContext();
@@ -138,8 +135,14 @@ const ChooseQuest = () => {
   };
 
   const battleBGMbutton = () => {
-    pauseBGM();
-    playBattle();
+        if(playing) {
+        stopBGM();
+        setPlaying(false);
+        playBattle();
+        setPlayingBattle(true);
+      }
+    // pauseBGM();
+    // playBattle();
   }
 
   useEffect(() => {
@@ -190,7 +193,7 @@ textRef.current.innerHTML =
                         <Link
                           className="dropdown-item battleBtn"
                           to={option.link}
-                          // onClick={() => battleBGMbutton()}
+                          onClick={() => battleBGMbutton()}
                         >
                           {option.text}
                         </Link>
@@ -204,7 +207,7 @@ textRef.current.innerHTML =
         </div>
 
         <div>
-          <section className="questDescription">
+          <section className="questDescription bg-dark bg-opacity-50">
             <p ref={textRef} className="placeText"></p>
           </section>
         </div>
