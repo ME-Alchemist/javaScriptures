@@ -122,7 +122,9 @@ const StyledDiv = styled.div`
 
 const ChooseVocation = () => {
   const [vocations, setVocations] = useState([]);
+  const [vocationsTypeB, setVocationsTypeB] = useState([]);
   const [currentVocation, setCurrentVocation] = useState({});
+  const [show, setShow] = useState(true);
   const description = useRef(null);
   const navigate = useNavigate();
   // const [next, setNext] = useState(0);
@@ -144,12 +146,21 @@ const ChooseVocation = () => {
       });
   };
 
+  // hide Body Type A, display Body Type B
+  const showBodyTypeB = () => {
+    setShow((show) => !show);
+  };
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/vocations")
       .then((res) => {
-        console.log(res.data);
-        setVocations(res.data);
+        // console.log(res.data);
+        // set the twelve last ones for body type B
+        setVocationsTypeB(res.data.slice(12));
+        // limit array to the first twelve options for body type A
+        setVocations(res.data.slice(0, 12));
+        // setVocations(res.data);
         setCurrentVocation(res.data[0]);
       })
       .catch((err) => {
@@ -174,16 +185,22 @@ const ChooseVocation = () => {
     slidesToScroll: 1,
     fade: false,
     beforeChange: (current, next) => {
-      let vocation = vocations[next];
-      setCurrentVocation(vocation);
-      console.log("the one it stops on", next);
-      console.log("the one before the it stops on", current);
+      if(show) {
+        let vocation = vocations[next];
+        setCurrentVocation(vocation);
+        console.log(currentVocation.vocation_id);
+      } else {
+        let vocation = vocationsTypeB[next];
+        setCurrentVocation(vocation);
+        console.log(currentVocation.vocation_id);
+      }
+
     },
   };
 
   return (
     <StyledDiv>
-      <h1 className="mb-4">Choose your vocation</h1>
+      <h1  className="mb-4">Choose your vocation</h1>
 
       <div className="bodyContainer d-flex flex-column flex-lg-row justify-content-center align-items-center">
         <div className="aboutVocationContainer ">
@@ -191,14 +208,15 @@ const ChooseVocation = () => {
         </div>
 
         <div className="vocationContainer">
-          <Slider {...settings}>
+        {show ? (
+          <Slider className="" {...settings}>
             {vocations ? (
               vocations.map((vocation) => {
                 return (
                   <div key={vocation.vocation_id}>
                     <img
-                      width={"350px"}
-                      height={"500px"}
+                      width={"280px"}
+                      // height={"500px"}
                       src={vocation.vocation_img}
                       key={vocation.vocation_id}
                       alt="vocation"
@@ -213,7 +231,39 @@ const ChooseVocation = () => {
               <Spinner animation="border" />
             )}
           </Slider>
+          
+        ) : (
+          <Slider className="" {...settings}>
+            {vocationsTypeB ? (
+              vocationsTypeB.map((vocation) => {
+                return (
+                  <div key={vocation.vocation_id}>
+                    <img
+                      width={"280px"}
+                      // height={"500px"}
+                      src={vocation.vocation_img}
+                      key={vocation.vocation_id}
+                      alt="vocation"
+                      title={vocation.vocation_name}
+                      style={{ objectFit: "cover" }}
+                      className="mx-auto img-fluid"
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <Spinner animation="border" />
+            )}
+          </Slider>
+          
+        )}
+
+
         </div>
+      </div>
+      <div className="mt-4 d-flex justify-content-center gap-2">
+        {/* <button className="btn btn-dark btn-lg">Body Type A</button> */}
+        <button onClick={() => showBodyTypeB()} className="btn btn-dark btn-lg">{show ? "Body Type A" : "Body Type B"}</button>
       </div>
       <button
         className="btn btn-dark btn-lg mt-4 mb-4"
@@ -221,8 +271,7 @@ const ChooseVocation = () => {
       >
         Confirm Choice
       </button>
-      {/* <button onClick={previousSlide}>previous</button>
-      <button onClick={nextSlide}>next</button> */}
+
     </StyledDiv>
   );
 };
