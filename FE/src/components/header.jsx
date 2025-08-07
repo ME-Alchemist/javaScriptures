@@ -85,27 +85,30 @@ const Header = () => {
 
 
   const logout = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/logout",
-        {},
-        {
-          withCredentials: true,
+    if(window.confirm("Are you sure you want to logout? if you have begun a quest your progress will be lost")) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/logout",
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+  
+        if (response.status === 200 && response.status < 300) {
+          pauseBGM();
+          pauseBattle();
+          UserDetails.getState().reset();
+          navigate("/login", { replace: true });
+        } else {
+          console.log("error logging out", response.status);
+          pauseBGM();
+          pauseBattle();
         }
-      );
-
-      if (response.status === 200 && response.status < 300) {
-        pauseBGM();
-        pauseBattle();
-        UserDetails.getState().reset();
-        navigate("/login", { replace: true });
-      } else {
-        console.log("error logging out", response.status);
-        pauseBGM();
-        pauseBattle();
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+
     }
   };
 

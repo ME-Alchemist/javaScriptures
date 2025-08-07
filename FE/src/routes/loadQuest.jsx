@@ -273,9 +273,16 @@ const ChosenQuests = () => {
       );
       const data = questResponse.data;
       const monsterData = monsterResponse.data;
-      while (monsterData.length < 5) {
-        let random = Math.floor(Math.random() * 3);
-        monsterData.push(monsterData[random]);
+      // if dragon queen challenge, fill the array 14 more times
+
+      console.log(monsterData[0].enemy_name);
+
+      if (monsterData[0].enemy_name === "Dragon Queen") {
+        for (let i = 0; i < 14; i++) {
+          monsterData.push(monsterData[0]);
+        }
+        // Array(14).fill(monsterData[0]);
+        console.log(monsterData);
       }
 
       const imageUrls = monsterData.map((monster) => monster.img_path);
@@ -367,11 +374,11 @@ const ChosenQuests = () => {
               setPlaying(true);
             }
           console.log(
-            `You chose to leave.Your progress is now lost.`
+            `You chose to leave. Your progress is now lost.`
           );
         }}
         beforeCancel={() => {
-          console.log("You chose to remain");
+          console.log("You chose to remain and continue the quest.");
         }}
       >
         {({ isActive, onCancel, onConfirm }) =>
@@ -522,11 +529,21 @@ const ChosenQuests = () => {
             questStore.getState().hitPoints,
             monsters[next].enemy_name
           );
-          appendToQuestLog(
-            `Correct! A fine hit! You received ${monsters[next].exp_drop} exp`,
-            undefined,
-            undefined,
-            "green"
+          // make ternary if the monster is or is not the dragon queen
+          monsters[next].enemy_name === "Dragon Queen" ? (
+            appendToQuestLog(
+              `Correct! You've struck the Dragon Queen!`,
+              undefined,
+              undefined,
+              "green"
+            )
+          ) : (
+             appendToQuestLog(
+              `Correct! A fine hit! You received ${monsters[next].exp_drop} exp`,
+              undefined,
+              undefined,
+              "green"
+            )
           );
           if (nextMonster < quest.length) {
             appendToQuestLog(

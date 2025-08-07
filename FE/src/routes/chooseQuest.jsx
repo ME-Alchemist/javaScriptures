@@ -107,6 +107,9 @@ const ChooseQuest = () => {
         {text: "JS Basics 2", link: "/main/quests/start/javascript basics 2"},
         {text: "JS Basics 3", link: "/main/quests/start/javascript basics 3"},
       ]},
+      {text: "Challenge", funcArg: "mix", options: [
+        {text: "Dragon Queen's challenge", link: "/main/quests/start/Dragon Queen's challenge"}
+      ]},
     ]
 
   const { setTitle } = titleStore();
@@ -121,6 +124,8 @@ const ChooseQuest = () => {
       css: "A style puzzle lies ahead — three declarations await. Drag and drop the right rule into the scroll of design. You have three chances to craft the perfect look. Fail, and a hit point shall vanish. Succeed, and gain experience in the art of style. May your layouts be ever aligned.",
 
       js: "A logic test begins — three scripts stand before you. Drag and drop the true function into the flow of code. You have three tries to bend the browser to your will. Fail, and you shall lose a hit point. Succeed, and power flows through your syntax. Let the code be with you.",
+
+      mix: "The Dragon Queen awaits — her trial is not for the faint of heart. Fifteen riddles of code shall test your mastery across the realms of HTML, CSS, and JavaScript. One path, no rest, no mercy. Drag the right answer into the circle of truth. Each mistake costs a hit point. Survive the trial, and the Dragon Queen shall grant you glory and great experience. Fail… and be scorched in console fire.",
     };
 
     if (text === "html") {
@@ -129,6 +134,8 @@ const ChooseQuest = () => {
       text = threeStrings.css;
     } else if (text === "js") {
       text = threeStrings.js;
+    } else if (text === "mix") {
+      text = threeStrings.mix;
     }
 
     textRef.current.innerHTML = text;

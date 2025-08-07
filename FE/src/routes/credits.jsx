@@ -22,6 +22,12 @@ const StyledSection = styled.section`
         width: 300px;
         overflow-y: auto;
     }
+
+    & ul {
+        /* list-style-type: none; */
+        list-style-position: inside;
+        padding: 0;
+    }
 `;
 
 const Credits = () => {
