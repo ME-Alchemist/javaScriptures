@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useSoundContext } from "../components/soundContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 // import { Spinner } from "react-bootstrap";
@@ -62,6 +63,7 @@ const StyledSection = styled.section`
 `;
 
 const Status = () => {
+    const { pauseBGM, pauseBattle } = useSoundContext();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { setTitle } = titleStore();
@@ -75,6 +77,34 @@ const Status = () => {
     vocation_img,
     vocation_portrait,
   } = UserDetails();
+
+    const logout = async () => {
+    if(window.confirm("Are you sure you want to logout?")) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/logout",
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+  
+        if (response.status === 200 && response.status < 300) {
+          pauseBGM();
+          pauseBattle();
+          UserDetails.getState().reset();
+          navigate("/login", { replace: true });
+        } else {
+          console.log("error logging out", response.status);
+          pauseBGM();
+          pauseBattle();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
+  };
 
   useEffect(() => {
     setTitle("Status");
@@ -121,13 +151,14 @@ const Status = () => {
               height="100%"
             />
           </article>
-          <article className="userInfo">
+          <article className="userInfo flex flex-column align-items-center">
             {/* <h1 style={{ textDecoration: "underline" }}>Stats</h1> */}
             <p className="paragraphBreak">Username: {username}</p>
             <p className="paragraphBreak">Email: {email}</p>
             <p>Level: {level}</p>
             <p className="paragraphBreak">Experience: {exp}</p>
             <p className="paragraphBreak">Vocation: {vocation}</p>
+            <button className="btn btn-dark btn-lg btn btn-primary" onClick={logout}>Logout</button>
           </article>
           <article
           // style={{

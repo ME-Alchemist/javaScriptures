@@ -1,4 +1,10 @@
 import styled from "styled-components";
+import titleStore from "../zustore/titleStore";
+import { useEffect} from "react";
+// import { Link, useNavigate } from "react-router";
+// import axios from "axios";
+// import Spinner from "../components/spinner";
+
 
 const StyledSection = styled.section`
     display: flex !important;
@@ -6,7 +12,7 @@ const StyledSection = styled.section`
     justify-content: center !important;
     align-items: center !important;
     flex-direction: row !important;
-    max-height: 600px;
+    max-height: 80vh !important;
     overflow-y: auto;
     font-size: 1.1rem;
 
@@ -19,7 +25,7 @@ const StyledSection = styled.section`
         border-style: inset;
         padding: 5px;
         height: 300px;
-        width: 300px;
+        width: 260px;
         overflow-y: auto;
     }
 
@@ -28,12 +34,35 @@ const StyledSection = styled.section`
         list-style-position: inside;
         padding: 0;
     }
+
 `;
 
 const Credits = () => {
+
+      const { setTitle } = titleStore();
+    
+      useEffect(() => {
+        setTitle("Credits");
+
+         return () => {
+           setTitle("Welcome traveler");
+         }
+      }, []);
+
     return (
         <>
-        <h1>Credits</h1>
+        {/* <h1>Credits</h1> */}
+
+        <img
+          data-aos-once="true"
+          className="img-fluid mx-auto d-block decoration"
+          src="/images/decorations/credits.webp"
+          alt="Gazer munching on text"
+          title="many thanks, much yummy"
+          width={"470px"}
+          height={"205px"}
+          style={{filter: "drop-shadow(0px 0px 28px #000)"}}
+        />
         
         <StyledSection className="">
                 <article className="bg-dark bg-opacity-50">

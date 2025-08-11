@@ -6,8 +6,8 @@ import { useSoundContext } from "../components/soundContext";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router";
+// import axios from "axios";
+// import { useNavigate } from "react-router";
 import UserDetails from "../zustore/userStore";
 import titleStore from "../zustore/titleStore";
 
@@ -73,44 +73,44 @@ const StyledCanvas = styled(Offcanvas)`
 
 const Header = () => {
   const currentPath = useLocation().pathname;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
-  const { mute, playing, playingBattle, toggleMute, toggleBGM, pauseBGM, pauseBattle } = useSoundContext();
+  const { mute, playing, playingBattle, toggleMute, toggleBGM } = useSoundContext();
  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
 
-  const logout = async () => {
-    if(window.confirm("Are you sure you want to logout? if you have begun a quest your progress will be lost")) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/logout",
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+  // const logout = async () => {
+  //   if(window.confirm("Are you sure you want to logout? if you have begun a quest your progress will be lost")) {
+  //     try {
+  //       const response = await axios.post(
+  //         "http://localhost:3000/logout",
+  //         {},
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
   
-        if (response.status === 200 && response.status < 300) {
-          pauseBGM();
-          pauseBattle();
-          UserDetails.getState().reset();
-          navigate("/login", { replace: true });
-        } else {
-          console.log("error logging out", response.status);
-          pauseBGM();
-          pauseBattle();
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  //       if (response.status === 200 && response.status < 300) {
+  //         pauseBGM();
+  //         pauseBattle();
+  //         UserDetails.getState().reset();
+  //         navigate("/login", { replace: true });
+  //       } else {
+  //         console.log("error logging out", response.status);
+  //         pauseBGM();
+  //         pauseBattle();
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
 
-    }
-  };
+  //   }
+  // };
 
   return (
     <>
@@ -180,9 +180,9 @@ const Header = () => {
                 <Link to={"/main/credits"}>Credits</Link>
               </li>
               {/* Sign out, ask the user to confirm before closing the app, POST requests  for user progressinon are now made during result screens so no need to perform additonal requests before logout*/}
-              <li className="logout" onClick={logout}>
+              {/* <li className="logout" onClick={logout}>
                 logout
-              </li>
+              </li> */}
             </ul>
           </div>
         </Offcanvas.Body>

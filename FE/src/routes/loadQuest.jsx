@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useSoundContext } from "../components/soundContext";
+import { appendToQuestLog } from "../utils/utils";
 import axios from "axios";
 import Prompt from "react-router-prompt";
 import { useParams, useNavigate, } from "react-router";
@@ -174,33 +175,6 @@ const ChosenQuests = () => {
   // You get three tries
   const [hitPoints, setHitPoints] = useState(3);
   const [blocking, setBlocking] = useState(true);
-
-  // Type writer effect
-  const appendToQuestLog = async (text, fSize, fStyle, fColor) => {
-    try {
-      let i = 0;
-      let txt = text;
-      let speed = 20;
-      const para = document.createElement("p");
-      para.style.fontSize = fSize;
-      para.style.fontStyle = fStyle;
-      para.style.color = fColor;
-      const questLog = document.querySelector(".questProgress");
-      questLog.appendChild(para);
-
-      const typeWriter = () => {
-        if (i < txt.length) {
-          para.innerHTML += txt.charAt(i);
-          i++;
-          setTimeout(typeWriter, speed);
-        }
-        para.scrollIntoView({ behavior: "smooth" });
-      };
-      typeWriter();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // sound effects
   const playSFX = (type) => {

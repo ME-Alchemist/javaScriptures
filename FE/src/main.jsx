@@ -1,6 +1,5 @@
 import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-// import { BrowserRouter, Routes, Route } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { SoundProvider } from "./components/soundContext";
 
@@ -14,8 +13,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 // import "normalize.css";
-// import App from "./routes/App.jsx";
-const App = lazy(() => import("./routes/App.jsx"));
+import App from "./routes/App.jsx";
+// const App = lazy(() => import("./routes/App.jsx"));
 
 import Login from "./routes/login.jsx";
 import Register from "./routes/signUp.jsx";

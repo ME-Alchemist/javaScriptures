@@ -15,6 +15,9 @@ const StyledSection = styled.section`
   align-items: center !important;
   flex-direction: column;
 
+  .decoration {
+  }
+
   .questDropdown {
     flex-direction: row !important;
   }
@@ -38,7 +41,7 @@ const StyledSection = styled.section`
   }
 
   @media screen and (max-width: 768px) {
-    gap: 8rem;
+    gap: 7rem;
 
     .questDescription {
       width: 300px;
@@ -50,8 +53,19 @@ const StyledSection = styled.section`
       color: #fffefe;
     }
   }
+  
+  @media screen and (max-width: 500px) {
+    
+    .decoration {
+      display: none;
+    }
+  }
 
   @media screen and (max-width: 400px) {
+
+        gap: 3rem;
+
+
     .questDescription {
       width: 270px;
       height: 330px;
@@ -63,6 +77,7 @@ const StyledSection = styled.section`
       }
     }
   }
+  
 `;
 
 const StyledHeader = styled.header`
@@ -176,7 +191,7 @@ textRef.current.innerHTML =
       </StyledHeader>
       <StyledSection className="flex-md-row">
         <div
-          className="questDropdown flex-column d-flex dropdown gap-3"
+          className="questDropdown flex-column d-flex flex-wrap justify-content-center dropdown gap-3"
           style={{ textAlign: "end" }}
         >
 
@@ -213,10 +228,19 @@ textRef.current.innerHTML =
           })}
         </div>
 
-        <div>
+        <div className="d-flex">
           <section className="questDescription bg-dark bg-opacity-50">
             <p ref={textRef} className="placeText"></p>
           </section>
+              <img
+                  data-aos-once="true"
+                  className="decoration align-self-center"
+                  src="/images/decorations/goblin.webp"
+                  alt="lich"
+                  title="Lich"
+                  width={"165px"}
+                  height={"190px"}
+                />
         </div>
       </StyledSection>
     </>
