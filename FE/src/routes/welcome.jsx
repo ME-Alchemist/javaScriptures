@@ -12,6 +12,11 @@ const StyledSection = styled.section`
   align-items: center !important;
   flex-direction: column;
 
+  .homeDeco {
+    filter: drop-shadow(rgb(0, 0, 0) -5px -5px 5px);
+    float: right;
+  }
+
   .Container {
     border: 2px solid black;
     border-radius: 15px;
@@ -41,26 +46,27 @@ const Welcome = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((response) => {
+        console.log("the response:", response);
 
-    axios.get("http://localhost:3000/check", { withCredentials: true }).then((response) => {
-      console.log("the response:", response);
-      
-          setTitle("Home");
-      
-          const img = new Image();
-          img.src = "/images/decorations/guildDeco.webp";
-          img.onload = () => {
-            setIsLoading(false);
-          };
-      
-          return () => {
-            setTitle("Welcome traveler");
-          };
+        setTitle("Home");
 
-    }) .catch((err) => {
-      console.log(err);
-      navigate("/login", { replace: true });    
-    });
+        const img = new Image();
+        img.src = "/images/decorations/guildDeco.webp";
+        img.onload = () => {
+          setIsLoading(false);
+        };
+
+        return () => {
+          setTitle("Welcome traveler");
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/login", { replace: true });
+      });
   }, []);
 
   return (
@@ -98,12 +104,11 @@ const Welcome = () => {
                   Guildenstern, The Guildmaster
                 </q>
                 <img
-                  className="img-fluid rounded-end-4"
+                  className="img-fluid rounded-end-4 homeDeco"
                   src="/images/decorations/guildDeco.webp"
                   alt="Guildmaster"
                   title="Guildenstern"
                   width={"250px"}
-                  style={{ float: "right" }}
                 />
               </>
             )}

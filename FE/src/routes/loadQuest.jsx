@@ -3,7 +3,7 @@ import { useSoundContext } from "../components/soundContext";
 import { appendToQuestLog } from "../utils/utils";
 import axios from "axios";
 import Prompt from "react-router-prompt";
-import { useParams, useNavigate, } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
 import { DndContext } from "@dnd-kit/core";
@@ -82,25 +82,53 @@ const StyledWrapper = styled.section`
     object-fit: contain;
   }
 
-@keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
-}
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+      transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+      transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+      transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
 
-@keyframes move {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(40px); }
-  100% { transform: translateX(0); }
-}
+  @keyframes move {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(40px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
 
   @media screen and (max-width: 760px) {
     .questLog {
@@ -144,20 +172,24 @@ const ModalBox = styled.div`
 `;
 
 const ChosenQuests = () => {
-
-  const { playSlash, 
-    playMissed, 
-    playBlocked, 
-    stopBattle, 
+  const {
+    playSlash,
+    playMissed,
+    playBlocked,
+    stopBattle,
+    stopBoss,
     playBGM,
     playWin,
     stopWin,
     playFail,
     stopFail,
-    setPlaying, 
-    playingBattle, 
-    setPlayingBattle } = useSoundContext();
-  
+    setPlaying,
+    playingBattle,
+    playingBoss,
+    setPlayingBattle,
+    setPlayingBoss,
+  } = useSoundContext();
+
   const navigate = useNavigate();
   const { setTitle } = titleStore();
   const { updateQuest, resetQuest } = questStore();
@@ -182,37 +214,45 @@ const ChosenQuests = () => {
       case "slash":
         playSlash();
         break;
-        case "missed":
-          playMissed();
-          break;
-          case "blocked":
-            playBlocked();
-            break;
-          }
-          console.log("playing sound effect");
-  }
+      case "missed":
+        playMissed();
+        break;
+      case "blocked":
+        playBlocked();
+        break;
+    }
+    console.log("playing sound effect");
+  };
 
   //monster img shake effect
   const attackHit = () => {
-      const monsterImg = document.querySelector(".monster-img");
-      monsterImg.style.animation = "shake 0.3s";
-      monsterImg.style.animationIterationCount = "1";
+    const monsterImg = document.querySelector(".monster-img");
+    monsterImg.style.animation = "shake 0.3s";
+    monsterImg.style.animationIterationCount = "1";
 
-        monsterImg.addEventListener("animationend", () => {
-    monsterImg.style.animation = "";
-  }, { once: true });
-  }
+    monsterImg.addEventListener(
+      "animationend",
+      () => {
+        monsterImg.style.animation = "";
+      },
+      { once: true }
+    );
+  };
 
   //monster img move effect
   const attackMissed = () => {
-      const monsterImg = document.querySelector(".monster-img");
-      monsterImg.style.animation = "move 0.6s";
-      monsterImg.style.animationIterationCount = "1";
+    const monsterImg = document.querySelector(".monster-img");
+    monsterImg.style.animation = "move 0.6s";
+    monsterImg.style.animationIterationCount = "1";
 
-        monsterImg.addEventListener("animationend", () => {
-    monsterImg.style.animation = "";
-  }, { once: true });
-  }
+    monsterImg.addEventListener(
+      "animationend",
+      () => {
+        monsterImg.style.animation = "";
+      },
+      { once: true }
+    );
+  };
 
   // image preloader
   const preloadImages = async (imageUrls) => {
@@ -279,8 +319,10 @@ const ChosenQuests = () => {
 
   // Run fetch on mount
   useEffect(() => {
-        axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
-      console.log(res);
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((res) => {
+        console.log(res);
       });
 
     setQuestCompleted(false);
@@ -300,7 +342,6 @@ const ChosenQuests = () => {
       appendToQuestLog(
         `The ${monsters[0].enemy_name} asks: ${quest[0].question}`
       );
-
     }
   }, [quest]);
 
@@ -319,16 +360,16 @@ const ChosenQuests = () => {
           replace: true,
           state: { fromQuest: true },
         });
-          stopBattle();
-          playWin();
-          setTimeout(() => {
-            stopWin();
-            if(playingBattle) {
-              setPlayingBattle(false);
-              setPlaying(true);
-              playBGM();
-            }
-          }, 4000);
+        stopBattle();
+        playWin();
+        setTimeout(() => {
+          stopWin();
+          if (playingBattle) {
+            setPlayingBattle(false);
+            setPlaying(true);
+            playBGM();
+          }
+        }, 4000);
       }, 2000);
     }
   }, [next]);
@@ -341,15 +382,15 @@ const ChosenQuests = () => {
         when={blocking}
         beforeConfirm={() => {
           resetQuest();
-            if(playingBattle) {
-              stopBattle();
-              setPlayingBattle(false);
-              playBGM();
-              setPlaying(true);
-            }
-          console.log(
-            `You chose to leave. Your progress is now lost.`
-          );
+          if (playingBattle || playingBoss) {
+            stopBattle();
+            setPlayingBattle(false);
+            stopBoss();
+            setPlayingBoss(false);
+            playBGM();
+            setPlaying(true);
+          }
+          console.log(`You chose to leave. Your progress is now lost.`);
         }}
         beforeCancel={() => {
           console.log("You chose to remain and continue the quest.");
@@ -416,7 +457,7 @@ const ChosenQuests = () => {
                   </article>
                 </section>
 
-                { questStore.getState().hitPoints <= 0 ? (
+                {questStore.getState().hitPoints <= 0 ? (
                   <div className="d-flex justify-content-center gap-4 ms-4">
                     <h3 className="question">Quest Failed...</h3>
                   </div>
@@ -427,7 +468,6 @@ const ChosenQuests = () => {
                     </div>
 
                     <img
-
                       src={monsters[next].img_path}
                       alt={monsters[next].enemy_name}
                       title={monsters[next].enemy_name}
@@ -504,28 +544,25 @@ const ChosenQuests = () => {
             monsters[next].enemy_name
           );
           // make ternary if the monster is or is not the dragon queen
-          monsters[next].enemy_name === "Dragon Queen" ? (
-            appendToQuestLog(
-              `Correct! You've struck the Dragon Queen!`,
-              undefined,
-              undefined,
-              "green"
-            )
-          ) : (
-             appendToQuestLog(
-              `Correct! A fine hit! You received ${monsters[next].exp_drop} exp`,
-              undefined,
-              undefined,
-              "green"
-            )
-          );
+          monsters[next].enemy_name === "Dragon Queen"
+            ? appendToQuestLog(
+                `Correct! You've struck the Dragon Queen!`,
+                undefined,
+                undefined,
+                "green"
+              )
+            : appendToQuestLog(
+                `Correct! A fine hit! You received ${monsters[next].exp_drop} exp`,
+                undefined,
+                undefined,
+                "green"
+              );
           if (nextMonster < quest.length) {
             appendToQuestLog(
               `The ${monsters[nextMonster].enemy_name} asks: ${quest[nextMonster].question}`
             );
           }
           nextQuestion();
-          
         }, 500);
       }
 
@@ -547,7 +584,7 @@ const ChosenQuests = () => {
             "red"
           );
           updateQuest(0, newHitPoints, "");
-  
+
           if (newHitPoints <= 0) {
             setBlocking(false);
             appendToQuestLog("No more tries!").then(() => {
@@ -556,20 +593,19 @@ const ChosenQuests = () => {
                   replace: true,
                   state: { fromQuest: true },
                 });
-                  stopBattle();
-                  playFail();
-                  setTimeout(() => {
-                    stopFail();
-                    if(playingBattle) {
-                      setPlayingBattle(false);
-                      setPlaying(true);
-                      playBGM();
-                    }
-                  }, 4000);
+                stopBattle();
+                playFail();
+                setTimeout(() => {
+                  stopFail();
+                  if (playingBattle) {
+                    setPlayingBattle(false);
+                    setPlaying(true);
+                    playBGM();
+                  }
+                }, 4000);
               }, 2000);
             });
           }
-          
         }, 500);
       }
     }

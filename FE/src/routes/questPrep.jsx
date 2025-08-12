@@ -12,6 +12,11 @@ const StyledSection = styled.section`
   align-items: center !important;
   flex-direction: column;
 
+  .prepDeco {
+    filter: drop-shadow(rgb(0, 0, 0) 10px 5px 5px);
+    float: right;
+  }
+
   .figure {
     color: white;
     text-shadow: 2px 4px 3px black;
@@ -56,30 +61,28 @@ const QuestPrep = () => {
     });
   };
 
-
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((response) => {
+        console.log("the response:", response);
 
-    axios.get("http://localhost:3000/check", { withCredentials: true }).then((response) => {
+        setTitle("Prepare for the quest ahead");
 
-      console.log("the response:", response);
-  
-      setTitle("Prepare for the quest ahead");
-  
-      const img = new Image();
-      img.src = "/images/decorations/dmDeco.webp";
-      img.onload = () => {
-        setIsLoading(false);
-      };
-  
-      return () => {
-        setTitle("Welcome traveler");
-      };
+        const img = new Image();
+        img.src = "/images/decorations/dmDeco.webp";
+        img.onload = () => {
+          setIsLoading(false);
+        };
 
-    }).catch((err) => {
-      console.log(err);
-      navigate("/login", { replace: true });
-    });
-
+        return () => {
+          setTitle("Welcome traveler");
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/login", { replace: true });
+      });
   }, []);
 
   return (
@@ -134,12 +137,11 @@ const QuestPrep = () => {
           ) : (
             <>
               <img
-                className="rounded-end-4"
+                className="rounded-end-4 prepDeco"
                 src="/images/decorations/dmDeco.webp"
                 alt="DM"
                 title="Duke MacQuoid"
                 width={"250px"}
-                style={{ float: "right" }}
               />
               <q className="figure">Duke MacQuoid, Guide</q>
             </>

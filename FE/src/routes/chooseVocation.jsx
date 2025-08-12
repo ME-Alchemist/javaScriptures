@@ -185,7 +185,7 @@ const ChooseVocation = () => {
     slidesToScroll: 1,
     fade: false,
     beforeChange: (current, next) => {
-      if(show) {
+      if (show) {
         let vocation = vocations[next];
         setCurrentVocation(vocation);
         console.log(currentVocation.vocation_id);
@@ -194,13 +194,12 @@ const ChooseVocation = () => {
         setCurrentVocation(vocation);
         console.log(currentVocation.vocation_id);
       }
-
     },
   };
 
   return (
     <StyledDiv>
-      <h1  className="mb-4">Choose your vocation</h1>
+      <h1 className="mb-4">Choose your vocation</h1>
 
       <div className="bodyContainer d-flex flex-column flex-lg-row justify-content-center align-items-center">
         <div className="aboutVocationContainer ">
@@ -208,62 +207,60 @@ const ChooseVocation = () => {
         </div>
 
         <div className="vocationContainer">
-        {show ? (
-          <Slider className="" {...settings}>
-            {vocations ? (
-              vocations.map((vocation) => {
-                return (
-                  <div key={vocation.vocation_id}>
-                    <img
-                      width={"280px"}
-                      // height={"500px"}
-                      src={vocation.vocation_img}
-                      key={vocation.vocation_id}
-                      alt="vocation"
-                      title={vocation.vocation_name}
-                      style={{ objectFit: "cover" }}
-                      className="mx-auto img-fluid"
-                    />
-                  </div>
-                );
-              })
-            ) : (
-              <Spinner animation="border" />
-            )}
-          </Slider>
-          
-        ) : (
-          <Slider className="" {...settings}>
-            {vocationsTypeB ? (
-              vocationsTypeB.map((vocation) => {
-                return (
-                  <div key={vocation.vocation_id}>
-                    <img
-                      width={"280px"}
-                      // height={"500px"}
-                      src={vocation.vocation_img}
-                      key={vocation.vocation_id}
-                      alt="vocation"
-                      title={vocation.vocation_name}
-                      style={{ objectFit: "cover" }}
-                      className="mx-auto img-fluid"
-                    />
-                  </div>
-                );
-              })
-            ) : (
-              <Spinner animation="border" />
-            )}
-          </Slider>
-          
-        )}
-
-
+          {show ? (
+            <Slider className="" {...settings}>
+              {vocations ? (
+                vocations.map((vocation) => {
+                  return (
+                    <div key={vocation.vocation_id}>
+                      <img
+                        width={"280px"}
+                        // height={"500px"}
+                        src={vocation.vocation_img}
+                        key={vocation.vocation_id}
+                        alt="vocation"
+                        title={vocation.vocation_name}
+                        style={{ objectFit: "cover" }}
+                        className="mx-auto img-fluid"
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <Spinner animation="border" />
+              )}
+            </Slider>
+          ) : (
+            <Slider className="" {...settings}>
+              {vocationsTypeB ? (
+                vocationsTypeB.map((vocation) => {
+                  return (
+                    <div key={vocation.vocation_id}>
+                      <img
+                        width={"280px"}
+                        // height={"500px"}
+                        src={vocation.vocation_img}
+                        key={vocation.vocation_id}
+                        alt="vocation"
+                        title={vocation.vocation_name}
+                        style={{ objectFit: "cover" }}
+                        className="mx-auto img-fluid"
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <Spinner animation="border" />
+              )}
+            </Slider>
+          )}
         </div>
       </div>
       <div className="mt-4 d-flex justify-content-center gap-2">
         {/* <button className="btn btn-dark btn-lg">Body Type A</button> */}
-        <button onClick={() => showBodyTypeB()} className="btn btn-dark btn-lg">{show ? "Body Type A" : "Body Type B"}</button>
+        <button onClick={() => showBodyTypeB()} className="btn btn-dark btn-lg">
+          {show ? "Body Type A" : "Body Type B"}
+        </button>
       </div>
       <button
         className="btn btn-dark btn-lg mt-4 mb-4"
@@ -271,7 +268,6 @@ const ChooseVocation = () => {
       >
         Confirm Choice
       </button>
-
     </StyledDiv>
   );
 };

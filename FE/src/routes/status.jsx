@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useSoundContext } from "../components/soundContext";
+// import { useSoundContext } from "../components/soundContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import Logout from "../components/logout";
 // import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import AOS from "aos";
@@ -38,6 +39,10 @@ const StyledSection = styled.section`
     }
   }
 
+  .userAvatar {
+    filter: drop-shadow(rgb(0, 0, 0) 10px 5px 5px);
+  }
+
   .paragraphBreak {
     word-break: break-all;
   }
@@ -63,7 +68,7 @@ const StyledSection = styled.section`
 `;
 
 const Status = () => {
-    const { pauseBGM, pauseBattle } = useSoundContext();
+  // const { pauseBGM, pauseBattle } = useSoundContext();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { setTitle } = titleStore();
@@ -78,33 +83,33 @@ const Status = () => {
     vocation_portrait,
   } = UserDetails();
 
-    const logout = async () => {
-    if(window.confirm("Are you sure you want to logout?")) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/logout",
-          {},
-          {
-            withCredentials: true,
-          }
-        );
-  
-        if (response.status === 200 && response.status < 300) {
-          pauseBGM();
-          pauseBattle();
-          UserDetails.getState().reset();
-          navigate("/login", { replace: true });
-        } else {
-          console.log("error logging out", response.status);
-          pauseBGM();
-          pauseBattle();
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  //   const logout = async () => {
+  //   if(window.confirm("Are you sure you want to logout?")) {
+  //     try {
+  //       const response = await axios.post(
+  //         "http://localhost:3000/logout",
+  //         {},
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
 
-    }
-  };
+  //       if (response.status === 200 && response.status < 300) {
+  //         pauseBGM();
+  //         pauseBattle();
+  //         UserDetails.getState().reset();
+  //         navigate("/login", { replace: true });
+  //       } else {
+  //         console.log("error logging out", response.status);
+  //         pauseBGM();
+  //         pauseBattle();
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+
+  //   }
+  // };
 
   useEffect(() => {
     setTitle("Status");
@@ -158,15 +163,9 @@ const Status = () => {
             <p>Level: {level}</p>
             <p className="paragraphBreak">Experience: {exp}</p>
             <p className="paragraphBreak">Vocation: {vocation}</p>
-            <button className="btn btn-dark btn-lg btn btn-primary" onClick={logout}>Logout</button>
+            <Logout />
           </article>
-          <article
-          // style={{
-          //   backgroundImage: `url("/images/backdrops/userFrame.webp")`,
-          //   backgroundRepeat: "no-repeat",
-          //   backgroundSize: "contain",
-          // }}
-          >
+          <article>
             {isLoading ? (
               <Spinner />
             ) : (

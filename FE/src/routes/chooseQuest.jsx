@@ -5,8 +5,6 @@ import styled from "styled-components";
 import titleStore from "../zustore/titleStore";
 import { useSoundContext } from "../components/soundContext";
 
-
-
 const StyledSection = styled.section`
   gap: 3rem;
   font-size: 1.2rem;
@@ -16,6 +14,7 @@ const StyledSection = styled.section`
   flex-direction: column;
 
   .decoration {
+    filter: drop-shadow(rgb(0, 0, 0) 10px 5px 5px);
   }
 
   .questDropdown {
@@ -36,8 +35,8 @@ const StyledSection = styled.section`
     width: 350px;
     height: 360px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    overflow-y: scroll;
   }
 
   @media screen and (max-width: 768px) {
@@ -53,18 +52,15 @@ const StyledSection = styled.section`
       color: #fffefe;
     }
   }
-  
+
   @media screen and (max-width: 500px) {
-    
     .decoration {
       display: none;
     }
   }
 
   @media screen and (max-width: 400px) {
-
-        gap: 3rem;
-
+    gap: 3rem;
 
     .questDescription {
       width: 270px;
@@ -77,7 +73,6 @@ const StyledSection = styled.section`
       }
     }
   }
-  
 `;
 
 const StyledHeader = styled.header`
@@ -99,33 +94,121 @@ const List = styled.ul`
 `;
 
 const ChooseQuest = () => {
-  const { 
+  const {
     stopBGM,
-    currentBGM, 
-    playBattle, 
-    setPlayingBattle, 
-    playing, 
-    setPlaying } = useSoundContext();
+    currentBGM,
+    playBoss,
+    stopBoss,
+    setPlayingBoss,
+    playBattle,
+    stopBattle,
+    setPlayingBattle,
+    playing,
+    setPlaying,
+  } = useSoundContext();
 
-    const dropdownBtns = [
-      {text: "HTML", funcArg: "html", options: [
-        {text: "HTML Basics 1", link: "/main/quests/start/html basics 1"},
-        {text: "HTML Basics 2", link: "/main/quests/start/html basics 2"},
-        {text: "HTML Basics 3", link: "/main/quests/start/html basics 3"},]},
-      {text: "CSS", funcArg: "css", options: [
-        {text: "CSS Basics 1", link: "/main/quests/start/css basics 1"},
-        {text: "CSS Basics 2", link: "/main/quests/start/css basics 2"},
-        {text: "CSS Basics 3", link: "/main/quests/start/css basics 3"},
-      ]},
-      {text: "JavaScript", funcArg: "js", options: [
-        {text: "JS Basics 1", link: "/main/quests/start/javascript basics 1"},
-        {text: "JS Basics 2", link: "/main/quests/start/javascript basics 2"},
-        {text: "JS Basics 3", link: "/main/quests/start/javascript basics 3"},
-      ]},
-      {text: "Challenge", funcArg: "mix", options: [
-        {text: "Dragon Queen's challenge", link: "/main/quests/start/Dragon Queen's challenge"}
-      ]},
-    ]
+  const battleBGMbutton = () => {
+    if (playing) {
+      stopBGM();
+      stopBoss();
+      setPlayingBoss(false);
+      setPlaying(false);
+      playBattle();
+      setPlayingBattle(true);
+    }
+    // pauseBGM();
+    // playBattle();
+  };
+
+  const bossBGMbutton = () => {
+    if (playing) {
+      stopBGM();
+      stopBattle();
+      setPlaying(false);
+      setPlayingBattle(false);
+      playBoss();
+      setPlayingBoss(true);
+    }
+    // pauseBGM();
+    // playBattle();
+  };
+
+  const dropdownBtns = [
+    {
+      text: "HTML",
+      funcArg: "html",
+      options: [
+        {
+          text: "HTML Basics 1",
+          link: "/main/quests/start/html basics 1",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "HTML Basics 2",
+          link: "/main/quests/start/html basics 2",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "HTML Basics 3",
+          link: "/main/quests/start/html basics 3",
+          buttonFunc: battleBGMbutton,
+        },
+      ],
+    },
+    {
+      text: "CSS",
+      funcArg: "css",
+      options: [
+        {
+          text: "CSS Basics 1",
+          link: "/main/quests/start/css basics 1",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "CSS Basics 2",
+          link: "/main/quests/start/css basics 2",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "CSS Basics 3",
+          link: "/main/quests/start/css basics 3",
+          buttonFunc: battleBGMbutton,
+        },
+      ],
+    },
+    {
+      text: "JavaScript",
+      funcArg: "js",
+      options: [
+        {
+          text: "JS Basics 1",
+          link: "/main/quests/start/javascript basics 1",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "JS Basics 2",
+          link: "/main/quests/start/javascript basics 2",
+          buttonFunc: battleBGMbutton,
+        },
+        {
+          text: "JS Basics 3",
+          link: "/main/quests/start/javascript basics 3",
+          buttonFunc: battleBGMbutton,
+        },
+      ],
+    },
+    {
+      text: "Challenge",
+      funcArg: "mix",
+      options: [
+        {
+          text: "Dragon Queen's challenge",
+          link: "/main/quests/start/Dragon Queen's challenge",
+          buttonFunc: bossBGMbutton,
+        },
+      ],
+    },
+  ];
 
   const { setTitle } = titleStore();
   const navigate = useNavigate();
@@ -156,45 +239,40 @@ const ChooseQuest = () => {
     textRef.current.innerHTML = text;
   };
 
-  const battleBGMbutton = () => {
-        if(playing) {
-        stopBGM();
-        setPlaying(false);
-        playBattle();
-        setPlayingBattle(true);
-      }
-    // pauseBGM();
-    // playBattle();
-  }
-
   useEffect(() => {
     console.log(currentBGM.current);
     setTitle("Choose your Quest");
-    axios.get("http://localhost:3000/check", { withCredentials: true }).then((res) => {
-      console.log(res);
-textRef.current.innerHTML =
-        "5 riddles await — 3 paths lie before you. Drag and drop your answer into the box of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
-      }) .catch((err) => {
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        textRef.current.innerHTML =
+          "5 riddles await — 3 paths lie before you. Drag and drop your answer into the box of fate. You have three chances to prove your wisdom. Fail, and a hit point shall be lost. Succeed, and experience shall be your reward. May fortune favor the bold.";
+      })
+      .catch((err) => {
         console.log(err);
         navigate("/login", { replace: true });
       });
-          return () => {
-        setTitle("Welcome traveler");
-      };
-    
+    return () => {
+      setTitle("Welcome traveler");
+    };
   }, []);
 
   return (
     <>
       <StyledHeader>
-        <h1>Choose your quest</h1>
+        <h1
+          className="fs-1 fw-bold"
+          style={{ textShadow: "2px 3px 12px white" }}
+        >
+          Choose your quest
+        </h1>
       </StyledHeader>
       <StyledSection className="flex-md-row">
         <div
           className="questDropdown flex-column d-flex flex-wrap justify-content-center dropdown gap-3"
           style={{ textAlign: "end" }}
         >
-
           {dropdownBtns.map((btn, index) => {
             return (
               <div key={index} className="dropdown">
@@ -215,7 +293,7 @@ textRef.current.innerHTML =
                         <Link
                           className="dropdown-item battleBtn"
                           to={option.link}
-                          onClick={() => battleBGMbutton()}
+                          onClick={option.buttonFunc}
                         >
                           {option.text}
                         </Link>
@@ -232,15 +310,15 @@ textRef.current.innerHTML =
           <section className="questDescription bg-dark bg-opacity-50">
             <p ref={textRef} className="placeText"></p>
           </section>
-              <img
-                  data-aos-once="true"
-                  className="decoration align-self-center"
-                  src="/images/decorations/goblin.webp"
-                  alt="lich"
-                  title="Lich"
-                  width={"165px"}
-                  height={"190px"}
-                />
+          <img
+            data-aos-once="true"
+            className="decoration align-self-center"
+            src="/images/decorations/goblin.webp"
+            alt="lich"
+            title="Lich"
+            width={"165px"}
+            height={"190px"}
+          />
         </div>
       </StyledSection>
     </>
@@ -249,16 +327,13 @@ textRef.current.innerHTML =
 
 export default ChooseQuest;
 
+// Keeping this as an example for future use
+// const [show, setShow] = useState(null);
 
-
-
-  // Keeping this as an example for future use
-  // const [show, setShow] = useState(null);
-
-  // const handleList = (list) => {
-  //   console.log(list);
-  //   setShow(list);
-  //   if (show === list) {
-  //     setShow(null);
-  //   }
-  // };
+// const handleList = (list) => {
+//   console.log(list);
+//   setShow(list);
+//   if (show === list) {
+//     setShow(null);
+//   }
+// };

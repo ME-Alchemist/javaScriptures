@@ -78,11 +78,11 @@ const Header = () => {
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
-  const { mute, playing, playingBattle, toggleMute, toggleBGM } = useSoundContext();
- 
+  const { mute, playing, playingBattle, playingBoss, toggleMute, toggleBGM } =
+    useSoundContext();
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
 
   // const logout = async () => {
   //   if(window.confirm("Are you sure you want to logout? if you have begun a quest your progress will be lost")) {
@@ -94,7 +94,7 @@ const Header = () => {
   //           withCredentials: true,
   //         }
   //       );
-  
+
   //       if (response.status === 200 && response.status < 300) {
   //         pauseBGM();
   //         pauseBattle();
@@ -117,19 +117,26 @@ const Header = () => {
       <StyledHeader className="shadow-sm d-flex flex-column justify-content-center">
         <h1 className="flex-grow-1">{title}</h1>
         <div className="d-flex flex-row justify-content-center align-items-center gap-5">
-        <button
-          className="btn bi bi-caret-right-fill fs-5 fw-bold"
-          onClick={handleShow}
-        >
-          Menu
-        </button>
-        <button onClick={() => toggleBGM(currentPath)} className="btn bi bi-music-note-beamed fw-bold" style={{ fontSize: "1.5rem" }}>
-          {playing || playingBattle ? "BGM: On" : "BGM: Off"}
-        </button>
-        <button onClick={toggleMute} className="btn bi bi-volume-off-fill fw-bold" style={{ fontSize: "1.5rem" }}>
-          {mute ? "SFX: On" : "SFX: Off"}
-        </button>
-
+          <button
+            className="btn bi bi-caret-right-fill fs-5 fw-bold"
+            onClick={handleShow}
+          >
+            Menu
+          </button>
+          <button
+            onClick={() => toggleBGM(currentPath)}
+            className="btn bi bi-music-note-beamed fw-bold"
+            style={{ fontSize: "1.5rem" }}
+          >
+            {playing || playingBattle || playingBoss ? "BGM: On" : "BGM: Off"}
+          </button>
+          <button
+            onClick={toggleMute}
+            className="btn bi bi-volume-off-fill fw-bold"
+            style={{ fontSize: "1.5rem" }}
+          >
+            {mute ? "SFX: On" : "SFX: Off"}
+          </button>
         </div>
       </StyledHeader>
 
