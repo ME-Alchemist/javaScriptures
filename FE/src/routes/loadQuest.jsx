@@ -210,6 +210,33 @@ const ChosenQuests = () => {
   // grab the current monster from the array
   // let isDragonQ = false;
 
+  // Run check on mount
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          console.log(err.status);
+          setBlocking(false);
+          navigate("/login", { replace: true });
+        }
+      });
+
+    setQuestCompleted(false);
+    console.log(completedStore.getState().questCompleted);
+    setTitle("The Quest begins!");
+    questFetch();
+
+    // cleanup function
+    return () => {
+      setTitle("Welcome traveler!"); // reset to initial title
+      setBlocking(true);
+    };
+  }, []);
+
   // sound effects
   const playSFX = (type) => {
     switch (type) {
@@ -327,26 +354,6 @@ const ChosenQuests = () => {
       setDropped(null);
     }
   };
-
-  // Run fetch on mount
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/check", { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-      });
-
-    setQuestCompleted(false);
-    console.log(completedStore.getState().questCompleted);
-    setTitle("The Quest begins!");
-    questFetch();
-
-    // cleanup function
-    return () => {
-      setTitle("Welcome traveler!"); // reset to initial title
-      setBlocking(true);
-    };
-  }, []);
 
   useEffect(() => {
     if (quest) {

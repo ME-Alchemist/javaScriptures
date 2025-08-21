@@ -23,7 +23,7 @@ function Droppable({ id, droppedAnswer }) {
 
   return (
     <StyledDiv className="mx-auto m-3" ref={setNodeRef} style={style}>
-      {droppedAnswer ? droppedAnswer : <div>Drop here</div>}
+      {droppedAnswer ? droppedAnswer : <div>Drag & drop here</div>}
     </StyledDiv>
   );
 }

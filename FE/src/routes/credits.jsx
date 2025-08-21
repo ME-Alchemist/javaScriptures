@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import axios from "axios";
+import { useNavigate } from "react-router";
 import titleStore from "../zustore/titleStore";
 import { useEffect } from "react";
 import JSON from "../static.json";
@@ -39,8 +41,19 @@ const StyledSection = styled.section`
 const Credits = () => {
   const { setTitle } = titleStore();
   const { sounds } = JSON;
+  const navigate = useNavigate();
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/check", { withCredentials: true })
+      .then((response) => {
+        console.log("the response:", response);
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate("/login", { replace: true });
+      });
+
     setTitle("Credits");
 
     return () => {
@@ -51,7 +64,7 @@ const Credits = () => {
   return (
     <>
       <h1 className="fs-1 fw-bold" style={{ textShadow: "2px 3px 12px white" }}>
-        I wish to thank...
+        The guild was not made in a day...
       </h1>
 
       <StyledSection className="">
@@ -103,7 +116,7 @@ const Credits = () => {
                 {sound.sound_name}
                 <p>
                   By: {sound.author_name} <br />
-                  Url: <a href={sound.sound_url}>{sound.sound_url}</a> <br />
+                  Url: <a href={sound.sound_url}>Freesound link</a> <br />
                   License: {sound.license_name}
                 </p>
                 <hr />

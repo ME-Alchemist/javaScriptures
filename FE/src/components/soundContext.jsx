@@ -37,7 +37,7 @@ export const SoundProvider = ({ children }) => {
 
   useEffect(() => {
     currentBGM.current = playing;
-    console.log(currentBGM.current);
+    // console.log(currentBGM.current);
   }, [playing]);
 
   const toggleMute = () => {

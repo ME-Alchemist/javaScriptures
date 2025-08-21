@@ -5,7 +5,7 @@ import { useLocation } from "react-router";
 import { useSoundContext } from "../components/soundContext";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router";
 import UserDetails from "../zustore/userStore";
@@ -35,12 +35,14 @@ const StyledCanvas = styled(Offcanvas)`
     margin-bottom: 0px;
   }
 
-  & a {
+  & a,
+  .timer {
     text-decoration: none;
     font-weight: bolder;
     font-size: larger;
     color: inherit;
     transition: all 0.2s ease-in-out;
+    text-shadow: 1px 1px 2px #000000;
   }
 
   & a:hover {
@@ -84,11 +86,27 @@ const Header = () => {
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
+  const [timer, setTimer] = useState(3600);
   const { mute, playing, playingBattle, playingBoss, toggleMute, toggleBGM } =
     useSoundContext();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    let countdown = timer; // 60 minutes in seconds
+
+    const intervalID = setInterval(() => {
+      setTimer((timer) => timer - 1);
+
+      if (countdown <= 0) {
+        clearInterval(intervalID);
+        console.log("Token has expired!");
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalID);
+  }, [timer]);
 
   return (
     <>
@@ -166,6 +184,15 @@ const Header = () => {
                 <Link to={"/main/credits"}>Credits</Link>
               </li>
             </ul>
+            <div>
+              <p className="fs-4 timer">
+                <span className="fw-bold text-decoration-underline">
+                  Session ends in:
+                </span>{" "}
+                <br />
+                {timer} seconds
+              </p>
+            </div>
           </div>
         </Offcanvas.Body>
       </StyledCanvas>

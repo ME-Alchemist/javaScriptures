@@ -1,5 +1,20 @@
 import { useSoundContext } from "../components/soundContext";
 import { Link } from "react-router";
+import styled from "styled-components";
+
+const StyledModal = styled.div`
+  .modal-header {
+    background-color: orange !important;
+  }
+
+  .modal-body {
+    background-color: #98570375 !important;
+  }
+
+  .modal-footer {
+    background-color: orange !important;
+  }
+`;
 
 const Modal = () => {
   const {
@@ -33,7 +48,7 @@ const Modal = () => {
       >
         Launch demo modal
       </button> */}
-      <div
+      <StyledModal
         className="modal fade"
         id="exampleModal"
         tabIndex="-1"
@@ -43,7 +58,10 @@ const Modal = () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5 mx-auto" id="exampleModalLabel">
+              <h1
+                className="modal-title fs-5 mx-auto fw-bold"
+                id="exampleModalLabel"
+              >
                 You 're about to challenge The Dragon Queen
               </h1>
               <button
@@ -64,31 +82,33 @@ const Modal = () => {
                 recommended that you complete HTML, CSS, and JS Basics 1 before
                 attempting this challenge. The Dragon Queen offers no second
                 chances… but great rewards await those who endure. <br />
-                <br /> Do you still wish to proceed?
+                Do you still wish to proceed?
               </p>
             </div>
-            <div className="modal-footer mx-auto">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <Link to={"/main/quests/start/Dragon Queen's challenge"}>
+            <div className="modal-footer">
+              <div className="mx-auto d-flex gap-2">
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                   data-bs-dismiss="modal"
-                  onClick={bossBGMbutton}
                 >
-                  Proceed
+                  Close
                 </button>
-              </Link>
+                <Link to={"/main/quests/start/Dragon Queen's challenge"}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    onClick={bossBGMbutton}
+                  >
+                    Proceed
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </StyledModal>
     </>
   );
 };
