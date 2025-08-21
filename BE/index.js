@@ -200,7 +200,7 @@ app.get("/check", verifyToken, async (req, res) => {
       error: error.message,
     });
   }
-})
+});
 
 // Get stats of currently logged in user
 app.get("/stats", verifyToken, async (req, res) => {
@@ -276,7 +276,13 @@ app.post("/sign-up", async (req, res) => {
 
     if (await User.findOne({ where: { email: email } })) {
       return res.status(400).json({
-        error: "User already exists",
+        error: "This email has been taken!",
+      });
+    }
+
+    if (await User.findOne({ where: { username: username } })) {
+      return res.status(400).json({
+        error: "This username has taken!",
       });
     }
 
@@ -325,7 +331,7 @@ app.post("/login", async (req, res) => {
 });
 
 // blacklist current token and log out user
-app.post("/logout", async (req, res) => {
+app.post("/logout", verifyToken, async (req, res) => {
   const token = req.cookies.token;
   if (token) {
     tokenBlacklist.add(token);
@@ -488,16 +494,22 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
 });
 
 // Delete user
-app.delete("/delete/:id", verifyToken, async (req, res) => {
+app.delete("/delete", verifyToken, async (req, res) => {
+  const token = req.cookies.token;
   try {
-    const userId = req.params.id;
+    if (token) {
+      tokenBlacklist.add(token);
+    }
+    const userId = req.user.user_id;
     const user = await User.findOne({ where: { user_id: userId } });
     if (user === null) {
       return res.status(404).json({
         error: "User not found",
       });
     }
+    await Completed.destroy({ where: { user_id: userId } });
     await User.destroy({ where: { user_id: userId } });
+    res.clearCookie("token");
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     return res.status(500).json({

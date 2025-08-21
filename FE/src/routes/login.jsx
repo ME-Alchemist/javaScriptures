@@ -19,7 +19,7 @@ const StyleWrapper = styled.div`
   max-width: 408px;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   border-radius: 15px;
   text-align: center;
 
@@ -33,8 +33,9 @@ const StyleWrapper = styled.div`
   }
 `;
 
-const Login = () => {  
-  const {stopBGM, stopBattle, setPlaying, setPlayingBattle, setMute} = useSoundContext();
+const Login = () => {
+  const { stopBGM, stopBattle, setPlaying, setPlayingBattle, setMute } =
+    useSoundContext();
   const navigate = useNavigate();
 
   const [toast, setToast] = useState(false);
@@ -46,8 +47,6 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  
 
   useEffect(() => {
     stopBGM();
@@ -63,51 +62,49 @@ const Login = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
-
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
     axios
       .post("http://localhost:3000/login", data, { withCredentials: true })
       .then((res) => {
-          console.log("RES.DATA = ", res.data);
-          if (res.status >= 200 && res.status < 300) {
-            if (res.data.user.chosenVocation === 0) {
-              {
-                alert("You must select a vocation first");
-                navigate("/vocation");
-                return;
-              }
+        console.log("RES.DATA = ", res.data);
+        if (res.status >= 200 && res.status < 300) {
+          if (res.data.user.chosenVocation === 0) {
+            {
+              alert("You must select a vocation first");
+              navigate("/vocation");
+              return;
             }
-            setToastColor("bg-success fs-5");
-            setToastMessage("Welcome back " + res.data.user.username + "!");
-            setToast(true);
-            setTimeout(() => {
-              navigate("/main/home", { replace: true });
-            }, 2500);
-            form.reset();
           }
-        })
+          setToastColor("bg-success fs-5");
+          setToastMessage("Welcome back " + res.data.user.username + "!");
+          setToast(true);
+          setTimeout(() => {
+            navigate("/main/home", { replace: true });
+          }, 2500);
+          form.reset();
+        }
+      })
       .catch((err) => {
-          if (err.response) {
-            if (err.response.status === 401) {
-              setToastColor("bg-danger fs-5");
-              setToastMessage("Wrong email or password!");
-              setToast(true);
-              console.log(err);
-            } else if (err.response.status === 404) {
-              setToastColor("bg-danger fs-5");
-              setToastMessage("Adventurer not found!");
-              setToast(true);
-              console.log(err);
-            }
-          } else {
+        if (err.response) {
+          if (err.response.status === 401) {
             setToastColor("bg-danger fs-5");
-            setToastMessage("Something went wrong!");
+            setToastMessage("Wrong email or password!");
+            setToast(true);
+            console.log(err);
+          } else if (err.response.status === 404) {
+            setToastColor("bg-danger fs-5");
+            setToastMessage("Adventurer not found!");
             setToast(true);
             console.log(err);
           }
-        });
+        } else {
+          setToastColor("bg-danger fs-5");
+          setToastMessage("Something went wrong!");
+          setToast(true);
+          console.log(err);
+        }
+      });
   };
 
   return (
@@ -200,6 +197,6 @@ const Login = () => {
       )}
     </>
   );
-}
+};
 
 export default Login;

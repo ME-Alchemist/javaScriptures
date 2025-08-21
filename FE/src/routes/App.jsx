@@ -43,18 +43,18 @@ const Background = styled.div`
     margin-top: 30px;
   }
 
-    & h1:nth-child(3) {
+  & h1:nth-child(3) {
     text-shadow: #000 4px 5px 4px;
     color: white;
     font-weight: bold;
-    margin-top: 30px;
+    /* margin-top: 30px; */
   }
 
   & section {
     /* overflow: auto; */
     border: 3px solid #000000;
     border-radius: 15px;
-    max-width: 350px;
+    max-width: 650px;
     min-width: 280px;
     background-color: #fffff0c2;
     margin-left: 10px;
@@ -75,6 +75,7 @@ const Background = styled.div`
 
   & section:nth-child(5) {
     margin-right: 10px !important;
+    margin-left: 10px !important;
   }
 
   & section:last-child {
@@ -105,21 +106,24 @@ function App() {
   return (
     <Background>
       <h1>Welcome to</h1>
-      <img src="/images/decorations/logo.webp" alt="logo" style={{ width: "55vw", maxWidth: "550px", minWidth: "300px" }} data-aos="fade-up"/>
+      <img
+        src="/images/decorations/logo.webp"
+        alt="logo"
+        style={{ width: "55vw", maxWidth: "550px", minWidth: "300px" }}
+        data-aos="fade-up"
+      />
       <h1>Where Code is Power and Every Line Matters</h1>
       <main
         className="d-flex flex-column gap-5 mx-auto justify-content-center align-items-center mt-5"
         // style={{ width: "65%" }}
       >
-        <section className="align-self-start" data-aos="fade-right">
+        <section className="align-self-start me-2 ms-2" data-aos="fade-zoom-in">
           <div>
             <p>
               This isn’t just another tutorial. It’s a world built on logic,
               challenge, and growth.
             </p>
             <p>
-              In this game, your tools are HTML, CSS, and JavaScript. Each quest
-              is a trial. Every bug, a monster to defeat. And the deeper you go,
               <img
                 src="/images/decorations/mimicDeco.webp"
                 alt=""
@@ -127,29 +131,31 @@ function App() {
                 style={{ float: "left" }}
                 loading="lazy"
               />
+              In this game, your tools are HTML, CSS, and JavaScript. Each quest
+              is a trial. Every bug, a monster to defeat. And the deeper you go,
               the stronger you become.
             </p>
           </div>
         </section>
 
-        <section className="align-self-end" data-aos="fade-left">
+        <section className="align-self-end" data-aos="fade-zoom-in">
           <div>
+            <img
+              src="/images/decorations/rogueDeco.webp"
+              alt=""
+              width={"150px"}
+              style={{ float: "right" }}
+              loading="lazy"
+            />
             <p>Pick your class. Sharpen your skills. Rewrite your fate</p>
             <p>
-              <img
-                src="/images/decorations/rogueDeco.webp"
-                alt=""
-                width={"150px"}
-                style={{ float: "right" }}
-                loading="lazy"
-              />{" "}
               Sign up to begin your journey — and earn your place among the
               legends of this digital realm.
             </p>
           </div>
         </section>
 
-        <section className="align-self-start" data-aos="fade-right">
+        <section className="align-self-start me-2 ms-2" data-aos="fade-zoom-in">
           <div>
             <ul>
               <li>
@@ -165,38 +171,38 @@ function App() {
                 you grow.
               </li>
               <li>
-                Explore the Realm – Progress through different zones themed
                 <img
                   src="/images/decorations/clericDeco.webp"
                   alt=""
                   width={"150px"}
-                  style={{ float: "left" }}
+                  style={{ float: "right", WebkitTransform: "scaleX(-1)" }}
                   loading="lazy"
                 />{" "}
+                Explore the Realm – Progress through different zones themed
                 around web development topics.
               </li>
             </ul>
           </div>
         </section>
 
-        <section className="align-self-end" data-aos="fade-left">
+        <section className="align-self-end" data-aos="fade-zoom-in">
           <div>
             <p>
               Whether you're a seasoned adventurer or a new squire, there's a
               place for you at the table.
+              <img
+                src="/images/decorations/beholderDeco.webp"
+                alt=""
+                width={"150px"}
+                style={{ float: "left", WebkitTransform: "scaleX(-1)" }}
+                loading="lazy"
+              />
             </p>
-            <img
-              src="/images/decorations/beholderDeco.webp"
-              alt=""
-              width={"150px"}
-              style={{ float: "right" }}
-              loading="lazy"
-            />
             <p>The realm awaits. Are you ready to begin your legend?</p>
           </div>
         </section>
 
-        <section className="align-self-center" data-aos="fade-up">
+        <section className="align-self-center" data-aos="fade-zoom-in">
           <Link to="/register">
             <h2>Press here to register yourself to the adventurers guild!</h2>
           </Link>

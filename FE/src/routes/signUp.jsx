@@ -18,7 +18,7 @@ const StyleWrapper = styled.div`
   max-width: 408px;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   border-radius: 15px;
   text-align: center;
 
@@ -41,6 +41,7 @@ export default function SignIn() {
   });
 
   const [toast, setToast] = useState(false);
+  const [toastColor, setToastColor] = useState("");
   const [toastMessage, setToastMessage] = useState("");
 
   const changeHandler = (e) => {
@@ -74,6 +75,7 @@ export default function SignIn() {
       .post("http://localhost:3000/sign-up", data)
       .then((res) => {
         if (res.status === 201) {
+          setToastColor("bg-success fs-5");
           setToastMessage("A new adventurer successfully registered!");
           setToast(true);
           console.log(res);
@@ -84,9 +86,10 @@ export default function SignIn() {
       })
       .catch((err) => {
         if (err.response.status === 400) {
-          setToastMessage("This adventurer already exists!");
+          setToastColor("bg-danger fs-5");
+          setToastMessage("This email or username has been taken!");
           setToast(true);
-          console.log(err, "hell no");
+          console.log(err);
         } else {
           setToastMessage("Something went wrong!");
           setToast(true);
@@ -237,14 +240,14 @@ export default function SignIn() {
         </p>
       </StyleWrapper>
       {toast && (
-        <ToastContainer position={"bottom-end"}>
+        <ToastContainer position={"top-center"}>
           <Toast
             onClose={() => setToast(false)}
             show={toast}
             delay={2500}
             autohide
           >
-            <Toast.Header>
+            <Toast.Header className={toastColor}>
               <strong className="me-auto">The Guild</strong>
               <small>{new Date().toLocaleString()}</small>
             </Toast.Header>

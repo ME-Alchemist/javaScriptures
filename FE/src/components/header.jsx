@@ -69,6 +69,12 @@ const StyledCanvas = styled(Offcanvas)`
     text-shadow: 1px 1px 2px #eee;
     cursor: pointer;
   }
+
+  @media screen and (max-width: 400px) {
+    button {
+      font-size: 1.2rem !important;
+    }
+  }
 `;
 
 const Header = () => {
@@ -84,58 +90,31 @@ const Header = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const logout = async () => {
-  //   if(window.confirm("Are you sure you want to logout? if you have begun a quest your progress will be lost")) {
-  //     try {
-  //       const response = await axios.post(
-  //         "http://localhost:3000/logout",
-  //         {},
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-
-  //       if (response.status === 200 && response.status < 300) {
-  //         pauseBGM();
-  //         pauseBattle();
-  //         UserDetails.getState().reset();
-  //         navigate("/login", { replace: true });
-  //       } else {
-  //         console.log("error logging out", response.status);
-  //         pauseBGM();
-  //         pauseBattle();
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-
-  //   }
-  // };
-
   return (
     <>
       <StyledHeader className="shadow-sm d-flex flex-column justify-content-center">
         <h1 className="flex-grow-1">{title}</h1>
         <div className="d-flex flex-row justify-content-center align-items-center gap-5">
           <button
-            className="btn bi bi-caret-right-fill fs-5 fw-bold"
+            className="btn fw-bold"
             onClick={handleShow}
+            style={{ fontSize: "1.4rem" }}
           >
             Menu
           </button>
           <button
             onClick={() => toggleBGM(currentPath)}
-            className="btn bi bi-music-note-beamed fw-bold"
-            style={{ fontSize: "1.5rem" }}
+            className="btn fw-bold bi bi-music-note-beamed"
+            style={{ fontSize: "1.4rem" }}
           >
-            {playing || playingBattle || playingBoss ? "BGM: On" : "BGM: Off"}
+            {playing || playingBattle || playingBoss ? ": On" : ": Off"}
           </button>
           <button
             onClick={toggleMute}
-            className="btn bi bi-volume-off-fill fw-bold"
-            style={{ fontSize: "1.5rem" }}
+            className="btn fw-bold bi bi-soundwave"
+            style={{ fontSize: "1.4rem" }}
           >
-            {mute ? "SFX: On" : "SFX: Off"}
+            {mute ? ": On" : ": Off"}
           </button>
         </div>
       </StyledHeader>
@@ -186,10 +165,6 @@ const Header = () => {
               <li onClick={handleClose}>
                 <Link to={"/main/credits"}>Credits</Link>
               </li>
-              {/* Sign out, ask the user to confirm before closing the app, POST requests  for user progressinon are now made during result screens so no need to perform additonal requests before logout*/}
-              {/* <li className="logout" onClick={logout}>
-                logout
-              </li> */}
             </ul>
           </div>
         </Offcanvas.Body>

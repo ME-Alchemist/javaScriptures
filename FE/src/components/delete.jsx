@@ -3,21 +3,21 @@ import UserDetails from "../zustore/userStore";
 import { useSoundContext } from "../components/soundContext";
 import { useNavigate } from "react-router";
 
-const LogoutFunc = () => {
+const DelFunc = () => {
   const { pauseBGM, pauseBattle, pauseBoss } = useSoundContext();
   const navigate = useNavigate();
 
-  const logout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
+  const accDel = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone!"
+      )
+    ) {
       try {
         axios
-          .post(
-            "http://localhost:3000/logout",
-            {},
-            {
-              withCredentials: true,
-            }
-          )
+          .delete("http://localhost:3000/delete", {
+            withCredentials: true,
+          })
           .then((response) => {
             if (response.status === 200 && response.status < 300) {
               pauseBGM();
@@ -26,7 +26,7 @@ const LogoutFunc = () => {
               UserDetails.getState().reset();
               navigate("/login", { replace: true });
             } else {
-              console.log("error logging out", response.status);
+              console.log("error deleting user account", response.status);
               pauseBGM();
               pauseBattle();
               pauseBoss();
@@ -39,10 +39,10 @@ const LogoutFunc = () => {
   };
 
   return (
-    <button className="btn btn-dark btn-primary mb-2 mt-4" onClick={logout}>
-      Logout
+    <button className="btn btn-danger btn-primary mb-2 mt-4" onClick={accDel}>
+      Delete account
     </button>
   );
 };
 
-export default LogoutFunc;
+export default DelFunc;

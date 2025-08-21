@@ -6,7 +6,6 @@ import { SoundProvider } from "./components/soundContext";
 import "./index.css";
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
-import "aos/dist/aos.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -104,9 +103,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Suspense fallback={<div>Loading...</div>}>
-          <SoundProvider>
-              <RouterProvider router={router} />
-          </SoundProvider>
+      <SoundProvider>
+        <RouterProvider router={router} />
+      </SoundProvider>
     </Suspense>
   </StrictMode>
 );

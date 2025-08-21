@@ -61,11 +61,9 @@ export const SoundProvider = ({ children }) => {
         setPlayingBattle(false);
         setPlaying(false);
         setPlayingBoss(false);
-        console.log(path);
       } else {
         playBoss();
         setPlayingBoss(true);
-        console.log(path);
       }
     } else if (path.startsWith("/main/quests/start/") && path !== string) {
       if (playingBattle) {
@@ -73,11 +71,9 @@ export const SoundProvider = ({ children }) => {
         setPlaying(false);
         setPlayingBattle(false);
         setPlayingBoss(false);
-        console.log(path);
       } else {
         playBattle();
         setPlayingBattle(true);
-        console.log(path);
       }
     } else {
       if (playing) {
@@ -85,17 +81,11 @@ export const SoundProvider = ({ children }) => {
         setPlayingBattle(false);
         setPlaying(false);
         setPlayingBoss(false);
-        console.log(path);
       } else {
         playBGM();
         setPlaying(true);
-        console.log(path);
       }
     }
-    // else {
-    //   console.log(path);
-    //   console.log("not on the right path dude");
-    // }
   };
 
   return (

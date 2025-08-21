@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useSoundContext } from "../components/soundContext";
-import { appendToQuestLog } from "../utils/utils";
+import { appendToQuestLog, shuffle } from "../utils/utils";
 import axios from "axios";
 import Prompt from "react-router-prompt";
 import { useParams, useNavigate } from "react-router";
@@ -56,14 +56,16 @@ const StyledWrapper = styled.section`
   }
 
   .question {
-    text-shadow: #fc0 1px 0 10px;
+    text-shadow: #000 -1px 5px 3px;
     color: white;
     font-weight: bold;
     margin-bottom: 30px;
     max-width: 450px;
     /* min-width: 700px; */
     @media screen and (max-width: 600px) {
-      font-size: large;
+      font-size: larger;
+      margin-top: 10px;
+      margin-bottom: 15px;
     }
   }
 
@@ -195,7 +197,6 @@ const ChosenQuests = () => {
   const { updateQuest, resetQuest } = questStore();
   const { setQuestCompleted } = completedStore();
   const { category_name } = useParams();
-  // maybe these states could be placed in a object or used with a useReducer
 
   const [next, setNext] = useState(0);
   const [quest, setQuest] = useState(null);
@@ -203,10 +204,11 @@ const ChosenQuests = () => {
   const [dropped, setDropped] = useState(null);
   // place monsters loaded into an array
   const [monsters, setMonsters] = useState([]);
-  // const [loading, setLoading] = useState(true);
   // You get three tries
   const [hitPoints, setHitPoints] = useState(3);
   const [blocking, setBlocking] = useState(true);
+  // grab the current monster from the array
+  // let isDragonQ = false;
 
   // sound effects
   const playSFX = (type) => {
@@ -285,18 +287,27 @@ const ChosenQuests = () => {
           withCredentials: true,
         }
       );
+      shuffle(questResponse.data);
       const data = questResponse.data;
       const monsterData = monsterResponse.data;
+      // currentMonster = monsterData[1].enemy_name;
       // if dragon queen challenge, fill the array 14 more times
 
+      // currentMonster = monsterData[0];
       console.log(monsterData[0].enemy_name);
+      // console.log(currentMonster);
 
       if (monsterData[0].enemy_name === "Dragon Queen") {
         for (let i = 0; i < 14; i++) {
-          monsterData.push(monsterData[0]);
+          monsterData.push({ ...monsterData[0] });
         }
-        // Array(14).fill(monsterData[0]);
         console.log(monsterData);
+      }
+
+      for (let i = 1; i < monsterData.length; i++) {
+        if (monsterData[i].enemy_name === "Dragon Queen") {
+          monsterData[i].exp_drop = 0;
+        }
       }
 
       const imageUrls = monsterData.map((monster) => monster.img_path);
@@ -360,11 +371,13 @@ const ChosenQuests = () => {
           replace: true,
           state: { fromQuest: true },
         });
+        stopBoss();
         stopBattle();
         playWin();
         setTimeout(() => {
           stopWin();
-          if (playingBattle) {
+          if (playingBattle || playingBoss) {
+            setPlayingBoss(false);
             setPlayingBattle(false);
             setPlaying(true);
             playBGM();
@@ -373,8 +386,6 @@ const ChosenQuests = () => {
       }, 2000);
     }
   }, [next]);
-
-  // Header.title = `"Loading"`;
 
   return (
     <>
@@ -414,7 +425,8 @@ const ChosenQuests = () => {
                       No, I will push on!
                     </button>
                     <button
-                      className="bg-warning bg-gradient"
+                      style={{ backgroundColor: "rgb(173 37 37)" }}
+                      className=""
                       type="submit"
                       onClick={onConfirm}
                     >
@@ -435,7 +447,6 @@ const ChosenQuests = () => {
               modifiers={[restrictToWindowEdges]}
               onDragEnd={handleDragEnd}
             >
-              {/* <button onClick={nextQuestion}>Next</button> */}
               <StyledWrapper className="">
                 <section className="d-flex flex-column gap-2">
                   <div
@@ -527,22 +538,24 @@ const ChosenQuests = () => {
 
   function handleDragEnd({ active, over }) {
     if (over) {
-      // console.log(
-      //   `the answer "${active.id}" was dropped over the ${over.id} element`
-      // );
-
       // if the answer is correct
       if (active.id === String(quest[next].correct_answer)) {
         attackHit();
         playSFX("slash");
+
         setTimeout(() => {
           const nextMonster = next + 1;
           setDropped(active.id);
+          // control first if the next monster is the dragon queen
+          // if it is, prevent any further exp drop after the first attack since the dragon queen appears 15 times
+          // and we do not want to reward the player the same exp 15 times
+
           updateQuest(
             monsters[next].exp_drop,
             questStore.getState().hitPoints,
             monsters[next].enemy_name
           );
+
           // make ternary if the monster is or is not the dragon queen
           monsters[next].enemy_name === "Dragon Queen"
             ? appendToQuestLog(
@@ -594,11 +607,13 @@ const ChosenQuests = () => {
                   state: { fromQuest: true },
                 });
                 stopBattle();
+                stopBoss();
                 playFail();
                 setTimeout(() => {
                   stopFail();
-                  if (playingBattle) {
+                  if (playingBattle || playingBoss) {
                     setPlayingBattle(false);
+                    setPlayingBoss(false);
                     setPlaying(true);
                     playBGM();
                   }

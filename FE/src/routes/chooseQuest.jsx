@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import styled from "styled-components";
 import titleStore from "../zustore/titleStore";
 import { useSoundContext } from "../components/soundContext";
+import Modal from "../components/modal";
 
 const StyledSection = styled.section`
   gap: 3rem;
@@ -116,8 +117,6 @@ const ChooseQuest = () => {
       playBattle();
       setPlayingBattle(true);
     }
-    // pauseBGM();
-    // playBattle();
   };
 
   const bossBGMbutton = () => {
@@ -129,26 +128,28 @@ const ChooseQuest = () => {
       playBoss();
       setPlayingBoss(true);
     }
-    // pauseBGM();
-    // playBattle();
   };
 
   const dropdownBtns = [
     {
+      id: 1,
       text: "HTML",
       funcArg: "html",
       options: [
         {
+          id: "html1",
           text: "HTML Basics 1",
           link: "/main/quests/start/html basics 1",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "html2",
           text: "HTML Basics 2",
           link: "/main/quests/start/html basics 2",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "html3",
           text: "HTML Basics 3",
           link: "/main/quests/start/html basics 3",
           buttonFunc: battleBGMbutton,
@@ -156,20 +157,24 @@ const ChooseQuest = () => {
       ],
     },
     {
+      id: 2,
       text: "CSS",
       funcArg: "css",
       options: [
         {
+          id: "css1",
           text: "CSS Basics 1",
           link: "/main/quests/start/css basics 1",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "css2",
           text: "CSS Basics 2",
           link: "/main/quests/start/css basics 2",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "css3",
           text: "CSS Basics 3",
           link: "/main/quests/start/css basics 3",
           buttonFunc: battleBGMbutton,
@@ -177,20 +182,24 @@ const ChooseQuest = () => {
       ],
     },
     {
+      id: 3,
       text: "JavaScript",
       funcArg: "js",
       options: [
         {
+          id: "js1",
           text: "JS Basics 1",
           link: "/main/quests/start/javascript basics 1",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "js2",
           text: "JS Basics 2",
           link: "/main/quests/start/javascript basics 2",
           buttonFunc: battleBGMbutton,
         },
         {
+          id: "js3",
           text: "JS Basics 3",
           link: "/main/quests/start/javascript basics 3",
           buttonFunc: battleBGMbutton,
@@ -198,10 +207,12 @@ const ChooseQuest = () => {
       ],
     },
     {
+      id: 4,
       text: "Challenge",
       funcArg: "mix",
       options: [
         {
+          id: "challenge-modal",
           text: "Dragon Queen's challenge",
           link: "/main/quests/start/Dragon Queen's challenge",
           buttonFunc: bossBGMbutton,
@@ -265,7 +276,7 @@ const ChooseQuest = () => {
           className="fs-1 fw-bold"
           style={{ textShadow: "2px 3px 12px white" }}
         >
-          Choose your quest
+          For there are many paths...
         </h1>
       </StyledHeader>
       <StyledSection className="flex-md-row">
@@ -286,17 +297,30 @@ const ChooseQuest = () => {
                 >
                   {btn.text}
                 </button>
-                <List className="dropdown-menu">
+                <List className="dropdown-menu dropdown-menu-end">
                   {btn.options.map((option, index) => {
                     return (
                       <li key={index}>
-                        <Link
-                          className="dropdown-item battleBtn"
-                          to={option.link}
-                          onClick={option.buttonFunc}
-                        >
-                          {option.text}
-                        </Link>
+                        {option.id !== "challenge-modal" ? (
+                          <Link
+                            id={option.id}
+                            className="dropdown-item"
+                            to={option.link}
+                            onClick={option.buttonFunc}
+                          >
+                            {option.text}
+                          </Link>
+                        ) : (
+                          <Link
+                            className="dropdown-item"
+                            // to={option.link}
+                            // onClick={option.buttonFunc}
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                          >
+                            {option.text}
+                          </Link>
+                        )}
                       </li>
                     );
                   })}
@@ -320,20 +344,10 @@ const ChooseQuest = () => {
             height={"190px"}
           />
         </div>
+        <Modal />
       </StyledSection>
     </>
   );
 };
 
 export default ChooseQuest;
-
-// Keeping this as an example for future use
-// const [show, setShow] = useState(null);
-
-// const handleList = (list) => {
-//   console.log(list);
-//   setShow(list);
-//   if (show === list) {
-//     setShow(null);
-//   }
-// };

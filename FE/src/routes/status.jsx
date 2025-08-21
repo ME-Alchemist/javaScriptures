@@ -1,8 +1,10 @@
 import axios from "axios";
+
 // import { useSoundContext } from "../components/soundContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Logout from "../components/logout";
+import Delete from "../components/delete";
 // import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import AOS from "aos";
@@ -16,8 +18,8 @@ const StyledSection = styled.section`
     background-color: #ff843a6b;
     text-shadow: azure 2px 2px 2px;
     border: 1px solid black;
-    height: 400px;
-    width: 240px;
+    height: 530px;
+    width: 290px;
     text-align: inherit;
     display: flex;
     flex-direction: column;
@@ -43,8 +45,13 @@ const StyledSection = styled.section`
     filter: drop-shadow(rgb(0, 0, 0) 10px 5px 5px);
   }
 
+  .titleText,
   .paragraphBreak {
-    word-break: break-all;
+    text-decoration: underline;
+  }
+
+  .paragraphBreak {
+    margin-bottom: 0px;
   }
 
   @media screen and (max-width: 768px) {
@@ -54,6 +61,14 @@ const StyledSection = styled.section`
 
     .userPortrait {
       display: block;
+      height: 140px;
+      width: 140px;
+    }
+
+    .userInfo {
+      font-size: large;
+      height: 440px;
+      width: 270px;
     }
   }
 
@@ -64,6 +79,19 @@ const StyledSection = styled.section`
 
   .fade-in-img.loaded {
     opacity: 1;
+  }
+
+  @media screen and (max-width: 325px) {
+    .userPortrait {
+      height: 120px;
+      width: 120px;
+    }
+
+    .userInfo {
+      font-size: medium;
+      height: 400px;
+      width: 270px;
+    }
   }
 `;
 
@@ -82,34 +110,6 @@ const Status = () => {
     vocation_img,
     vocation_portrait,
   } = UserDetails();
-
-  //   const logout = async () => {
-  //   if(window.confirm("Are you sure you want to logout?")) {
-  //     try {
-  //       const response = await axios.post(
-  //         "http://localhost:3000/logout",
-  //         {},
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-
-  //       if (response.status === 200 && response.status < 300) {
-  //         pauseBGM();
-  //         pauseBattle();
-  //         UserDetails.getState().reset();
-  //         navigate("/login", { replace: true });
-  //       } else {
-  //         console.log("error logging out", response.status);
-  //         pauseBGM();
-  //         pauseBattle();
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-
-  //   }
-  // };
 
   useEffect(() => {
     setTitle("Status");
@@ -146,7 +146,7 @@ const Status = () => {
   return (
     <>
       {vocation_img ? (
-        <StyledSection className="d-flex flex-column flex-md-row mx-auto align-items-center gap-5">
+        <StyledSection className="d-flex flex-column flex-md-row mx-auto align-items-center gap-2">
           <article className="userPortrait">
             <img
               src={vocation_portrait}
@@ -157,13 +157,20 @@ const Status = () => {
             />
           </article>
           <article className="userInfo flex flex-column align-items-center">
-            {/* <h1 style={{ textDecoration: "underline" }}>Stats</h1> */}
-            <p className="paragraphBreak">Username: {username}</p>
-            <p className="paragraphBreak">Email: {email}</p>
-            <p>Level: {level}</p>
-            <p className="paragraphBreak">Experience: {exp}</p>
-            <p className="paragraphBreak">Vocation: {vocation}</p>
-            <Logout />
+            <h1 className="fw-bold titleText">Stats</h1>
+            <p className="paragraphBreak ">Username:</p>
+            {username}
+            <p className="paragraphBreak mt-2">Email:</p>
+            {email}
+            <p className="paragraphBreak mt-2">Level:</p> {level}
+            <p className="paragraphBreak mt-2">Experience:</p>
+            {exp}
+            <p className="paragraphBreak mt-2">Vocation:</p>
+            {vocation}
+            <div className="gap-2 d-flex flex-row">
+              <Logout />
+              <Delete />
+            </div>
           </article>
           <article>
             {isLoading ? (

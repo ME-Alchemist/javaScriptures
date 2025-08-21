@@ -1,10 +1,13 @@
 import JSON from "../static.json";
+import categories from "../utils/categories";
 import axios from "axios";
 import styled from "styled-components";
 import titleStore from "../zustore/titleStore";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
+// import { code } from "../utils/utils";
 import Spinner from "../components/spinner";
+import Code from "../components/prism";
 
 const StyledSection = styled.section`
   display: flex !important;
@@ -32,7 +35,7 @@ const StyledSection = styled.section`
 
   @media screen and (max-width: 500px) {
     & p {
-      font-size: medium !important;
+      font-size: large !important;
     }
   }
 `;
@@ -40,7 +43,8 @@ const StyledSection = styled.section`
 const QuestPrep = () => {
   const navigate = useNavigate();
   const { setTitle } = titleStore();
-  const { categories } = JSON;
+  // const { categories } = JSON;
+  const [display, setDisplay] = useState("none");
 
   const [prep, setPrep] = useState({
     preparation:
@@ -48,6 +52,7 @@ const QuestPrep = () => {
     reference: "https://www.w3schools.com/",
     title: null,
     img: null,
+    code: null,
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +63,9 @@ const QuestPrep = () => {
       reference: category.reference,
       title: category.title,
       img: category.img,
+      code: category.code_block,
     });
+    setDisplay("block");
   };
 
   useEffect(() => {
@@ -67,7 +74,7 @@ const QuestPrep = () => {
       .then((response) => {
         console.log("the response:", response);
 
-        setTitle("Prepare for the quest ahead");
+        setTitle("Prepare for the quests ahead");
 
         const img = new Image();
         img.src = "/images/decorations/dmDeco.webp";
@@ -88,7 +95,7 @@ const QuestPrep = () => {
   return (
     <>
       <h1 style={{ fontWeight: "bolder", textShadow: "2px 3px 12px white" }}>
-        Preparing for your next challenge?
+        Adequately prepared is key to success
       </h1>
       <div className="d-flex flex-column flex-sm-row align-items-center justify-content-center">
         {categories.map((category, index) => {
@@ -96,7 +103,7 @@ const QuestPrep = () => {
             <button
               onClick={() => handleClick(category)}
               key={index}
-              className="btn btn-dark m-1"
+              className="btn btn-dark m-1 p-2"
             >
               {category.title}
             </button>
@@ -107,8 +114,8 @@ const QuestPrep = () => {
         className="d-flex flex-row align-items-center justify-content-center mx-auto"
         style={{ maxWidth: "650px", width: "100%" }}
       >
-        <div className="border border-black rounded-4 m-2 bg-dark bg-opacity-50">
-          <div>
+        <div className="border border-black rounded-4 m-2 bg-dark bg-opacity-50 overflow-auto">
+          <div style={{ height: "390px" }}>
             <p>
               <img
                 style={{ float: "left" }}
@@ -120,16 +127,19 @@ const QuestPrep = () => {
               />
               {prep.preparation}
             </p>
+            <pre style={{ display: display }}>
+              <Code code={prep.code} language="js" />
+            </pre>
+            <p style={{ display: display }}>
+              Brush up on your knowledge by
+              <br />
+              pressing
+              <Link target="_blank" to={prep.reference}>
+                {" "}
+                here
+              </Link>
+            </p>
           </div>
-          <p>
-            Brush up on your knowledge by
-            <br />
-            pressing
-            <Link target="_blank" to={prep.reference}>
-              {" "}
-              here
-            </Link>
-          </p>
         </div>
         <div className="d-flex flex-column d-none d-md-block d-lg-block">
           {isLoading ? (
@@ -143,7 +153,7 @@ const QuestPrep = () => {
                 title="Duke MacQuoid"
                 width={"250px"}
               />
-              <q className="figure">Duke MacQuoid, Guide</q>
+              <q className="figure fs-5">Duke MacQuoid, Guide</q>
             </>
           )}
         </div>

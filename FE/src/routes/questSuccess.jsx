@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import questStore from "../zustore/questStore";
 import axios from "axios";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router";
 import completedStore from "../zustore/questCompletedStore";
 
@@ -89,11 +89,10 @@ const QuestSuccess = () => {
   const [user, setUser] = useState(null);
   const { category_name } = useParams();
   const { setQuestCompleted, questCompleted } = completedStore();
-  
 
   useEffect(() => {
     console.log(completedStore.getState().questCompleted);
-    
+
     // trying to navigate here manually or
     //attempting to the reload the page will navigate away
     if (!location.state?.fromQuest || questCompleted === true) {
@@ -125,7 +124,6 @@ const QuestSuccess = () => {
         navigate("/main/404");
       });
   }, []);
-
 
   return (
     <StyledDiv>
@@ -199,9 +197,13 @@ const QuestSuccess = () => {
             />
             <p style={{ textDecoration: "underline" }}>Monsters encountered:</p>
             <div style={{ maxHeight: "80px", overflowY: "auto" }}>
-              {monstersEncountered.map((m, index) => {
-                return <p key={index}>{m}</p>;
-              })}
+              {monstersEncountered[0] === "Dragon Queen" ? (
+                <p>{monstersEncountered[0]}</p>
+              ) : (
+                monstersEncountered.map((m, index) => {
+                  return <p key={index}>{m}</p>;
+                })
+              )}
             </div>
           </div>
         </section>

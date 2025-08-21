@@ -1,25 +1,60 @@
 {
-  "categories": [
+  "sounds": [
     {
-      "id": "html",
-      "title": "Runes of Structure (HTML)",
-      "preparation": "In the ancient scrolls of the Weblands, the Runes of Structure — known to sages as HTML — form the bones of all that is seen. You will be tested on sacred elements such as <div>, <a>, and <img>, and the wisdom of attributes like 'href' and 'alt'. Study the glyphs well, for structure is the foundation upon which all kingdoms are built.",
-      "reference": "https://www.w3schools.com/html/",
-      "img": "/images/decorations/htmlDeco.webp"
+      "sound_name": "Michael Stutz - Pistris.wav",
+      "author_name": "Michaelp800",
+      "sound_url": "https://freesound.org/people/Michaelp800/sounds/669435/",
+      "author_url": "https://freesound.org/people/Michaelp800/",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_name": "Attribution 4.0"
     },
     {
-      "id": "css",
-      "title": "Cloaks of Style (CSS)",
-      "preparation": "Among the Elven stylists and Dwarven decorators, the Cloaks of Style — or CSS — grant form and beauty to the raw skeleton of code. You shall be asked about the secrets of colors, spacing, layout spells like flex and grid, and the mystical hierarchy of selectors. Dress your knowledge in elegance, and you shall pass unscathed.",
-      "reference": "https://www.w3schools.com/css/",
-      "img": "/images/decorations/cssDeco.webp"
+      "sound_name": "Tunnels",
+      "author_name": "FoolBoyMedia",
+      "sound_url": "https://freesound.org/people/FoolBoyMedia/sounds/341865/",
+      "author_url": "https://freesound.org/people/FoolBoyMedia/",
+      "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "license_name": "Attribution NonCommercial 4.0"
     },
     {
-      "id": "javascript",
-      "title": "Scrolls of Behavior (JavaScript)",
-      "preparation": "Only the wise dare open the Scrolls of Behavior. These living scripts — JavaScript — breathe life into the static. Expect to duel with variables, functions, conditions, and loops. The brave may also glimpse the Shadows of Scope and the Storm of Events. Wield logic as your sword, and let no bug stand in your path.",
-      "reference": "https://www.w3schools.com/js/",
-      "img": "/images/decorations/jsDeco.webp"
+      "sound_name": "Slash - [Rpg] 2",
+      "author_name": "colorsCrimsonTears",
+      "sound_url": "https://freesound.org/people/colorsCrimsonTears/sounds/641901/",
+      "author_url": "https://freesound.org/people/colorsCrimsonTears/",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "license_name": "Creative Commons 0"
+    },
+    {
+      "sound_name": "Game Fail Fanfare",
+      "author_name": "el_boss",
+      "sound_url": "https://freesound.org/people/el_boss/sounds/677855/",
+      "author_url": "https://freesound.org/people/el_boss/",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "license_name": "Creative Commons 0"
+    },
+    {
+      "sound_name": "Success Fanfare Trumpets.mp3",
+      "author_name": "FunWithSound",
+      "sound_url": "https://freesound.org/people/FunWithSound/sounds/456966/",
+      "author_url": "https://freesound.org/people/FunWithSound/",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "license_name": "Creative Commons 0"
+    },
+    {
+      "sound_name": "You miss your attack (sfx)",
+      "author_name": "xkeril",
+      "sound_url": "https://freesound.org/people/xkeril/sounds/703084/",
+      "author_url": "https://freesound.org/people/xkeril/",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "license_name": "Creative Commons 0"
+    },
+    {
+      "sound_name": "Battle Tactics",
+      "author_name": "code_box",
+      "sound_url": "https://freesound.org/people/code_box/sounds/559485/",
+      "author_url": "https://freesound.org/people/code_box/",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "license_name": "Creative Commons 0"
     }
   ]
 }

@@ -35,7 +35,7 @@ const StyledSection = styled.section`
 
   @media screen and (max-width: 500px) {
     & p {
-      font-size: medium !important;
+      font-size: large !important;
     }
   }
 `;
@@ -51,16 +51,12 @@ const Welcome = () => {
       .then((response) => {
         console.log("the response:", response);
 
-        setTitle("Home");
+        setTitle("Welcome Traveler");
 
         const img = new Image();
         img.src = "/images/decorations/guildDeco.webp";
         img.onload = () => {
           setIsLoading(false);
-        };
-
-        return () => {
-          setTitle("Welcome traveler");
         };
       })
       .catch((err) => {
@@ -100,7 +96,7 @@ const Welcome = () => {
               <Spinner />
             ) : (
               <>
-                <q className="figure flex-grow-1">
+                <q className="figure flex-grow-1 fs-5">
                   Guildenstern, The Guildmaster
                 </q>
                 <img

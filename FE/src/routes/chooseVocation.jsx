@@ -18,7 +18,8 @@ const StyledDiv = styled.div`
   .vocationDescription {
     text-align: center;
     font-size: x-large;
-    text-shadow: 2px 1px 2px white;
+    text-shadow: 4px 4px 3px black;
+    color: white;
     font-weight: bolder;
   }
 
@@ -124,44 +125,67 @@ const ChooseVocation = () => {
   const [vocations, setVocations] = useState([]);
   const [vocationsTypeB, setVocationsTypeB] = useState([]);
   const [currentVocation, setCurrentVocation] = useState({});
+  const [currentVocationTypeB, setCurrentVocationTypeB] = useState({});
+  const [display, setDisplay] = useState("block");
   const [show, setShow] = useState(true);
   const description = useRef(null);
+  const descriptionTypeB = useRef(null);
+  // const currentVocationRef = useRef(null);
   const navigate = useNavigate();
   // const [next, setNext] = useState(0);
 
   const updateChoseVocation = () => {
-    axios
-      .patch(
-        "http://localhost:3000/user/update/vocation",
-        { chosenVocation: 1, vocation_id: currentVocation.vocation_id },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res);
-        alert(`Vocation chosen: ${currentVocation.vocation_name}`);
-        navigate("/main/home", { replace: true });
-      })
-      .catch((err) => {
-        console.log("invalid token", err);
-      });
+    if (show) {
+      axios
+        .patch(
+          "http://localhost:3000/user/update/vocation",
+          { chosenVocation: 1, vocation_id: currentVocation.vocation_id },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          console.log(res);
+          alert(`Vocation chosen: ${currentVocation.vocation_name}`);
+          navigate("/main/home", { replace: true });
+        })
+        .catch((err) => {
+          console.log("invalid token", err);
+        });
+    } else {
+      axios
+        .patch(
+          "http://localhost:3000/user/update/vocation",
+          { chosenVocation: 1, vocation_id: currentVocationTypeB.vocation_id },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          console.log(res);
+          alert(`Vocation chosen: ${currentVocationTypeB.vocation_name}`);
+          navigate("/main/home", { replace: true });
+        })
+        .catch((err) => {
+          console.log("invalid token", err);
+        });
+    }
   };
 
-  // hide Body Type A, display Body Type B
-  const showBodyTypeB = () => {
+  // change body type
+  // update the value of the current vocation id based on what body type has been chosen
+  const changeBodyType = () => {
     setShow((show) => !show);
+    setDisplay(show ? "none" : "block");
+    console.log(currentVocation.vocation_id);
   };
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/vocations")
       .then((res) => {
-        // console.log(res.data);
         // set the twelve last ones for body type B
         setVocationsTypeB(res.data.slice(12));
         // limit array to the first twelve options for body type A
         setVocations(res.data.slice(0, 12));
-        // setVocations(res.data);
         setCurrentVocation(res.data[0]);
+        setCurrentVocationTypeB(res.data[12]);
       })
       .catch((err) => {
         console.log("invalid token", err);
@@ -174,6 +198,14 @@ const ChooseVocation = () => {
       description.current.innerHTML = currentVocation.vocation_description;
     }
   }, [currentVocation]);
+
+  useEffect(() => {
+    console.log(currentVocationTypeB.vocation_description);
+    if (currentVocationTypeB) {
+      descriptionTypeB.current.innerHTML =
+        currentVocationTypeB.vocation_description;
+    }
+  }, [currentVocationTypeB]);
 
   // slider settings
   var settings = {
@@ -188,11 +220,11 @@ const ChooseVocation = () => {
       if (show) {
         let vocation = vocations[next];
         setCurrentVocation(vocation);
-        console.log(currentVocation.vocation_id);
+        console.log(vocation.vocation_id);
       } else {
         let vocation = vocationsTypeB[next];
-        setCurrentVocation(vocation);
-        console.log(currentVocation.vocation_id);
+        setCurrentVocationTypeB(vocation);
+        console.log(vocation.vocation_id);
       }
     },
   };
@@ -202,63 +234,77 @@ const ChooseVocation = () => {
       <h1 className="mb-4">Choose your vocation</h1>
 
       <div className="bodyContainer d-flex flex-column flex-lg-row justify-content-center align-items-center">
-        <div className="aboutVocationContainer ">
+        <div
+          style={{ display: display }}
+          className="aboutVocationContainer bg-dark bg-opacity-50"
+        >
           <p ref={description} className="vocationDescription"></p>
         </div>
 
+        <div
+          style={{ display: display === "none" ? "block" : "none" }}
+          className="aboutVocationContainer bg-dark bg-opacity-50"
+        >
+          <p ref={descriptionTypeB} className="vocationDescription"></p>
+        </div>
+
         <div className="vocationContainer">
-          {show ? (
-            <Slider className="" {...settings}>
-              {vocations ? (
-                vocations.map((vocation) => {
-                  return (
-                    <div key={vocation.vocation_id}>
-                      <img
-                        width={"280px"}
-                        // height={"500px"}
-                        src={vocation.vocation_img}
-                        key={vocation.vocation_id}
-                        alt="vocation"
-                        title={vocation.vocation_name}
-                        style={{ objectFit: "cover" }}
-                        className="mx-auto img-fluid"
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <Spinner animation="border" />
-              )}
-            </Slider>
-          ) : (
-            <Slider className="" {...settings}>
-              {vocationsTypeB ? (
-                vocationsTypeB.map((vocation) => {
-                  return (
-                    <div key={vocation.vocation_id}>
-                      <img
-                        width={"280px"}
-                        // height={"500px"}
-                        src={vocation.vocation_img}
-                        key={vocation.vocation_id}
-                        alt="vocation"
-                        title={vocation.vocation_name}
-                        style={{ objectFit: "cover" }}
-                        className="mx-auto img-fluid"
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <Spinner animation="border" />
-              )}
-            </Slider>
-          )}
+          <Slider style={{ display: display }} className="" {...settings}>
+            {vocations ? (
+              vocations.map((vocation) => {
+                return (
+                  <div key={vocation.vocation_id}>
+                    <img
+                      id={vocation.vocation_id}
+                      width={"280px"}
+                      src={vocation.vocation_img}
+                      key={vocation.vocation_id}
+                      alt="vocation"
+                      title={vocation.vocation_name}
+                      style={{ objectFit: "cover" }}
+                      className="mx-auto img-fluid"
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <Spinner animation="border" />
+            )}
+          </Slider>
+
+          <Slider
+            style={{ display: display === "none" ? "block" : "none" }}
+            className=""
+            {...settings}
+          >
+            {vocationsTypeB ? (
+              vocationsTypeB.map((vocation) => {
+                return (
+                  <div key={vocation.vocation_id}>
+                    <img
+                      width={"280px"}
+                      src={vocation.vocation_img}
+                      key={vocation.vocation_id}
+                      alt="vocation"
+                      title={vocation.vocation_name}
+                      style={{ objectFit: "cover" }}
+                      className="mx-auto img-fluid"
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <Spinner animation="border" />
+            )}
+          </Slider>
         </div>
       </div>
       <div className="mt-4 d-flex justify-content-center gap-2">
         {/* <button className="btn btn-dark btn-lg">Body Type A</button> */}
-        <button onClick={() => showBodyTypeB()} className="btn btn-dark btn-lg">
+        <button
+          onClick={() => changeBodyType()}
+          className="btn btn-dark btn-lg"
+        >
           {show ? "Body Type A" : "Body Type B"}
         </button>
       </div>
