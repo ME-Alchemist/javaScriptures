@@ -3,6 +3,7 @@ import styled from "styled-components";
 // import useSound from "use-sound";
 import { useLocation } from "react-router";
 import { useSoundContext } from "../components/soundContext";
+import Timer from "./timer";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
@@ -184,15 +185,7 @@ const Header = () => {
                 <Link to={"/main/credits"}>Credits</Link>
               </li>
             </ul>
-            <div>
-              <p className="fs-4 timer">
-                <span className="fw-bold text-decoration-underline">
-                  Session ends in:
-                </span>{" "}
-                <br />
-                {timer} seconds
-              </p>
-            </div>
+            <Timer />
           </div>
         </Offcanvas.Body>
       </StyledCanvas>

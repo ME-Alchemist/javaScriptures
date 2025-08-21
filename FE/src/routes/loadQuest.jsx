@@ -219,7 +219,6 @@ const ChosenQuests = () => {
       })
       .catch((err) => {
         if (err.status === 401) {
-          console.log(err.status);
           setBlocking(false);
           navigate("/login", { replace: true });
         }
@@ -317,18 +316,11 @@ const ChosenQuests = () => {
       shuffle(questResponse.data);
       const data = questResponse.data;
       const monsterData = monsterResponse.data;
-      // currentMonster = monsterData[1].enemy_name;
-      // if dragon queen challenge, fill the array 14 more times
-
-      // currentMonster = monsterData[0];
-      console.log(monsterData[0].enemy_name);
-      // console.log(currentMonster);
 
       if (monsterData[0].enemy_name === "Dragon Queen") {
         for (let i = 0; i < 14; i++) {
           monsterData.push({ ...monsterData[0] });
         }
-        console.log(monsterData);
       }
 
       for (let i = 1; i < monsterData.length; i++) {
@@ -591,7 +583,6 @@ const ChosenQuests = () => {
         attackMissed();
         playSFX("missed");
         setTimeout(() => {
-          console.log(hitPoints);
           let getHP = document.querySelectorAll(".hp");
           getHP[getHP.length - 1].remove();
           const newHitPoints = hitPoints - 1;

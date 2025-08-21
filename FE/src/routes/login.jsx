@@ -8,6 +8,7 @@ import axios from "axios";
 import AOS from "aos";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
+import sessiontimer from "../zustore/sessionTimer";
 
 const StyleWrapper = styled.div`
   font-size: x-large;
@@ -34,6 +35,8 @@ const StyleWrapper = styled.div`
 `;
 
 const Login = () => {
+  const { resetCountdown } = sessiontimer();
+
   const { stopBGM, stopBattle, setPlaying, setPlayingBattle, setMute } =
     useSoundContext();
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ const Login = () => {
   } = useForm();
 
   useEffect(() => {
+    resetCountdown();
     stopBGM();
     stopBattle();
     setPlaying(false);

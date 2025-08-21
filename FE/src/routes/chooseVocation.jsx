@@ -193,14 +193,12 @@ const ChooseVocation = () => {
   }, []);
 
   useEffect(() => {
-    console.log(currentVocation.vocation_description);
     if (currentVocation) {
       description.current.innerHTML = currentVocation.vocation_description;
     }
   }, [currentVocation]);
 
   useEffect(() => {
-    console.log(currentVocationTypeB.vocation_description);
     if (currentVocationTypeB) {
       descriptionTypeB.current.innerHTML =
         currentVocationTypeB.vocation_description;
@@ -220,11 +218,9 @@ const ChooseVocation = () => {
       if (show) {
         let vocation = vocations[next];
         setCurrentVocation(vocation);
-        console.log(vocation.vocation_id);
       } else {
         let vocation = vocationsTypeB[next];
         setCurrentVocationTypeB(vocation);
-        console.log(vocation.vocation_id);
       }
     },
   };
