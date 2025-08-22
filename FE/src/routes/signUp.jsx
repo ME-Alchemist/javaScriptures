@@ -108,7 +108,7 @@ export default function SignIn() {
           className="img-fluid"
           src={`${
             import.meta.env.BASE_URL
-          }/images/decorations/dragonTopDeco.webp`}
+          }images/decorations/dragonTopDeco.webp`}
           alt="dragon"
           title="dragon"
           width={"420px"}

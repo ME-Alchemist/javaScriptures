@@ -121,9 +121,7 @@ const Login = () => {
         <img
           data-aos-once="true"
           className="img-fluid"
-          src={`${
-            import.meta.env.BASE_URL
-          }/images/decorations/lichTopDeco.webp`}
+          src={`${import.meta.env.BASE_URL}images/decorations/lichTopDeco.webp`}
           alt="lich"
           title="Lich"
           width={"470px"}
