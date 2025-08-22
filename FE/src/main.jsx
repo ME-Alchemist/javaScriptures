@@ -38,22 +38,28 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-  {
-    path: "register",
-    element: <Register />,
-  },
-  {
-    path: "login",
-    element: <Login />,
-  },
-  {
-    path: "vocation",
-    element: <ChooseVocation />,
+    children: [
+      {
+        index: true,
+        element: <App />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "vocation",
+        element: <ChooseVocation />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
   },
   {
     path: "/main",
@@ -96,6 +102,7 @@ const router = createBrowserRouter([
         path: "404",
         element: <NotFound />,
       },
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);
