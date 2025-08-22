@@ -52,10 +52,6 @@ const router = createBrowserRouter([
     element: <ChooseVocation />,
   },
   {
-    path: "*",
-    element: <NotFound />,
-  },
-  {
     path: "/main",
     element: <MainPage />,
     children: [
@@ -98,6 +94,10 @@ const router = createBrowserRouter([
       },
       { path: "*", element: <NotFound /> },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
