@@ -102,7 +102,9 @@ const Welcome = () => {
                 </q>
                 <img
                   className="img-fluid rounded-end-4 homeDeco"
-                  src="/images/decorations/guildDeco.webp"
+                  src={`${
+                    import.meta.env.BASE_URL
+                  }/images/decorations/guildDeco.webp`}
                   alt="Guildmaster"
                   title="Guildenstern"
                   width={"250px"}

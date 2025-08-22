@@ -121,7 +121,7 @@ const QuestPrep = () => {
               <img
                 style={{ float: "left" }}
                 width={"100px"}
-                src={prep.img}
+                src={`${import.meta.env.BASE_URL}${prep.img}`}
                 alt={prep.id}
                 title={prep.id}
                 className="d-sm-block d-md-none d-lg-none"
@@ -149,7 +149,9 @@ const QuestPrep = () => {
             <>
               <img
                 className="rounded-end-4 prepDeco"
-                src="/images/decorations/dmDeco.webp"
+                src={`${
+                  import.meta.env.BASE_URL
+                }/images/decorations/dmDeco.webp`}
                 alt="DM"
                 title="Duke MacQuoid"
                 width={"250px"}

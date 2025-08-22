@@ -339,7 +339,7 @@ const ChooseQuest = () => {
           <img
             data-aos-once="true"
             className="decoration align-self-center"
-            src="/images/decorations/goblin.webp"
+            src={`${import.meta.env.BASE_URL}images/decorations/goblin.webp`}
             alt="lich"
             title="Lich"
             width={"165px"}

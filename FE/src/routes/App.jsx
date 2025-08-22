@@ -9,7 +9,7 @@ import "aos/dist/aos.css";
 import styled from "styled-components";
 
 const Background = styled.div`
-  background-image: url(/images/backdrops/mainPageBackground2.webp);
+  background-image: url(images/backdrops/mainPageBackground2.webp);
   background-size: cover;
   background-position: center;
   /* height: auto; */
@@ -107,7 +107,7 @@ function App() {
     <Background>
       <h1>Welcome to</h1>
       <img
-        src="/images/decorations/logo.webp"
+        src={`${import.meta.env.BASE_URL}images/decorations/logo.webp`}
         alt="logo"
         style={{ width: "55vw", maxWidth: "550px", minWidth: "300px" }}
         data-aos="fade-up"
@@ -125,7 +125,9 @@ function App() {
             </p>
             <p>
               <img
-                src="/images/decorations/mimicDeco.webp"
+                src={`${
+                  import.meta.env.BASE_URL
+                }images/decorations/mimicDeco.webp`}
                 alt=""
                 width={"130px"}
                 style={{ float: "left" }}
@@ -141,7 +143,9 @@ function App() {
         <section className="align-self-end" data-aos="fade-zoom-in">
           <div>
             <img
-              src="/images/decorations/rogueDeco.webp"
+              src={`${
+                import.meta.env.BASE_URL
+              }images/decorations/rogueDeco.webp`}
               alt=""
               width={"150px"}
               style={{ float: "right" }}
@@ -172,7 +176,9 @@ function App() {
               </li>
               <li>
                 <img
-                  src="/images/decorations/clericDeco.webp"
+                  src={`${
+                    import.meta.env.BASE_URL
+                  }images/decorations/clericDeco.webp`}
                   alt=""
                   width={"150px"}
                   style={{ float: "right", WebkitTransform: "scaleX(-1)" }}
@@ -191,7 +197,9 @@ function App() {
               Whether you're a seasoned adventurer or a new squire, there's a
               place for you at the table.
               <img
-                src="/images/decorations/beholderDeco.webp"
+                src={`${
+                  import.meta.env.BASE_URL
+                }images/decorations/beholderDeco.webp`}
                 alt=""
                 width={"150px"}
                 style={{ float: "left", WebkitTransform: "scaleX(-1)" }}

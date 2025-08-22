@@ -106,7 +106,9 @@ export default function SignIn() {
         <img
           data-aos-once="true"
           className="img-fluid"
-          src="/images/decorations/dragonTopDeco.webp"
+          src={`${
+            import.meta.env.BASE_URL
+          }/images/decorations/dragonTopDeco.webp`}
           alt="dragon"
           title="dragon"
           width={"420px"}

@@ -253,7 +253,9 @@ const ChooseVocation = () => {
                     <img
                       id={vocation.vocation_id}
                       width={"280px"}
-                      src={vocation.vocation_img}
+                      src={`${import.meta.env.BASE_URL}${
+                        vocation.vocation_img
+                      }`}
                       key={vocation.vocation_id}
                       alt="vocation"
                       title={vocation.vocation_name}
@@ -279,7 +281,9 @@ const ChooseVocation = () => {
                   <div key={vocation.vocation_id}>
                     <img
                       width={"280px"}
-                      src={vocation.vocation_img}
+                      src={`${import.meta.env.BASE_URL}${
+                        vocation.vocation_img
+                      }`}
                       key={vocation.vocation_id}
                       alt="vocation"
                       title={vocation.vocation_name}
