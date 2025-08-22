@@ -3,10 +3,9 @@ import styled from "styled-components";
 // import useSound from "use-sound";
 import { useLocation } from "react-router";
 import { useSoundContext } from "../components/soundContext";
-import Timer from "./timer";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router";
 import UserDetails from "../zustore/userStore";
@@ -87,27 +86,11 @@ const Header = () => {
   const { title } = titleStore();
 
   const [show, setShow] = useState(false);
-  const [timer, setTimer] = useState(3600);
   const { mute, playing, playingBattle, playingBoss, toggleMute, toggleBGM } =
     useSoundContext();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  useEffect(() => {
-    let countdown = timer; // 60 minutes in seconds
-
-    const intervalID = setInterval(() => {
-      setTimer((timer) => timer - 1);
-
-      if (countdown <= 0) {
-        clearInterval(intervalID);
-        console.log("Token has expired!");
-      }
-    }, 1000);
-
-    return () => clearInterval(intervalID);
-  }, [timer]);
 
   return (
     <>
@@ -185,7 +168,6 @@ const Header = () => {
                 <Link to={"/main/credits"}>Credits</Link>
               </li>
             </ul>
-            <Timer />
           </div>
         </Offcanvas.Body>
       </StyledCanvas>

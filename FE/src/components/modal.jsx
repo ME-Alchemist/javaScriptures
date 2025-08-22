@@ -89,15 +89,15 @@ const Modal = () => {
               <div className="mx-auto d-flex gap-2">
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="btn btn-dark"
                   data-bs-dismiss="modal"
                 >
-                  Close
+                  Turn back
                 </button>
                 <Link to={"/main/quests/start/Dragon Queen's challenge"}>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-danger"
                     data-bs-dismiss="modal"
                     onClick={bossBGMbutton}
                   >

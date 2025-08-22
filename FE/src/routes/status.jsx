@@ -41,6 +41,17 @@ const StyledSection = styled.section`
     }
   }
 
+  .interpolated {
+    max-width: 200px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .interpolated::-webkit-scrollbar {
+    display: none;
+  }
+
   .userAvatar {
     filter: drop-shadow(rgb(0, 0, 0) 10px 5px 5px);
   }
@@ -159,14 +170,15 @@ const Status = () => {
           <article className="userInfo flex flex-column align-items-center">
             <h1 className="fw-bold titleText">Stats</h1>
             <p className="paragraphBreak ">Username:</p>
-            {username}
+            <span className="interpolated">{username}</span>
             <p className="paragraphBreak mt-2">Email:</p>
-            {email}
-            <p className="paragraphBreak mt-2">Level:</p> {level}
+            <span className="interpolated">{email}</span>
+            <p className="paragraphBreak mt-2">Level:</p>
+            <span className="interpolated">{level}</span>
             <p className="paragraphBreak mt-2">Experience:</p>
-            {exp}
+            <span className="interpolated">{exp}</span>
             <p className="paragraphBreak mt-2">Vocation:</p>
-            {vocation}
+            <span className="interpolated">{vocation}</span>
             <div className="gap-2 d-flex flex-row">
               <Logout />
               <Delete />

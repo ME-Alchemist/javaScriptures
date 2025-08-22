@@ -64,8 +64,6 @@ export default function SignIn() {
     window.scrollTo(0, 0);
   }, []);
 
-  // const username = watch("username");
-  // const email = watch("email");
   const pass = watch("passHash");
   const repeat = watch("repass");
 
@@ -227,16 +225,10 @@ export default function SignIn() {
           </Button>
         </Form>
         <p className="mt-5">
-          Already registered? login{" "}
-          <Link to={"/login"} viewTransition>
-            here!
-          </Link>
+          Already registered? login <Link to={"/login"}>here!</Link>
         </p>
         <p>
-          Back to the{" "}
-          <Link to={"/"} viewTransition>
-            main page
-          </Link>
+          Back to the <Link to={"/"}>main page</Link>
         </p>
       </StyleWrapper>
       {toast && (

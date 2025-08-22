@@ -167,8 +167,8 @@ function App() {
                 CSS.
               </li>
               <li>
-                Earn Experience & Level Up – Unlock new abilities and titles as
-                you grow.
+                Earn Experience & Level Up – Progress through the game as you
+                grow.
               </li>
               <li>
                 <img

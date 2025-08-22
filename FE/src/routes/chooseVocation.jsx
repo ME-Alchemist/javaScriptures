@@ -173,7 +173,6 @@ const ChooseVocation = () => {
   const changeBodyType = () => {
     setShow((show) => !show);
     setDisplay(show ? "none" : "block");
-    console.log(currentVocation.vocation_id);
   };
 
   useEffect(() => {

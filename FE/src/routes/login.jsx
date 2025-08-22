@@ -171,16 +171,10 @@ const Login = () => {
           </Button>
         </Form>
         <p className="mt-5">
-          No account? sign up{" "}
-          <Link to={"/register"} viewTransition>
-            here!
-          </Link>
+          No account? sign up <Link to={"/register"}>here!</Link>
         </p>
         <p>
-          Back to the{" "}
-          <Link to={"/"} viewTransition>
-            main page
-          </Link>
+          Back to the <Link to={"/"}>main page</Link>
         </p>
       </StyleWrapper>
       {toast && (

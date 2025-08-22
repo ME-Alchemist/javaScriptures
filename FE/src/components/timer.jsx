@@ -14,17 +14,7 @@ const TimerComponent = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  return (
-    <div>
-      <p className="fs-4 timer">
-        <span className="fw-bold text-decoration-underline">
-          Session ends in:
-        </span>{" "}
-        <br />
-        {timer} seconds
-      </p>
-    </div>
-  );
+  return <p className="fw-bold">Session ends in: {timer} seconds</p>;
 };
 
 export default TimerComponent;

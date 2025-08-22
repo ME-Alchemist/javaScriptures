@@ -23,14 +23,18 @@ connection.connect();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://ME-Alchemist.github.io",
+    ],
     credentials: true,
   })
 );
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -519,5 +523,5 @@ app.delete("/delete", verifyToken, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

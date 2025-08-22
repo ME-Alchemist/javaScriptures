@@ -64,7 +64,7 @@ const Credits = () => {
   return (
     <>
       <h1 className="fs-1 fw-bold" style={{ textShadow: "2px 3px 12px white" }}>
-        The guild was not made in a day...
+        The guild was not built in a day...
       </h1>
 
       <StyledSection className="">
@@ -79,15 +79,21 @@ const Credits = () => {
             <li>Bootstrap</li>
             <li>Aiven</li>
             <li>MySQL</li>
-            <li>prismJS</li>
+            <li>Sequelize</li>
             <li>Visual Studio Code</li>
             <li>Express</li>
+            <li>jsonwebtoken</li>
+            <li>cookie-parser</li>
+            <li>cors</li>
+            <li>dotenv</li>
+            <li>bcrypt-js</li>
             <li>React Router</li>
             <li>React Context</li>
             <li>Zustand</li>
             <li>AOS</li>
             <li>styled-components</li>
             <li>DnD Kit</li>
+            <li>prismJS</li>
           </ul>
         </article>
 
