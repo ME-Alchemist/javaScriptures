@@ -19,6 +19,7 @@ dist-ssr
 data/
 health.sh
 .env
+aiven.env
 text.txt
 **/.env
 .env.*
