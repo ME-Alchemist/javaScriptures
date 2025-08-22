@@ -318,6 +318,7 @@ app.post("/login", async (req, res) => {
       httpOnly: true,
       sameSite: "none",
       secure: true,
+      partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
   } catch (error) {
