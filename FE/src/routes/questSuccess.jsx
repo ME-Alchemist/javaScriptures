@@ -133,7 +133,7 @@ const QuestSuccess = () => {
       <section className="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-center">
         <section className="eventBox">
           <img
-            src={`${import.meta.env.BASE_URL}/images/Event/Success.webp`}
+            src={`${import.meta.env.BASE_URL}images/Event/Success.webp`}
             alt="Success"
             title="Success!"
             style={{ height: "100%" }}

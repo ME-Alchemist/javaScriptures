@@ -502,7 +502,7 @@ const ChosenQuests = () => {
                           className="icons"
                           src={`${
                             import.meta.env.BASE_URL
-                          }/images/decorations/swordDeco.webp`}
+                          }images/decorations/swordDeco.webp`}
                           alt=""
                         />
                       </Draggable>
@@ -512,7 +512,7 @@ const ChosenQuests = () => {
                           className="icons"
                           src={`${
                             import.meta.env.BASE_URL
-                          }/images/decorations/shieldDeco.webp`}
+                          }images/decorations/shieldDeco.webp`}
                           alt=""
                         />
                       </Draggable>
@@ -522,7 +522,7 @@ const ChosenQuests = () => {
                           className="icons"
                           src={`${
                             import.meta.env.BASE_URL
-                          }/images/decorations/potionDeco.webp`}
+                          }images/decorations/potionDeco.webp`}
                           alt=""
                         />
                       </Draggable>
