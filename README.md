@@ -46,10 +46,5 @@ Along with body type of your choice! (A or B)
 ## 💾 Installation
 
 ```bash
-git clone https://github.com/my-username/javascriptures.git
-cd javascriptures
-npm install
-cd client && npm install
-cd ..
-npm run dev
+Will be added in the future
 ```
