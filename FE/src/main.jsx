@@ -34,81 +34,78 @@ import Welcome from "./routes/welcome.jsx";
 import QuestPrep from "./routes/questPrep.jsx";
 import Credits from "./routes/credits.jsx";
 
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <App />,
-      children: [
-        {
-          index: true,
-          element: <App />,
-        },
-        {
-          path: "register",
-          element: <Register />,
-        },
-        {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "vocation",
-          element: <ChooseVocation />,
-        },
-        {
-          path: "*",
-          element: <NotFound />,
-        },
-      ],
-    },
-    {
-      path: "/main",
-      element: <MainPage />,
-      children: [
-        {
-          path: "quests",
-          element: <Quests />,
-          children: [],
-        },
-        {
-          path: "home",
-          element: <Welcome />,
-        },
-        {
-          path: "preparations",
-          element: <QuestPrep />,
-        },
-        {
-          path: "quests/start/:category_name",
-          element: <LoadQuest />,
-        },
-        {
-          path: "results/success/:category_name",
-          element: <QuestSuccess />,
-        },
-        {
-          path: "results/failed",
-          element: <QuestFailed />,
-        },
-        {
-          path: "stats",
-          element: <Status />,
-        },
-        {
-          path: "credits",
-          element: <Credits />,
-        },
-        {
-          path: "404",
-          element: <NotFound />,
-        },
-        { path: "*", element: <NotFound /> },
-      ],
-    },
-  ],
-  { basename: "/javaScriptures" }
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <App />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "vocation",
+        element: <ChooseVocation />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
+  },
+  {
+    path: "/main",
+    element: <MainPage />,
+    children: [
+      {
+        path: "quests",
+        element: <Quests />,
+        children: [],
+      },
+      {
+        path: "home",
+        element: <Welcome />,
+      },
+      {
+        path: "preparations",
+        element: <QuestPrep />,
+      },
+      {
+        path: "quests/start/:category_name",
+        element: <LoadQuest />,
+      },
+      {
+        path: "results/success/:category_name",
+        element: <QuestSuccess />,
+      },
+      {
+        path: "results/failed",
+        element: <QuestFailed />,
+      },
+      {
+        path: "stats",
+        element: <Status />,
+      },
+      {
+        path: "credits",
+        element: <Credits />,
+      },
+      {
+        path: "404",
+        element: <NotFound />,
+      },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
