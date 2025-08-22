@@ -104,7 +104,7 @@ const Welcome = () => {
                   className="img-fluid rounded-end-4 homeDeco"
                   src={`${
                     import.meta.env.BASE_URL
-                  }/images/decorations/guildDeco.webp`}
+                  }images/decorations/guildDeco.webp`}
                   alt="Guildmaster"
                   title="Guildenstern"
                   width={"250px"}

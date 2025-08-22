@@ -151,7 +151,7 @@ const QuestPrep = () => {
                 className="rounded-end-4 prepDeco"
                 src={`${
                   import.meta.env.BASE_URL
-                }/images/decorations/dmDeco.webp`}
+                }images/decorations/dmDeco.webp`}
                 alt="DM"
                 title="Duke MacQuoid"
                 width={"250px"}
