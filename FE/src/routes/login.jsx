@@ -35,6 +35,7 @@ const StyleWrapper = styled.div`
 `;
 
 const Login = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { resetCountdown } = sessiontimer();
 
   const { stopBGM, stopBattle, setPlaying, setPlayingBattle, setMute } =
@@ -69,7 +70,7 @@ const Login = () => {
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
     axios
-      .post("http://localhost:3000/login", data, { withCredentials: true })
+      .post(`${API_URL}/login`, data, { withCredentials: true })
       .then((res) => {
         console.log("RES.DATA = ", res.data);
         if (res.status >= 200 && res.status < 300) {

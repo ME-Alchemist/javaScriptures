@@ -83,6 +83,7 @@ const StyledDiv = styled.div`
 `;
 
 const QuestSuccess = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { exp_gathered, hitPoints, monstersEncountered } = questStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,7 +107,7 @@ const QuestSuccess = () => {
     // display Results then perform a PATCH request on the users exp field
     axios
       .patch(
-        "http://localhost:3000/user/questComplete",
+        `${API_URL}/user/questComplete`,
         {
           exp: combinedExp,
           category_name: category_name,

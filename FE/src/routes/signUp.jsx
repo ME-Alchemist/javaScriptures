@@ -33,6 +33,7 @@ const StyleWrapper = styled.div`
 `;
 
 export default function SignIn() {
+  const API_URL = import.meta.env.VITE_API_URL;
   let navigate = useNavigate();
   const setUser = useState({
     username: "",
@@ -70,7 +71,7 @@ export default function SignIn() {
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
     axios
-      .post("http://localhost:3000/sign-up", data)
+      .post(`${API_URL}/sign-up`, data)
       .then((res) => {
         if (res.status === 201) {
           setToastColor("bg-success fs-5");

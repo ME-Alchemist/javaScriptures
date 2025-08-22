@@ -4,6 +4,7 @@ import { useSoundContext } from "../components/soundContext";
 import { useNavigate } from "react-router";
 
 const DelFunc = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { pauseBGM, pauseBattle, pauseBoss } = useSoundContext();
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ const DelFunc = () => {
     ) {
       try {
         axios
-          .delete("http://localhost:3000/delete", {
+          .delete(`${API_URL}/delete`, {
             withCredentials: true,
           })
           .then((response) => {

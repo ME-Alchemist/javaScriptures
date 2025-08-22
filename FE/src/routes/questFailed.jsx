@@ -3,7 +3,6 @@ import questStore from "../zustore/questStore";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -77,6 +76,7 @@ const StyledDiv = styled.div`
 `;
 
 const QuestFailed = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { hitPoints, monstersEncountered } = questStore();
   const [user, setUser] = useState(null);
 
@@ -86,7 +86,7 @@ const QuestFailed = () => {
     // display Results then perform a PATCH request on the users exp field
 
     axios
-      .get("http://localhost:3000/stats", {
+      .get(`${API_URL}/stats`, {
         withCredentials: true,
       })
       .then((res) => {

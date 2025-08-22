@@ -41,6 +41,7 @@ const StyledSection = styled.section`
 `;
 
 const QuestPrep = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const { setTitle } = titleStore();
   // const { categories } = JSON;
@@ -70,7 +71,7 @@ const QuestPrep = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/check", { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((response) => {
         console.log("the response:", response);
 

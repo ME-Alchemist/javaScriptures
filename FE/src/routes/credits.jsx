@@ -39,13 +39,14 @@ const StyledSection = styled.section`
 `;
 
 const Credits = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { setTitle } = titleStore();
   const { sounds } = JSON;
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/check", { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((response) => {
         console.log("the response:", response);
       })

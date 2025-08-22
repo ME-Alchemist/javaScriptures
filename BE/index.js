@@ -17,6 +17,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:3000",
       "http://ME-Alchemist.github.io",
+      "https://ME-Alchemist.github.io/jscriptures",
     ],
     credentials: true,
   })

@@ -174,6 +174,7 @@ const ModalBox = styled.div`
 `;
 
 const ChosenQuests = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const {
     playSlash,
     playMissed,
@@ -213,7 +214,7 @@ const ChosenQuests = () => {
   // Run check on mount
   useEffect(() => {
     axios
-      .get("http://localhost:3000/check", { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
       })
@@ -302,13 +303,13 @@ const ChosenQuests = () => {
     try {
       resetQuest();
       const questResponse = await axios.get(
-        `http://localhost:3000/quests/${category_name}`,
+        `${API_URL}/quests/${category_name}`,
         {
           withCredentials: true,
         }
       );
       const monsterResponse = await axios.get(
-        `http://localhost:3000/monsters/${category_name}`,
+        `${API_URL}/monsters/${category_name}`,
         {
           withCredentials: true,
         }

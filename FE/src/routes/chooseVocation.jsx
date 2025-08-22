@@ -122,6 +122,7 @@ const StyledDiv = styled.div`
 `;
 
 const ChooseVocation = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [vocations, setVocations] = useState([]);
   const [vocationsTypeB, setVocationsTypeB] = useState([]);
   const [currentVocation, setCurrentVocation] = useState({});
@@ -138,7 +139,7 @@ const ChooseVocation = () => {
     if (show) {
       axios
         .patch(
-          "http://localhost:3000/user/update/vocation",
+          `${API_URL}/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocation.vocation_id },
           { withCredentials: true }
         )
@@ -153,7 +154,7 @@ const ChooseVocation = () => {
     } else {
       axios
         .patch(
-          "http://localhost:3000/user/update/vocation",
+          `${API_URL}/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocationTypeB.vocation_id },
           { withCredentials: true }
         )
@@ -177,7 +178,7 @@ const ChooseVocation = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/vocations")
+      .get(`${API_URL}/vocations`)
       .then((res) => {
         // set the twelve last ones for body type B
         setVocationsTypeB(res.data.slice(12));

@@ -95,6 +95,8 @@ const List = styled.ul`
 `;
 
 const ChooseQuest = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const {
     stopBGM,
     currentBGM,
@@ -254,7 +256,7 @@ const ChooseQuest = () => {
     console.log(currentBGM.current);
     setTitle("Choose your Quest");
     axios
-      .get("http://localhost:3000/check", { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         textRef.current.innerHTML =

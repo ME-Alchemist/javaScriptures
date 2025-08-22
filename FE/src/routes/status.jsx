@@ -107,7 +107,7 @@ const StyledSection = styled.section`
 `;
 
 const Status = () => {
-  // const { pauseBGM, pauseBattle } = useSoundContext();
+  const API_URL = import.meta.env.VITE_API_URL;
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { setTitle } = titleStore();
@@ -137,7 +137,7 @@ const Status = () => {
     });
 
     axios
-      .get("http://localhost:3000/stats", { withCredentials: true })
+      .get(`${API_URL}/stats`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         UserDetails.setState(res.data);

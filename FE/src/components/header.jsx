@@ -1,13 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-// import useSound from "use-sound";
 import { useLocation } from "react-router";
 import { useSoundContext } from "../components/soundContext";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router";
 import { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router";
 import UserDetails from "../zustore/userStore";
 import titleStore from "../zustore/titleStore";
 
