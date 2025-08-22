@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const bcryptjs = require("bcryptjs");
-const mysql = require("mysql2");
 const sequelize = require("./sequelize");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -10,15 +9,6 @@ const initializeModels = require("./models/index");
 const { Op } = require("sequelize");
 
 dotenv.config();
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
-
-connection.connect();
 
 const app = express();
 app.use(
@@ -36,7 +26,10 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET =
+  process.env.NODE_ENV === "production"
+    ? process.env.PROD_JWT_SECRET
+    : process.env.DEV_JWT_SECRET;
 
 // Set and save a list of blacklisted tokens
 const tokenBlacklist = new Set();
