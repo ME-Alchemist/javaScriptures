@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
 import { Col, Row, Form, Button, ToastContainer } from "react-bootstrap";
 import styled from "styled-components";
 import axios from "axios";
 import AOS from "aos";
-
-import { useState, useEffect } from "react";
+import SignUpModal from "../components/signupModal";
 import Toast from "react-bootstrap/Toast";
 import { useNavigate, Link } from "react-router";
 
@@ -100,6 +100,7 @@ export default function SignIn() {
 
   return (
     <>
+      <SignUpModal />
       <div className="d-flex justify-content-center" data-aos="fade-zoom-in">
         <img
           data-aos-once="true"

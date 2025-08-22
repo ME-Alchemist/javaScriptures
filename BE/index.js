@@ -81,7 +81,7 @@ app.get("/quests", verifyToken, async (req, res) => {
   try {
     const quests = await Quests.findAll({
       include: ["category"],
-      attributes: { exclude: ["category_id"] },
+      attributes: { exclude: ["category_id", "correct_answer"] },
     });
     res.json(quests);
   } catch (error) {
@@ -175,16 +175,16 @@ app.get("/monsters/:category_name", verifyToken, async (req, res) => {
 });
 
 // Get all users
-app.get("/users", async (req, res) => {
-  try {
-    const user = await User.findAll();
-    res.json(user);
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-});
+// app.get("/users", async (req, res) => {
+//   try {
+//     const user = await User.findAll();
+//     res.json(user);
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: error.message,
+//     });
+//   }
+// });
 
 // Create check to see if the user is still logged in or the token is still valid
 app.get("/check", verifyToken, async (req, res) => {
