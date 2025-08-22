@@ -11,29 +11,41 @@ export const SoundProvider = ({ children }) => {
   const [mute, setMute] = useState(false);
   const [vol, setVol] = useState(0);
   const [playBGM, { pause: pauseBGM, stop: stopBGM }] = useSound(
-    "/sounds/tunnels.mp3",
+    `${import.meta.env.BASE_URL}sounds/tunnels.mp3`,
     { volume: 0.2, loop: true }
   );
   const [playBattle, { pause: pauseBattle, stop: stopBattle }] = useSound(
-    "/sounds/battle.mp3",
+    `${import.meta.env.BASE_URL}sounds/battle.mp3`,
     { volume: 0.2, loop: true }
   );
   const [playBoss, { pause: pauseBoss, stop: stopBoss }] = useSound(
-    "/sounds/challenge.mp3",
+    `${import.meta.env.BASE_URL}sounds/challenge.mp3`,
     { volume: 0.3, loop: true }
   );
-  const [playSlash, { pause: pauseSlash }] = useSound("/sounds/slash.mp3", {
-    volume: vol,
-  });
-  const [playMissed, { pause: pauseMissed }] = useSound("/sounds/missed.mp3", {
-    volume: vol,
-  });
-  const [playFail, { stop: stopFail }] = useSound("/sounds/fail.mp3", {
-    volume: vol,
-  });
-  const [playWin, { stop: stopWin }] = useSound("/sounds/success.mp3", {
-    volume: vol,
-  });
+  const [playSlash, { pause: pauseSlash }] = useSound(
+    `${import.meta.env.BASE_URL}sounds/slash.mp3`,
+    {
+      volume: vol,
+    }
+  );
+  const [playMissed, { pause: pauseMissed }] = useSound(
+    `${import.meta.env.BASE_URL}sounds/missed.mp3`,
+    {
+      volume: vol,
+    }
+  );
+  const [playFail, { stop: stopFail }] = useSound(
+    `${import.meta.env.BASE_URL}sounds/fail.mp3`,
+    {
+      volume: vol,
+    }
+  );
+  const [playWin, { stop: stopWin }] = useSound(
+    `${import.meta.env.BASE_URL}sounds/success.mp3`,
+    {
+      volume: vol,
+    }
+  );
 
   useEffect(() => {
     currentBGM.current = playing;
