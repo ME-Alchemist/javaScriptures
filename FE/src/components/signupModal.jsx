@@ -18,49 +18,57 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function SignUpModal() {
+  let modalShown = sessionStorage.getItem("showSignUpModal");
+
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    sessionStorage.setItem("showSignUpModal", "true");
+  };
 
   useEffect(() => {
     setShow(true);
+    sessionStorage.setItem("showSignUpModal", "false");
   }, []);
 
   return (
     <>
-      <Modal centered show={show} onHide={handleClose}>
-        <Modal.Header style={{ backgroundColor: "orange" }} closeButton>
-          <Modal.Title
-            className="mx-auto fw-bold text-decoration-underline"
+      {modalShown === "false" && (
+        <Modal centered show={show} onHide={handleClose}>
+          <Modal.Header style={{ backgroundColor: "orange" }} closeButton>
+            <Modal.Title
+              className="mx-auto fw-bold text-decoration-underline"
+              style={{
+                textShadow: "2px 2px 5px black",
+                color: "white",
+              }}
+            >
+              {" "}
+              Real mail not required! Make one up!
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
             style={{
-              textShadow: "2px 4px 3px black",
+              backgroundColor: "#b6721a",
               color: "white",
+              textShadow: "2px 2px 5px black",
             }}
+            className="fs-5"
           >
             {" "}
-            Real mail not required! Make one up!
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body
-          style={{
-            backgroundColor: "#b6721a",
-            color: "white",
-            textShadow: "2px 4px 3px black",
-          }}
-          className="fs-5"
-        >
-          {" "}
-          There's no need for real mail adresses here, no verification mail is
-          sent so please make one up, this form is mainly used for constraints
-          and check purposes, wether a mail is valid or perhaps already in use
-          along with username and proper password creation.
-        </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: "orange" }}>
-          <Button variant="success" onClick={handleClose} className="mx-auto">
-            Understood!
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            There is no need for real mail adresses here, no verification mail
+            is sent so please feel free to make one up, this form is mainly used
+            for constraints and checking purposes, if a mail is valid or perhaps
+            already in use.
+          </Modal.Body>
+          <Modal.Footer style={{ backgroundColor: "orange" }}>
+            <Button variant="success" onClick={handleClose} className="mx-auto">
+              I understand!
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </>
   );
 }

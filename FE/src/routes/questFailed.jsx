@@ -132,7 +132,7 @@ const QuestFailed = () => {
                 style={{ borderRadius: "15px" }}
               />
             </div>
-            <div>
+            <div style={{ overflowX: "scroll", maxWidth: "150px" }}>
               <p>Hero: {user?.username}</p>
               <p>Vocation: {user?.vocation}</p>
               <p>Level: {user?.level}</p>
