@@ -18,7 +18,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function SignUpModal() {
-  let modalShown = sessionStorage.setItem("showSignUpModal", "false");
+  let modalShown = sessionStorage.getItem("showSignUpModal");
 
   const [show, setShow] = useState(false);
 
@@ -34,7 +34,7 @@ function SignUpModal() {
 
   return (
     <>
-      {modalShown === "false" && (
+      {modalShown === null && (
         <Modal centered show={show} onHide={handleClose}>
           <Modal.Header style={{ backgroundColor: "orange" }} closeButton>
             <Modal.Title
