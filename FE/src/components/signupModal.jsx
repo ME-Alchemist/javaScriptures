@@ -18,7 +18,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function SignUpModal() {
-  let modalShown = sessionStorage.getItem("showSignUpModal");
+  let modalShown = sessionStorage.setItem("showSignUpModal", "false");
 
   const [show, setShow] = useState(false);
 
@@ -29,7 +29,7 @@ function SignUpModal() {
 
   useEffect(() => {
     setShow(true);
-    sessionStorage.setItem("showSignUpModal", "false");
+    // sessionStorage.setItem("showSignUpModal", "false");
   }, []);
 
   return (
