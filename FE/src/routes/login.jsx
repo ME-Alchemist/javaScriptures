@@ -74,7 +74,6 @@ const Login = () => {
       .then((res) => {
         // change cursor to wait
         document.body.style.cursor = "wait";
-        console.log("RES.DATA = ", res.data);
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
             {
