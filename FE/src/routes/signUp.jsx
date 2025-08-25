@@ -71,12 +71,12 @@ export default function SignIn() {
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
     // change cursor to wait
-    document.body.style.cursor = "wait !important";
+    document.body.style.cursor = "wait";
     axios
       .post(`${API_URL}/sign-up`, data)
       .then((res) => {
         if (res.status === 201) {
-          document.body.style.cursor = "auto !important";
+          document.body.style.cursor = "auto";
           setToastColor("bg-success fs-5");
           setToastMessage("A new adventurer successfully registered!");
           setToast(true);
@@ -88,7 +88,7 @@ export default function SignIn() {
       })
       .catch((err) => {
         if (err.response.status === 400) {
-          document.body.style.cursor = "auto !important";
+          document.body.style.cursor = "auto";
           setToastColor("bg-danger fs-5");
           setToastMessage("This email or username has been taken!");
           setToast(true);

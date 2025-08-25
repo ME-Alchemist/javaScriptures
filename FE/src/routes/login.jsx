@@ -69,7 +69,7 @@ const Login = () => {
 
   const onSubmit = (data) => {
     // change cursor to wait
-    document.body.style.cursor = "wait !important";
+    document.body.style.cursor = "wait";
     const form = document.getElementById("userForm");
     axios
       .post(`${API_URL}/login`, data, { withCredentials: true })
@@ -77,13 +77,13 @@ const Login = () => {
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
             {
-              document.body.style.cursor = "auto !important";
+              document.body.style.cursor = "auto";
               alert("You must select a vocation first");
               navigate("/vocation");
               return;
             }
           }
-          document.body.style.cursor = "auto !important";
+          document.body.style.cursor = "auto";
           setToastColor("bg-success fs-5");
           setToastMessage("Welcome back " + res.data.user.username + "!");
           setToast(true);
@@ -96,7 +96,7 @@ const Login = () => {
       .catch((err) => {
         if (err.response) {
           if (err.response.status === 401) {
-            document.body.style.cursor = "auto !important";
+            document.body.style.cursor = "auto";
             setToastColor("bg-danger fs-5");
             setToastMessage("Wrong email or password!");
             setToast(true);
