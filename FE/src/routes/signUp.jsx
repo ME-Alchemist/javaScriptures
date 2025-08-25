@@ -73,7 +73,10 @@ export default function SignIn() {
     axios
       .post(`${API_URL}/sign-up`, data)
       .then((res) => {
+        // change cursor to wait
+        document.body.style.cursor = "wait";
         if (res.status === 201) {
+          document.body.style.cursor = "auto";
           setToastColor("bg-success fs-5");
           setToastMessage("A new adventurer successfully registered!");
           setToast(true);

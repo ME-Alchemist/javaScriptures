@@ -72,15 +72,19 @@ const Login = () => {
     axios
       .post(`${API_URL}/login`, data, { withCredentials: true })
       .then((res) => {
+        // change cursor to wait
+        document.body.style.cursor = "wait";
         console.log("RES.DATA = ", res.data);
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
             {
+              document.body.style.cursor = "auto";
               alert("You must select a vocation first");
               navigate("/vocation");
               return;
             }
           }
+          document.body.style.cursor = "auto";
           setToastColor("bg-success fs-5");
           setToastMessage("Welcome back " + res.data.user.username + "!");
           setToast(true);

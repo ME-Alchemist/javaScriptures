@@ -4,6 +4,7 @@
 import "../App.css";
 import { Link } from "react-router";
 import { useEffect } from "react";
+import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import styled from "styled-components";
@@ -95,12 +96,18 @@ const Background = styled.div`
 `;
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
       once: true,
     });
     window.scrollTo(0, 0);
+
+    axios.get(`${API_URL}/ping`).then((response) => {
+      console.log(response);
+    });
   }, []);
 
   return (

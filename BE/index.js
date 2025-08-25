@@ -199,6 +199,13 @@ app.get("/check", verifyToken, async (req, res) => {
   }
 });
 
+// Create a "ping" route
+app.get("/ping", async (req, res) => {
+  res.status(200).json({
+    message: "pong",
+  });
+});
+
 // Get stats of currently logged in user
 app.get("/stats", verifyToken, async (req, res) => {
   console.log("Cookies get", req.cookies);
