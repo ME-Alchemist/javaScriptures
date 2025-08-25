@@ -76,7 +76,7 @@ export default function SignIn() {
     axios
       .post(`${API_URL}/sign-up`, data)
       .then((res) => {
-        if (res.status === 200 && res.status < 300) {
+        if (res.status >= 200 && res.status < 300) {
           setSubmitted(false);
           setToastColor("bg-success fs-5");
           setToastMessage("A new adventurer successfully registered!");
