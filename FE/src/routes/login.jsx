@@ -68,12 +68,12 @@ const Login = () => {
   }, []);
 
   const onSubmit = (data) => {
+    // change cursor to wait
+    document.body.style.cursor = "wait";
     const form = document.getElementById("userForm");
     axios
       .post(`${API_URL}/login`, data, { withCredentials: true })
       .then((res) => {
-        // change cursor to wait
-        document.body.style.cursor = "wait";
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
             {

@@ -70,11 +70,11 @@ export default function SignIn() {
 
   const onSubmit = (data) => {
     const form = document.getElementById("userForm");
+    // change cursor to wait
+    document.body.style.cursor = "wait";
     axios
       .post(`${API_URL}/sign-up`, data)
       .then((res) => {
-        // change cursor to wait
-        document.body.style.cursor = "wait";
         if (res.status === 201) {
           document.body.style.cursor = "auto";
           setToastColor("bg-success fs-5");
