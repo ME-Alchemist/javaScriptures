@@ -42,6 +42,7 @@ export default function SignIn() {
   });
 
   const [toast, setToast] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [toastColor, setToastColor] = useState("");
   const [toastMessage, setToastMessage] = useState("");
 
@@ -69,14 +70,14 @@ export default function SignIn() {
   const repeat = watch("repass");
 
   const onSubmit = (data) => {
+    setSubmitted(true);
     const form = document.getElementById("userForm");
-    // change cursor to wait
-    document.body.style.cursor = "wait";
+
     axios
       .post(`${API_URL}/sign-up`, data)
       .then((res) => {
-        if (res.status === 201) {
-          document.body.style.cursor = "auto";
+        if (res.status === 200 && res.status < 300) {
+          setSubmitted(false);
           setToastColor("bg-success fs-5");
           setToastMessage("A new adventurer successfully registered!");
           setToast(true);
@@ -84,23 +85,33 @@ export default function SignIn() {
           setTimeout(() => {
             navigate("/login");
           }, 1500);
+          document.activeElement.blur();
+          form.reset();
         }
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          document.body.style.cursor = "auto";
-          setToastColor("bg-danger fs-5");
-          setToastMessage("This email or username has been taken!");
-          setToast(true);
-          console.log(err);
+        if (err.response) {
+          if (err.response.status === 400) {
+            setSubmitted(false);
+            setToastColor("bg-danger fs-5");
+            setToastMessage("This email or username has been taken!");
+            setToast(true);
+            console.log(err);
+          } else {
+            setSubmitted(false);
+            setToastColor("bg-danger fs-5");
+            setToastMessage("Something went wrong!");
+            setToast(true);
+            console.log(err);
+          }
         } else {
+          setSubmitted(false);
+          setToastColor("bg-danger fs-5");
           setToastMessage("Something went wrong!");
           setToast(true);
           console.log(err);
         }
       });
-    document.activeElement.blur();
-    form.reset();
   };
 
   return (
@@ -228,8 +239,18 @@ export default function SignIn() {
               )}
             </Form.Group>
           </Col>
-          <Button type="submit" className="btn btn-dark btn-lg">
-            Register
+          <Button
+            type="submit"
+            className="btn btn-dark btn-lg"
+            disabled={submitted}
+          >
+            {submitted ? (
+              <div className="spinner-border text-white" role="status">
+                <span className="sr-only"></span>
+              </div>
+            ) : (
+              "Sign up"
+            )}
           </Button>
         </Form>
         <p className="mt-5">

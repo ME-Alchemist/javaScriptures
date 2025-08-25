@@ -4,6 +4,7 @@ import { Col, Form, Button, ToastContainer } from "react-bootstrap";
 import { useSoundContext } from "../components/soundContext";
 import styled from "styled-components";
 import Toast from "react-bootstrap/Toast";
+import Spinner from "../components/spinner";
 import axios from "axios";
 import AOS from "aos";
 import { useNavigate } from "react-router";
@@ -43,6 +44,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [toast, setToast] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("");
 
@@ -68,16 +70,15 @@ const Login = () => {
   }, []);
 
   const onSubmit = (data) => {
-    // change cursor to wait
-    document.body.style.cursor = "wait";
+    setSubmitted(true);
     const form = document.getElementById("userForm");
+
     axios
       .post(`${API_URL}/login`, data, { withCredentials: true })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
             {
-              document.body.style.cursor = "auto";
               alert("You must select a vocation first");
               navigate("/vocation");
               return;
@@ -96,18 +97,20 @@ const Login = () => {
       .catch((err) => {
         if (err.response) {
           if (err.response.status === 401) {
-            document.body.style.cursor = "auto";
+            setSubmitted(false);
             setToastColor("bg-danger fs-5");
             setToastMessage("Wrong email or password!");
             setToast(true);
             console.log(err);
           } else if (err.response.status === 404) {
+            setSubmitted(false);
             setToastColor("bg-danger fs-5");
             setToastMessage("Adventurer not found!");
             setToast(true);
             console.log(err);
           }
         } else {
+          setSubmitted(false);
           setToastColor("bg-danger fs-5");
           setToastMessage("Something went wrong!");
           setToast(true);
@@ -171,8 +174,18 @@ const Login = () => {
               {errors.repass && <span>A password is required</span>}
             </Form.Group>
           </Col>
-          <Button type="submit" className="btn btn-dark btn-lg">
-            Login
+          <Button
+            type="submit"
+            className="btn btn-dark btn-lg"
+            disabled={submitted}
+          >
+            {submitted ? (
+              <div className="spinner-border text-white" role="status">
+                <span className="sr-only"></span>
+              </div>
+            ) : (
+              "Login"
+            )}
           </Button>
         </Form>
         <p className="mt-5">
