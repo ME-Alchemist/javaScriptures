@@ -74,7 +74,7 @@ export default function SignIn() {
     const form = document.getElementById("userForm");
 
     axios
-      .post(`${API_URL}/api/sign-up`, data)
+      .post(`/api/sign-up`, data)
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           setSubmitted(false);
@@ -121,9 +121,7 @@ export default function SignIn() {
         <img
           data-aos-once="true"
           className="img-fluid"
-          src={`${
-            import.meta.env.BASE_URL
-          }images/decorations/dragonTopDeco.webp`}
+          src={`/images/decorations/dragonTopDeco.webp`}
           alt="dragon"
           title="dragon"
           width={"420px"}

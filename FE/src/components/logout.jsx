@@ -13,7 +13,7 @@ const LogoutFunc = () => {
       try {
         axios
           .post(
-            `${API_URL}/api/logout`,
+            `/api/logout`,
             {},
             {
               withCredentials: true,

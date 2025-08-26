@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const dotenv = require("dotenv");
 const bcryptjs = require("bcryptjs");
 const sequelize = require("./sequelize");
@@ -18,6 +19,8 @@ app.use(
       "http://localhost:3000",
       "https://javascriptures-1.onrender.com",
       "https://www.javascriptures-1.onrender.com",
+      "https://javascriptures.onrender.com",
+      "https://www.javascriptures.onrender.com",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -34,18 +37,24 @@ app.use(
   })
 );
 
-app.use(
-  express.static("public", {
-    setHeaders: (res, path) => {
-      if (path.endsWith(".webp")) {
-        res.setHeader("Content-Type", "image/webp");
-      }
-    },
-  })
-);
+// app.use(
+//   express.static("public", {
+//     setHeaders: (res, path) => {
+//       if (path.endsWith(".webp")) {
+//         res.setHeader("Content-Type", "image/webp");
+//       }
+//     },
+//   })
+// );
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -348,8 +357,8 @@ app.post("/api/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production" ? true : false,
-      partitioned: true,
+      secure: process.env.NODE_ENV === "production",
+      // partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
   } catch (error) {

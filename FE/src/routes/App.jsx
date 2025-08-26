@@ -105,7 +105,7 @@ function App() {
     });
     window.scrollTo(0, 0);
 
-    axios.get(`${API_URL}/api/ping`).then((response) => {
+    axios.get(`/api/ping`).then((response) => {
       console.log(response);
     });
   }, []);
@@ -114,7 +114,7 @@ function App() {
     <Background>
       <h1>Welcome to</h1>
       <img
-        src={`${import.meta.env.BASE_URL}images/decorations/logo.webp`}
+        src={`/images/decorations/logo.webp`}
         alt="logo"
         style={{ width: "55vw", maxWidth: "550px", minWidth: "300px" }}
         data-aos="fade-up"
@@ -132,9 +132,7 @@ function App() {
             </p>
             <p>
               <img
-                src={`${
-                  import.meta.env.BASE_URL
-                }images/decorations/mimicDeco.webp`}
+                src={`/images/decorations/mimicDeco.webp`}
                 alt=""
                 width={"130px"}
                 style={{ float: "left" }}
@@ -150,9 +148,7 @@ function App() {
         <section className="align-self-end" data-aos="fade-zoom-in">
           <div>
             <img
-              src={`${
-                import.meta.env.BASE_URL
-              }images/decorations/rogueDeco.webp`}
+              src={`/images/decorations/rogueDeco.webp`}
               alt=""
               width={"150px"}
               style={{ float: "right" }}
@@ -183,9 +179,7 @@ function App() {
               </li>
               <li>
                 <img
-                  src={`${
-                    import.meta.env.BASE_URL
-                  }images/decorations/clericDeco.webp`}
+                  src={`/images/decorations/clericDeco.webp`}
                   alt=""
                   width={"150px"}
                   style={{ float: "right", WebkitTransform: "scaleX(-1)" }}
@@ -204,9 +198,7 @@ function App() {
               Whether you're a seasoned adventurer or a new squire, there's a
               place for you at the table.
               <img
-                src={`${
-                  import.meta.env.BASE_URL
-                }images/decorations/beholderDeco.webp`}
+                src={`/images/decorations/beholderDeco.webp`}
                 alt=""
                 width={"150px"}
                 style={{ float: "left", WebkitTransform: "scaleX(-1)" }}

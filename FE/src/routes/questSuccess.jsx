@@ -107,7 +107,7 @@ const QuestSuccess = () => {
     // display Results then perform a PATCH request on the users exp field
     axios
       .patch(
-        `${API_URL}/api/user/questComplete`,
+        `/api/user/questComplete`,
         {
           exp: combinedExp,
           category_name: category_name,
@@ -133,7 +133,7 @@ const QuestSuccess = () => {
       <section className="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-center">
         <section className="eventBox">
           <img
-            src={`${import.meta.env.BASE_URL}images/Event/Success.webp`}
+            src={`/images/Event/Success.webp`}
             alt="Success"
             title="Success!"
             style={{ height: "100%" }}
@@ -155,7 +155,7 @@ const QuestSuccess = () => {
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}${user?.portrait}`}
+                src={"/" + user?.portrait}
                 alt="portrait"
                 title="portrait"
                 width={"100%"}

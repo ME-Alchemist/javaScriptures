@@ -86,7 +86,7 @@ const QuestFailed = () => {
     // display Results then perform a PATCH request on the users exp field
 
     axios
-      .get(`${API_URL}/api/stats`, {
+      .get(`/api/stats`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -102,7 +102,7 @@ const QuestFailed = () => {
       <section className="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-center">
         <section className="eventBox d-flex align-items-center justify-content-center">
           <img
-            src={`${import.meta.env.BASE_URL}images/Event/Failure.webp`}
+            src={`/images/Event/Failure.webp`}
             alt="Success"
             title="Success!"
             style={{ height: "100%" }}
@@ -124,7 +124,7 @@ const QuestFailed = () => {
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}${user?.vocation_portrait}`}
+                src={"/" + user?.vocation_portrait}
                 alt="portrait"
                 title="portrait"
                 width={"100%"}

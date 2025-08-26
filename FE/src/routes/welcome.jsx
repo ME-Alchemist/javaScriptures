@@ -48,7 +48,7 @@ const Welcome = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/check`, { withCredentials: true })
+      .get(`/api/check`, { withCredentials: true })
       .then((response) => {
         console.log("the response:", response);
 
@@ -102,9 +102,7 @@ const Welcome = () => {
                 </q>
                 <img
                   className="img-fluid rounded-end-4 homeDeco"
-                  src={`${
-                    import.meta.env.BASE_URL
-                  }images/decorations/guildDeco.webp`}
+                  src={`/images/decorations/guildDeco.webp`}
                   alt="Guildmaster"
                   title="Guildenstern"
                   width={"250px"}

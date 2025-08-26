@@ -16,7 +16,7 @@ const DelFunc = () => {
     ) {
       try {
         axios
-          .delete(`${API_URL}/api/delete`, {
+          .delete(`/api/delete`, {
             withCredentials: true,
           })
           .then((response) => {
