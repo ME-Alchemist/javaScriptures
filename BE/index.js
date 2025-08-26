@@ -323,9 +323,9 @@ app.post("/login", async (req, res) => {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       secure: true,
-      partitioned: true,
+      // partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
   } catch (error) {
