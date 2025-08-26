@@ -256,7 +256,7 @@ const ChooseQuest = () => {
     console.log(currentBGM.current);
     setTitle("Choose your Quest");
     axios
-      .get(`${API_URL}/check`, { withCredentials: true })
+      .get(`${API_URL}/api/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         textRef.current.innerHTML =

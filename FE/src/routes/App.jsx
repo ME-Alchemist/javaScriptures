@@ -105,7 +105,7 @@ function App() {
     });
     window.scrollTo(0, 0);
 
-    axios.get(`${API_URL}/ping`).then((response) => {
+    axios.get(`${API_URL}/api/ping`).then((response) => {
       console.log(response);
     });
   }, []);

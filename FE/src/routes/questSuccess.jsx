@@ -107,7 +107,7 @@ const QuestSuccess = () => {
     // display Results then perform a PATCH request on the users exp field
     axios
       .patch(
-        `${API_URL}/user/questComplete`,
+        `${API_URL}/api/user/questComplete`,
         {
           exp: combinedExp,
           category_name: category_name,

@@ -86,7 +86,7 @@ const QuestFailed = () => {
     // display Results then perform a PATCH request on the users exp field
 
     axios
-      .get(`${API_URL}/stats`, {
+      .get(`${API_URL}/api/stats`, {
         withCredentials: true,
       })
       .then((res) => {

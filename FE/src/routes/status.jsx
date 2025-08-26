@@ -137,7 +137,7 @@ const Status = () => {
     });
 
     axios
-      .get(`${API_URL}/stats`, { withCredentials: true })
+      .get(`${API_URL}/api/stats`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         UserDetails.setState(res.data);

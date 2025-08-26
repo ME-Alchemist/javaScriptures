@@ -214,7 +214,7 @@ const ChosenQuests = () => {
   // Run check on mount
   useEffect(() => {
     axios
-      .get(`${API_URL}/check`, { withCredentials: true })
+      .get(`${API_URL}/api/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
       })
@@ -305,13 +305,13 @@ const ChosenQuests = () => {
     try {
       resetQuest();
       const questResponse = await axios.get(
-        `${API_URL}/quests/${category_name}`,
+        `${API_URL}/api/quests/${category_name}`,
         {
           withCredentials: true,
         }
       );
       const monsterResponse = await axios.get(
-        `${API_URL}/monsters/${category_name}`,
+        `${API_URL}/api/monsters/${category_name}`,
         {
           withCredentials: true,
         }
