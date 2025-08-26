@@ -18,8 +18,6 @@ app.use(
       "http://localhost:3000",
       "https://javascriptures-1.onrender.com",
       "https://www.javascriptures-1.onrender.com",
-      "https://javascriptures.onrender.com",
-      "https://www.javascriptures.onrender.com",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
