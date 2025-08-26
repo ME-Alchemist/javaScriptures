@@ -27,6 +27,7 @@ app.use(
       "X-Requested-With",
       "Accept",
       "Origin",
+      "image/webp",
     ],
     exposedHeaders: ["Content-Type", "Authorization"],
     maxAge: 3600,
