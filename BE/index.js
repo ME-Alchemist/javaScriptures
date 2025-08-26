@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const dotenv = require("dotenv");
 const bcryptjs = require("bcryptjs");
 const sequelize = require("./sequelize");
@@ -37,24 +36,18 @@ app.use(
   })
 );
 
-// app.use(
-//   express.static("public", {
-//     setHeaders: (res, path) => {
-//       if (path.endsWith(".webp")) {
-//         res.setHeader("Content-Type", "image/webp");
-//       }
-//     },
-//   })
-// );
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".webp")) {
+        res.setHeader("Content-Type", "image/webp");
+      }
+    },
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, "dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
 
 const PORT = process.env.PORT || 3000;
 

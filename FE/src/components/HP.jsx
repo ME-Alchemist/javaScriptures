@@ -18,19 +18,19 @@ const HitPoints = () => {
         <h2>HP: </h2>
         <img
           className="hp"
-          src={`/images/decorations/heartDeco.webp`}
+          src={`${import.meta.env.BASE_URL}images/decorations/heartDeco.webp`}
           alt=""
           style={{ width: "30px", height: "30px" }}
         />
         <img
           className="hp"
-          src={`/images/decorations/heartDeco.webp`}
+          src={`${import.meta.env.BASE_URL}images/decorations/heartDeco.webp`}
           alt=""
           style={{ width: "30px", height: "30px" }}
         />
         <img
           className="hp"
-          src={`/images/decorations/heartDeco.webp`}
+          src={`${import.meta.env.BASE_URL}images/decorations/heartDeco.webp`}
           alt=""
           style={{ width: "30px", height: "30px" }}
         />

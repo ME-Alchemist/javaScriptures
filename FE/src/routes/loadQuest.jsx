@@ -214,7 +214,7 @@ const ChosenQuests = () => {
   // Run check on mount
   useEffect(() => {
     axios
-      .get(`/api/check`, { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
       })
@@ -287,7 +287,7 @@ const ChosenQuests = () => {
   const preloadImages = async (imageUrls) => {
     return Promise.all(
       imageUrls
-        .map((url) => "/" + url)
+        .map((url) => `${import.meta.env.BASE_URL}${url}`)
         .map(
           (url) =>
             new Promise((resolve, reject) => {
@@ -304,11 +304,14 @@ const ChosenQuests = () => {
   const questFetch = async () => {
     try {
       resetQuest();
-      const questResponse = await axios.get(`/api/quests/${category_name}`, {
-        withCredentials: true,
-      });
+      const questResponse = await axios.get(
+        `${API_URL}/quests/${category_name}`,
+        {
+          withCredentials: true,
+        }
+      );
       const monsterResponse = await axios.get(
-        `/api/monsters/${category_name}`,
+        `${API_URL}/monsters/${category_name}`,
         {
           withCredentials: true,
         }
@@ -478,7 +481,9 @@ const ChosenQuests = () => {
                     </div>
 
                     <img
-                      src={"/" + monsters[next].img_path}
+                      src={`${import.meta.env.BASE_URL}${
+                        monsters[next].img_path
+                      }`}
                       alt={monsters[next].enemy_name}
                       title={monsters[next].enemy_name}
                       className="img-fluid monster-img"
@@ -495,7 +500,9 @@ const ChosenQuests = () => {
                         {quest[next].answer_a}{" "}
                         <img
                           className="icons"
-                          src={`/images/decorations/swordDeco.webp`}
+                          src={`${
+                            import.meta.env.BASE_URL
+                          }images/decorations/swordDeco.webp`}
                           alt=""
                         />
                       </Draggable>
@@ -503,7 +510,9 @@ const ChosenQuests = () => {
                         {quest[next].answer_b}{" "}
                         <img
                           className="icons"
-                          src={`/images/decorations/shieldDeco.webp`}
+                          src={`${
+                            import.meta.env.BASE_URL
+                          }images/decorations/shieldDeco.webp`}
                           alt=""
                         />
                       </Draggable>
@@ -511,7 +520,9 @@ const ChosenQuests = () => {
                         {quest[next].answer_c}{" "}
                         <img
                           className="icons"
-                          src={`/images/decorations/potionDeco.webp`}
+                          src={`${
+                            import.meta.env.BASE_URL
+                          }images/decorations/potionDeco.webp`}
                           alt=""
                         />
                       </Draggable>

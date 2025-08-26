@@ -137,7 +137,7 @@ const Status = () => {
     });
 
     axios
-      .get(`/api/stats`, { withCredentials: true })
+      .get(`${API_URL}/stats`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         UserDetails.setState(res.data);
@@ -160,7 +160,7 @@ const Status = () => {
         <StyledSection className="d-flex flex-column flex-md-row mx-auto align-items-center gap-2">
           <article className="userPortrait">
             <img
-              src={"/" + vocation_portrait}
+              src={`${import.meta.env.BASE_URL}${vocation_portrait}`}
               alt="userPortrait"
               title="userPortrait"
               width="100%"
@@ -190,7 +190,7 @@ const Status = () => {
             ) : (
               <img
                 className="img-fluid userAvatar"
-                src={"/" + vocation_img}
+                src={`${import.meta.env.BASE_URL}${vocation_img}`}
                 alt={vocation}
                 width={400}
                 height={600}

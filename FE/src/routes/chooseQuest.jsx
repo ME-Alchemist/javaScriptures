@@ -256,7 +256,7 @@ const ChooseQuest = () => {
     console.log(currentBGM.current);
     setTitle("Choose your Quest");
     axios
-      .get(`/api/check`, { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         textRef.current.innerHTML =
@@ -339,9 +339,9 @@ const ChooseQuest = () => {
           <img
             data-aos-once="true"
             className="decoration align-self-center"
-            src={`/images/decorations/goblin.webp`}
-            alt="goblin"
-            title="goblin"
+            src={`${import.meta.env.BASE_URL}images/decorations/goblin.webp`}
+            alt="lich"
+            title="Lich"
             width={"165px"}
             height={"190px"}
           />

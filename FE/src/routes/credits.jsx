@@ -46,7 +46,7 @@ const Credits = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/check`, { withCredentials: true })
+      .get(`${API_URL}/check`, { withCredentials: true })
       .then((response) => {
         console.log("the response:", response);
       })

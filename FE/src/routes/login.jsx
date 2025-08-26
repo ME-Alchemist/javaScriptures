@@ -74,7 +74,7 @@ const Login = () => {
     const form = document.getElementById("userForm");
 
     axios
-      .post(`/api/login`, data, { withCredentials: true })
+      .post(`${API_URL}/login`, data, { withCredentials: true })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {
@@ -128,7 +128,7 @@ const Login = () => {
         <img
           data-aos-once="true"
           className="img-fluid"
-          src={`/images/decorations/lichTopDeco.webp`}
+          src={`${import.meta.env.BASE_URL}images/decorations/lichTopDeco.webp`}
           alt="lich"
           title="Lich"
           width={"470px"}

@@ -139,7 +139,7 @@ const ChooseVocation = () => {
     if (show) {
       axios
         .patch(
-          `/api/user/update/vocation`,
+          `${API_URL}/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocation.vocation_id },
           { withCredentials: true }
         )
@@ -154,7 +154,7 @@ const ChooseVocation = () => {
     } else {
       axios
         .patch(
-          `/api/user/update/vocation`,
+          `${API_URL}/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocationTypeB.vocation_id },
           { withCredentials: true }
         )
@@ -178,7 +178,7 @@ const ChooseVocation = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/vocations`)
+      .get(`${API_URL}/vocations`)
       .then((res) => {
         // set the twelve last ones for body type B
         setVocationsTypeB(res.data.slice(12));
@@ -253,7 +253,9 @@ const ChooseVocation = () => {
                     <img
                       id={vocation.vocation_id}
                       width={"280px"}
-                      src={"/" + vocation.vocation_img}
+                      src={`${import.meta.env.BASE_URL}${
+                        vocation.vocation_img
+                      }`}
                       key={vocation.vocation_id}
                       alt="vocation"
                       title={vocation.vocation_name}
@@ -279,7 +281,9 @@ const ChooseVocation = () => {
                   <div key={vocation.vocation_id}>
                     <img
                       width={"280px"}
-                      src={"/" + vocation.vocation_img}
+                      src={`${import.meta.env.BASE_URL}${
+                        vocation.vocation_img
+                      }`}
                       key={vocation.vocation_id}
                       alt="vocation"
                       title={vocation.vocation_name}
