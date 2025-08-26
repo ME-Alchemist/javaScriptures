@@ -13,5 +13,11 @@ export default defineConfig({
         secure: false,
       },
     },
+    fs: {
+      strict: false,
+    },
+    headers: {
+      "Cache-Control": "no-store",
+    },
   },
 });
