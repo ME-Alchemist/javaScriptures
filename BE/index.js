@@ -27,13 +27,23 @@ app.use(
       "X-Requested-With",
       "Accept",
       "Origin",
-      "image/webp",
     ],
     exposedHeaders: ["Content-Type", "Authorization"],
     maxAge: 3600,
     optionsSuccessStatus: 200,
   })
 );
+
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".webp")) {
+        res.setHeader("Content-Type", "image/webp");
+      }
+    },
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
