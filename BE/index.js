@@ -72,13 +72,13 @@ const models = initializeModels(sequelize);
 const { User, Bestiary, Quests, Vocations, Levels, Categories, Completed } =
   models;
 
-app.get("/favicon.ico", (req, res) => res.sendStatus(204));
+app.get("/api/favicon.ico", (req, res) => res.sendStatus(204));
 
 // Check for token, not needed for now
 // app.use("/main/:route*", verifyToken);
 
 // Get all quests
-app.get("/quests", verifyToken, async (req, res) => {
+app.get("/api/quests", verifyToken, async (req, res) => {
   try {
     const quests = await Quests.findAll({
       include: ["category"],
@@ -93,7 +93,7 @@ app.get("/quests", verifyToken, async (req, res) => {
 });
 
 // Get HTML/CSS/JS quests
-app.get("/quests/:category_name", verifyToken, async (req, res) => {
+app.get("/api/quests/:category_name", verifyToken, async (req, res) => {
   try {
     const { category_name } = req.params;
     // const difficulty = req.params.difficulty;
@@ -124,7 +124,7 @@ app.get("/quests/:category_name", verifyToken, async (req, res) => {
 });
 
 // Get all monsters
-app.get("/monsters", async (req, res) => {
+app.get("/api/monsters", async (req, res) => {
   try {
     const monsters = await Bestiary.findAll();
     res.json(monsters);
@@ -136,7 +136,7 @@ app.get("/monsters", async (req, res) => {
 });
 
 // Get specific monster
-app.get("/monster/:id", async (req, res) => {
+app.get("/api/monster/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const monster = await Bestiary.findOne({ where: { enemy_id: id } });
@@ -149,7 +149,7 @@ app.get("/monster/:id", async (req, res) => {
 });
 
 // Get monsters specific to difficulty
-app.get("/monsters/:category_name", verifyToken, async (req, res) => {
+app.get("/api/monsters/:category_name", verifyToken, async (req, res) => {
   try {
     // const difficulty = req.params.difficulty;
 
@@ -188,7 +188,7 @@ app.get("/monsters/:category_name", verifyToken, async (req, res) => {
 // });
 
 // Create check to see if the user is still logged in or the token is still valid
-app.get("/check", verifyToken, async (req, res) => {
+app.get("/api/check", verifyToken, async (req, res) => {
   try {
     res.json({
       message: "You are still logged in.",
@@ -201,14 +201,14 @@ app.get("/check", verifyToken, async (req, res) => {
 });
 
 // Create a "ping" route
-app.get("/ping", async (req, res) => {
+app.get("/api/ping", async (req, res) => {
   res.status(200).json({
     message: "pong",
   });
 });
 
 // Get stats of currently logged in user
-app.get("/stats", verifyToken, async (req, res) => {
+app.get("/api/stats", verifyToken, async (req, res) => {
   console.log("Cookies get", req.cookies);
 
   try {
@@ -243,7 +243,7 @@ app.get("/stats", verifyToken, async (req, res) => {
 });
 
 // Get single user by token
-app.get("/user/", verifyToken, async (req, res) => {
+app.get("/api/user/", verifyToken, async (req, res) => {
   try {
     const userID = req.user.user_id;
     const user = await User.findOne({ where: { user_id: userID } });
@@ -261,7 +261,7 @@ app.get("/user/", verifyToken, async (req, res) => {
 });
 
 // Get vocations
-app.get("/vocations", async (req, res) => {
+app.get("/api/vocations", async (req, res) => {
   try {
     const vocations = await Vocations.findAll();
     res.json(vocations);
@@ -273,7 +273,7 @@ app.get("/vocations", async (req, res) => {
 });
 
 // Create new user
-app.post("/sign-up", async (req, res) => {
+app.post("/api/sign-up", async (req, res) => {
   try {
     const { username, email, passHash } = req.body;
     const salt = await bcryptjs.genSaltSync(10);
@@ -304,7 +304,7 @@ app.post("/sign-up", async (req, res) => {
 });
 
 // Login user
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   try {
     const { email, passHash } = req.body;
     const user = await User.findOne({ where: { email: email } });
@@ -337,7 +337,7 @@ app.post("/login", async (req, res) => {
 });
 
 // blacklist current token and log out user
-app.post("/logout", verifyToken, async (req, res) => {
+app.post("/api/logout", verifyToken, async (req, res) => {
   const token = req.cookies.token;
   if (token) {
     tokenBlacklist.add(token);
@@ -347,7 +347,7 @@ app.post("/logout", verifyToken, async (req, res) => {
 });
 
 // Update user details
-app.patch("/user/update/", verifyToken, async (req, res) => {
+app.patch("/api/user/update/", verifyToken, async (req, res) => {
   try {
     const userID = req.user.user_id;
     const { username, email } = req.body;
@@ -380,7 +380,7 @@ app.patch("/user/update/", verifyToken, async (req, res) => {
 });
 
 // Update user vocation for first time login
-app.patch("/user/update/vocation", verifyToken, async (req, res) => {
+app.patch("/api/user/update/vocation", verifyToken, async (req, res) => {
   try {
     const userID = req.user.user_id;
     const { chosenVocation, vocation_id } = req.body;
@@ -410,7 +410,7 @@ app.patch("/user/update/vocation", verifyToken, async (req, res) => {
 });
 
 // Update user exp points, check for level up
-app.patch("/user/questComplete/", verifyToken, async (req, res) => {
+app.patch("/api/user/questComplete/", verifyToken, async (req, res) => {
   try {
     //the token
     const userID = req.user.user_id;
@@ -500,7 +500,7 @@ app.patch("/user/questComplete/", verifyToken, async (req, res) => {
 });
 
 // Delete user
-app.delete("/delete", verifyToken, async (req, res) => {
+app.delete("/api/delete", verifyToken, async (req, res) => {
   const token = req.cookies.token;
   try {
     if (token) {

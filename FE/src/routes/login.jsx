@@ -74,7 +74,7 @@ const Login = () => {
     const form = document.getElementById("userForm");
 
     axios
-      .post(`${API_URL}/login`, data, { withCredentials: true })
+      .post(`${API_URL}/api/login`, data, { withCredentials: true })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           if (res.data.user.chosenVocation === 0) {

@@ -74,7 +74,7 @@ export default function SignIn() {
     const form = document.getElementById("userForm");
 
     axios
-      .post(`${API_URL}/sign-up`, data)
+      .post(`${API_URL}/api/sign-up`, data)
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           setSubmitted(false);

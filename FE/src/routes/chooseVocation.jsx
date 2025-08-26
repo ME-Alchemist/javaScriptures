@@ -139,7 +139,7 @@ const ChooseVocation = () => {
     if (show) {
       axios
         .patch(
-          `${API_URL}/user/update/vocation`,
+          `${API_URL}/api/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocation.vocation_id },
           { withCredentials: true }
         )
@@ -154,7 +154,7 @@ const ChooseVocation = () => {
     } else {
       axios
         .patch(
-          `${API_URL}/user/update/vocation`,
+          `${API_URL}/api/user/update/vocation`,
           { chosenVocation: 1, vocation_id: currentVocationTypeB.vocation_id },
           { withCredentials: true }
         )
@@ -178,7 +178,7 @@ const ChooseVocation = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/vocations`)
+      .get(`${API_URL}/api/vocations`)
       .then((res) => {
         // set the twelve last ones for body type B
         setVocationsTypeB(res.data.slice(12));

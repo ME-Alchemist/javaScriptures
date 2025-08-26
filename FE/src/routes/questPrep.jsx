@@ -71,7 +71,7 @@ const QuestPrep = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/check`, { withCredentials: true })
+      .get(`${API_URL}/api/check`, { withCredentials: true })
       .then((response) => {
         console.log("the response:", response);
 
