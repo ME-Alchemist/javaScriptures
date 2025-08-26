@@ -58,7 +58,7 @@ const JWT_SECRET =
 const tokenBlacklist = new Set();
 
 const verifyToken = (req, res, next) => {
-  console.log("cookies:", req.cookies);
+  // console.log("cookies:", req.cookies);
   const token = req.cookies.token;
 
   if (!token) {
