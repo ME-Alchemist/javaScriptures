@@ -349,10 +349,7 @@ app.post("/api/login", async (req, res) => {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production",
-      // sameSite: "lax",
-      // secure: false,
-      // secure: process.env.NODE_ENV === "production",
-      // partitioned: true,
+      partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
   } catch (error) {
