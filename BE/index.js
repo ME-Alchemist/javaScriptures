@@ -324,9 +324,8 @@ app.post("/login", async (req, res) => {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      // secure: true,
+      sameSite: "none",
+      secure: true,
       // partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
