@@ -17,6 +17,7 @@ app.use(
       "http://localhost:5173",
       "http://localhost:3000",
       "https://javascriptures-1.onrender.com",
+      "https://www.javascriptures-1.onrender.com",
     ],
     credentials: true,
   })
@@ -324,7 +325,8 @@ app.post("/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "lax",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      // secure: true,
       // partitioned: true,
     });
     res.status(200).json({ message: "Login successful", user: user });
